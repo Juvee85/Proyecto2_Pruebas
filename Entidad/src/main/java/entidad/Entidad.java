@@ -1,4 +1,6 @@
-
+/*
+ * Entidad.java 
+ */
 package entidad;
 
 /**
