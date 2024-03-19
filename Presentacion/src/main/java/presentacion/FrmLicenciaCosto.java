@@ -4,14 +4,12 @@ import dtos.LicenciaDTO;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import javax.crypto.AEADBadTagException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import utilerias.RoundedPanel;
 
 /**
@@ -21,13 +19,17 @@ import utilerias.RoundedPanel;
  */
 public class FrmLicenciaCosto extends javax.swing.JFrame {
 
-    int mouseX, mouseY;
-
+    private int mouseX, mouseY;
+    private boolean discapacitado;
+    
     /**
      * Creates new form FrmLicenciaVigencia
      */
-    public FrmLicenciaCosto() {
+    public FrmLicenciaCosto(boolean discapacitado) {
         initComponents();
+        
+        this.discapacitado = discapacitado;
+        
         cargarDatos();
         formatearTabla();
     }
@@ -42,7 +44,7 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         List<LicenciaDTO> listaTarifas = new ArrayList<>();
         listaTarifas.add(new LicenciaDTO("1 año", "$600.00", "$200.00"));
         listaTarifas.add(new LicenciaDTO("2 años", "$900.00", "$500.00"));
-        listaTarifas.add(new LicenciaDTO("3 años", "$1,000.00", "$700.00"));
+        listaTarifas.add(new LicenciaDTO("3 años", "$1,100.00", "$700.00"));
         
         DefaultComboBoxModel<LicenciaDTO> modelo = new DefaultComboBoxModel<>();
         for (LicenciaDTO tarifa : listaTarifas) {
@@ -51,7 +53,11 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         
         comboVigencia.setModel(modelo);
         LicenciaDTO primerElemento = (LicenciaDTO) comboVigencia.getSelectedItem();
-        txtCosto.setText(primerElemento.getCostoNormal());
+        if (discapacitado) {
+            txtCosto.setText(primerElemento.getCostoDiscapacitado());
+        } else {
+            txtCosto.setText(primerElemento.getCostoNormal());
+        }
         
         llenarTablaTarifas(listaTarifas);
     }
@@ -100,11 +106,6 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        btnVolver = new RoundedPanel(10);
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        btnContinuar = new RoundedPanel(10);
-        jLabel19 = new javax.swing.JLabel();
         pnlCampos = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -113,6 +114,8 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTarifas = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
+        btnContinuar = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -264,73 +267,6 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Trámite de licencias");
 
-        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
-        btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnVolver.setOpaque(false);
-        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnVolverMouseClicked(evt);
-            }
-        });
-
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
-
-        jLabel17.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel17.setText("Volver");
-
-        javax.swing.GroupLayout btnVolverLayout = new javax.swing.GroupLayout(btnVolver);
-        btnVolver.setLayout(btnVolverLayout);
-        btnVolverLayout.setHorizontalGroup(
-            btnVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnVolverLayout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(jLabel16)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel17)
-                .addGap(12, 12, 12))
-        );
-        btnVolverLayout.setVerticalGroup(
-            btnVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnVolverLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(btnVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
-        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnContinuar.setOpaque(false);
-        btnContinuar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnContinuarMouseClicked(evt);
-            }
-        });
-
-        jLabel19.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel19.setText("Continuar");
-
-        javax.swing.GroupLayout btnContinuarLayout = new javax.swing.GroupLayout(btnContinuar);
-        btnContinuar.setLayout(btnContinuarLayout);
-        btnContinuarLayout.setHorizontalGroup(
-            btnContinuarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnContinuarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        btnContinuarLayout.setVerticalGroup(
-            btnContinuarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnContinuarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         pnlCampos.setBackground(new java.awt.Color(242, 242, 242));
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -378,6 +314,9 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        tblTarifas.setBackground(new java.awt.Color(11, 35, 30));
+        tblTarifas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        tblTarifas.setForeground(new java.awt.Color(242, 242, 242));
         tblTarifas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -390,10 +329,7 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
             }
         ));
         tblTarifas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tblTarifas.setBackground(new java.awt.Color(11, 35, 30));
         tblTarifas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tblTarifas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        tblTarifas.setForeground(new java.awt.Color(242, 242, 242));
         tblTarifas.setName(""); // NOI18N
         tblTarifas.setSelectionBackground(new java.awt.Color(106, 27, 49));
         tblTarifas.setSelectionForeground(new java.awt.Color(242, 242, 242));
@@ -408,6 +344,31 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Costos de licencias");
 
+        btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
+        btnContinuar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnContinuar.setForeground(new java.awt.Color(242, 242, 242));
+        btnContinuar.setText("Continuar");
+        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnContinuar.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnContinuar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContinuarActionPerformed(evt);
+            }
+        });
+
+        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
+        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
+        btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
+        btnVolver.setText("Volver");
+        btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVolver.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlContenidoLayout = new javax.swing.GroupLayout(pnlContenido);
         pnlContenido.setLayout(pnlContenidoLayout);
         pnlContenidoLayout.setHorizontalGroup(
@@ -421,11 +382,12 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
                         .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 320, Short.MAX_VALUE)
                         .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         pnlContenidoLayout.setVerticalGroup(
@@ -439,11 +401,11 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11))
+                .addGap(18, 18, 18))
         );
 
         getContentPane().add(pnlContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 450));
@@ -493,36 +455,37 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarSesionMouseClicked
 
-    private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
-        FrmLicenciaDatosCliente frmLicenciaDatosCliente = new FrmLicenciaDatosCliente();
-        frmLicenciaDatosCliente.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnVolverMouseClicked
+    private void comboVigenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVigenciaActionPerformed
+        LicenciaDTO primerElemento = (LicenciaDTO) comboVigencia.getSelectedItem();
+        if (discapacitado) {
+            txtCosto.setText(primerElemento.getCostoDiscapacitado());
+        } else {
+            txtCosto.setText(primerElemento.getCostoNormal());
+        }
+    }//GEN-LAST:event_comboVigenciaActionPerformed
 
-    private void btnContinuarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContinuarMouseClicked
+    private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         JOptionPane.showMessageDialog(this, "Trámite completado.", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
         FrmHome frmHome = new FrmHome();
         frmHome.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnContinuarMouseClicked
+    }//GEN-LAST:event_btnContinuarActionPerformed
 
-    private void comboVigenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVigenciaActionPerformed
-        LicenciaDTO primerElemento = (LicenciaDTO) comboVigencia.getSelectedItem();
-        txtCosto.setText(primerElemento.getCostoNormal());
-    }//GEN-LAST:event_comboVigenciaActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        FrmLicenciaDatosCliente frmLicenciaDatosCliente = new FrmLicenciaDatosCliente();
+        frmLicenciaDatosCliente.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnCerrar;
     private javax.swing.JPanel btnCerrarSesion;
-    private javax.swing.JPanel btnContinuar;
+    private javax.swing.JButton btnContinuar;
     private javax.swing.JPanel btnMinimizar;
-    private javax.swing.JPanel btnVolver;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<LicenciaDTO> comboVigencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

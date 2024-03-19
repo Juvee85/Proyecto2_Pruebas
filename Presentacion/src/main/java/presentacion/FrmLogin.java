@@ -174,7 +174,7 @@ public class FrmLogin extends javax.swing.JFrame {
         pnlContenido.setBackground(new java.awt.Color(242, 242, 242));
         pnlContenido.setPreferredSize(new java.awt.Dimension(700, 350));
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 32)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 40)); // NOI18N
         jLabel1.setText("Iniciar sesión");
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 20)); // NOI18N
@@ -191,6 +191,7 @@ public class FrmLogin extends javax.swing.JFrame {
         btnIniciarSesion.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         btnIniciarSesion.setForeground(new java.awt.Color(242, 242, 242));
         btnIniciarSesion.setText("Iniciar sesión");
+        btnIniciarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarSesionActionPerformed(evt);
@@ -225,9 +226,9 @@ public class FrmLogin extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pwdContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGap(19, 19, 19))
         );
 
         getContentPane().add(pnlContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 350));

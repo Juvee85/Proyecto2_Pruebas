@@ -2,6 +2,7 @@ package presentacion;
 
 import java.awt.Color;
 import java.awt.Frame;
+import javax.swing.JOptionPane;
 import utilerias.RoundedPanel;
 
 /**
@@ -10,7 +11,9 @@ import utilerias.RoundedPanel;
  * @author Juventino López García - 00000248547
  */
 public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
-    int mouseX, mouseY;
+    
+    private int mouseX, mouseY;
+    private boolean discapacitado;
     
     /** Creates new form FrmLicenciaDatosCliente */
     public FrmLicenciaDatosCliente() {
@@ -41,11 +44,6 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        btnVolver = new RoundedPanel(10);
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        btnContinuar = new RoundedPanel(10);
-        jLabel19 = new javax.swing.JLabel();
         pnlCampos = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
@@ -64,6 +62,8 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         rdbDiscapacitadoSi = new javax.swing.JRadioButton();
         rdbDiscapacitadoNo = new javax.swing.JRadioButton();
+        btnContinuar = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -215,73 +215,6 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
         jLabel7.setText("Trámite de licencias");
         jLabel7.setFont(new java.awt.Font("SansSerif", 0, 40)); // NOI18N
 
-        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
-        btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnVolver.setOpaque(false);
-        btnVolver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnVolverMouseClicked(evt);
-            }
-        });
-
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
-
-        jLabel17.setText("Volver");
-        jLabel17.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(242, 242, 242));
-
-        javax.swing.GroupLayout btnVolverLayout = new javax.swing.GroupLayout(btnVolver);
-        btnVolver.setLayout(btnVolverLayout);
-        btnVolverLayout.setHorizontalGroup(
-            btnVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnVolverLayout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(jLabel16)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel17)
-                .addGap(12, 12, 12))
-        );
-        btnVolverLayout.setVerticalGroup(
-            btnVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnVolverLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(btnVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
-        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnContinuar.setOpaque(false);
-        btnContinuar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnContinuarMouseClicked(evt);
-            }
-        });
-
-        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel19.setText("Continuar");
-        jLabel19.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(242, 242, 242));
-
-        javax.swing.GroupLayout btnContinuarLayout = new javax.swing.GroupLayout(btnContinuar);
-        btnContinuar.setLayout(btnContinuarLayout);
-        btnContinuarLayout.setHorizontalGroup(
-            btnContinuarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnContinuarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        btnContinuarLayout.setVerticalGroup(
-            btnContinuarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnContinuarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         pnlCampos.setBackground(new java.awt.Color(242, 242, 242));
 
         jLabel8.setText("Nombre");
@@ -416,6 +349,31 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
+        btnContinuar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnContinuar.setForeground(new java.awt.Color(242, 242, 242));
+        btnContinuar.setText("Continuar");
+        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnContinuar.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnContinuar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContinuarActionPerformed(evt);
+            }
+        });
+
+        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
+        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
+        btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
+        btnVolver.setText("Volver");
+        btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVolver.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlContenidoLayout = new javax.swing.GroupLayout(pnlContenido);
         pnlContenido.setLayout(pnlContenidoLayout);
         pnlContenidoLayout.setHorizontalGroup(
@@ -441,11 +399,11 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         getContentPane().add(pnlContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 450));
@@ -495,25 +453,34 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarSesionMouseClicked
 
-    private void btnContinuarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnContinuarMouseClicked
-        FrmLicenciaCosto frmLicenciaCosto = new FrmLicenciaCosto();
+    private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
+        if (btgDiscapacitado.getSelection() == null) {
+            JOptionPane.showMessageDialog(this, "Favor de especificar si está o no discapacitado.", "¡Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (rdbDiscapacitadoSi.isSelected()) {
+            discapacitado = true;
+        } else if (rdbDiscapacitadoNo.isSelected()) {
+            discapacitado = false;
+        }
+        FrmLicenciaCosto frmLicenciaCosto = new FrmLicenciaCosto(discapacitado);
         frmLicenciaCosto.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnContinuarMouseClicked
+    }//GEN-LAST:event_btnContinuarActionPerformed
 
-    private void btnVolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVolverMouseClicked
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmHome frmHome = new FrmHome();
         frmHome.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnVolverMouseClicked
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btgDiscapacitado;
     private javax.swing.JPanel btnCerrar;
     private javax.swing.JPanel btnCerrarSesion;
-    private javax.swing.JPanel btnContinuar;
+    private javax.swing.JButton btnContinuar;
     private javax.swing.JPanel btnMinimizar;
-    private javax.swing.JPanel btnVolver;
+    private javax.swing.JButton btnVolver;
     private com.github.lgooddatepicker.components.DatePicker dtchFechaNacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -522,9 +489,6 @@ public class FrmLicenciaDatosCliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
