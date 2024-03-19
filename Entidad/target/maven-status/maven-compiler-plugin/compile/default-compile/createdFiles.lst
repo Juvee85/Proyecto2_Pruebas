@@ -1,1 +1,10 @@
+entidades\PersonaEntidad.class
+entidades\AutomovilEntidad.class
+entidades\RelacionVehiculoPersona.class
+entidades\TarifaPlaca.class
+entidades\Placa.class
+entidades\Tramite.class
+entidades\VehiculoEntidad.class
+entidades\LicenciaEntidad.class
+entidades\TarifaLicencia.class
 entidad\Entidad.class
