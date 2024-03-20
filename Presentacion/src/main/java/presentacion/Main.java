@@ -1,6 +1,7 @@
 package presentacion;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 

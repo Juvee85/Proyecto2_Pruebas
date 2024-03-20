@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
-import javax.crypto.AEADBadTagException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +35,7 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
     
     public void formatearTabla() {
         tblTarifas.getTableHeader().setBackground(new Color(106, 27, 49));
-        tblTarifas.getTableHeader().setFont(new Font("Sans serif", Font.BOLD, 16));
+        tblTarifas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 16));
         tblTarifas.getTableHeader().setForeground(new Color(188, 149, 92));
     }
 
@@ -269,10 +268,10 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
 
         pnlCampos.setBackground(new java.awt.Color(242, 242, 242));
 
-        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel8.setText("Vigencia");
 
-        jLabel9.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel9.setText("Costo");
 
         txtCosto.setEditable(false);
@@ -384,10 +383,9 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
                         .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 320, Short.MAX_VALUE)
                         .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         pnlContenidoLayout.setVerticalGroup(
@@ -455,15 +453,6 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarSesionMouseClicked
 
-    private void comboVigenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVigenciaActionPerformed
-        LicenciaDTO primerElemento = (LicenciaDTO) comboVigencia.getSelectedItem();
-        if (discapacitado) {
-            txtCosto.setText(primerElemento.getCostoDiscapacitado());
-        } else {
-            txtCosto.setText(primerElemento.getCostoNormal());
-        }
-    }//GEN-LAST:event_comboVigenciaActionPerformed
-
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         JOptionPane.showMessageDialog(this, "Trámite completado.", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
         FrmHome frmHome = new FrmHome();
@@ -476,6 +465,15 @@ public class FrmLicenciaCosto extends javax.swing.JFrame {
         frmLicenciaDatosCliente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void comboVigenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVigenciaActionPerformed
+        LicenciaDTO primerElemento = (LicenciaDTO) comboVigencia.getSelectedItem();
+        if (discapacitado) {
+            txtCosto.setText(primerElemento.getCostoDiscapacitado());
+        } else {
+            txtCosto.setText(primerElemento.getCostoNormal());
+        }
+    }//GEN-LAST:event_comboVigenciaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnCerrar;

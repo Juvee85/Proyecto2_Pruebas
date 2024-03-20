@@ -2,6 +2,7 @@ package presentacion;
 
 import java.awt.Color;
 import java.awt.Frame;
+import javax.swing.JOptionPane;
 import utilerias.RoundedPanel;
 
 /**
@@ -382,6 +383,11 @@ public class FrmHome extends javax.swing.JFrame {
         btnReportes.setBackground(new java.awt.Color(11, 35, 30));
         btnReportes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(188, 149, 92), 2));
         btnReportes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnReportesMouseClicked(evt);
+            }
+        });
 
         jPanel11.setBackground(new java.awt.Color(106, 27, 49));
 
@@ -426,6 +432,11 @@ public class FrmHome extends javax.swing.JFrame {
         btnInsercion.setBackground(new java.awt.Color(11, 35, 30));
         btnInsercion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(188, 149, 92), 2));
         btnInsercion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnInsercion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInsercionMouseClicked(evt);
+            }
+        });
 
         jPanel13.setBackground(new java.awt.Color(106, 27, 49));
 
@@ -530,7 +541,9 @@ public class FrmHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPlacasMouseClicked
 
     private void btnHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHistorialMouseClicked
-        // TODO add your handling code here:
+        FrmHistorialFiltros frmHistorialFiltros = new FrmHistorialFiltros();
+        frmHistorialFiltros.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnHistorialMouseClicked
 
     private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
@@ -573,6 +586,16 @@ public class FrmHome extends javax.swing.JFrame {
         int y = evt.getYOnScreen();
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
+
+    private void btnInsercionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsercionMouseClicked
+        JOptionPane.showMessageDialog(this, "Se insertaron 20 personas.", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnInsercionMouseClicked
+
+    private void btnReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseClicked
+        FrmReportesFiltros frmReportesFiltros = new FrmReportesFiltros();
+        frmReportesFiltros.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnReportesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnCerrar;

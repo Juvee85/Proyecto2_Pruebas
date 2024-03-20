@@ -24,19 +24,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>unknown.binary</groupId>
+            <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
-            <version>SNAPSHOT</version>
+            <version>RELEASE210</version>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>3.4</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>DTOs</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>

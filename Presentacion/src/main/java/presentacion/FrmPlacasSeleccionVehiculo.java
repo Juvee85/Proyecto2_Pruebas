@@ -1,6 +1,5 @@
 package presentacion;
 
-import dtos.LicenciaDTO;
 import dtos.VehiculoDTO;
 import java.awt.Color;
 import java.awt.Frame;

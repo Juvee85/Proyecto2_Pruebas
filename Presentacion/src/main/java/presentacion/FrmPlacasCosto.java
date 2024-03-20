@@ -1,6 +1,5 @@
 package presentacion;
 
-import dtos.LicenciaDTO;
 import dtos.PlacaDTO;
 import java.awt.Color;
 import java.awt.Font;
@@ -35,7 +34,7 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
     
     public void formatearTabla() {
         tblTarifas.getTableHeader().setBackground(new Color(106, 27, 49));
-        tblTarifas.getTableHeader().setFont(new Font("Sans serif", Font.BOLD, 20));
+        tblTarifas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 20));
         tblTarifas.getTableHeader().setForeground(new Color(188, 149, 92));
     }
 
