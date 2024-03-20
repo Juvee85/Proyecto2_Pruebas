@@ -310,7 +310,7 @@
                           <Component id="btnVolver" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnBuscar" min="-2" pref="120" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnContinuar" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="pnlCampos" min="-2" max="-2" attributes="0"/>
