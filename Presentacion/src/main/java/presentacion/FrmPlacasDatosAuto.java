@@ -2,7 +2,6 @@ package presentacion;
 
 import java.awt.Color;
 import java.awt.Frame;
-import utilerias.RoundedPanel;
 
 /**
  *
@@ -55,8 +54,6 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         pnlTitulo = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        btnCerrarSesion = new RoundedPanel(40);
-        jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -175,25 +172,6 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         pnlTitulo.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 25, -1, -1));
-
-        btnCerrarSesion.setBackground(new java.awt.Color(11, 35, 30));
-        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCerrarSesion.setOpaque(false);
-        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCerrarSesionMouseClicked(evt);
-            }
-        });
-        btnCerrarSesion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel11.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/usuario.png"))); // NOI18N
-        jLabel11.setText("Cerrar sesión");
-        btnCerrarSesion.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 40));
-
-        pnlTitulo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 160, 40));
 
         jLabel12.setFont(new java.awt.Font("SansSerif", 0, 48)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(188, 149, 92));
@@ -324,12 +302,12 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
-        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
         btnVolver.setText("Volver");
+        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
         btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver.setPreferredSize(new java.awt.Dimension(120, 40));
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -337,11 +315,11 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
             }
         });
 
+        btnContinuar.setText("Continuar");
         btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
+        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnContinuar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnContinuar.setForeground(new java.awt.Color(242, 242, 242));
-        btnContinuar.setText("Continuar");
-        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnContinuar.setPreferredSize(new java.awt.Dimension(120, 40));
         btnContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,12 +327,12 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
             }
         });
 
-        btnBuscar.setBackground(new java.awt.Color(106, 27, 49));
-        btnBuscar.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
-        btnBuscar.setForeground(new java.awt.Color(242, 242, 242));
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/buscar.png"))); // NOI18N
         btnBuscar.setText("Buscar");
+        btnBuscar.setBackground(new java.awt.Color(106, 27, 49));
         btnBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBuscar.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(242, 242, 242));
         btnBuscar.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
         btnBuscar.setPreferredSize(new java.awt.Dimension(120, 40));
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -439,12 +417,6 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
-    private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
-        FrmLogin frmLogin = new FrmLogin();
-        frmLogin.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnCerrarSesionMouseClicked
-
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmPlacasSeleccionVehiculo frmPlacasSeleccion = new FrmPlacasSeleccionVehiculo();
         frmPlacasSeleccion.setVisible(true);
@@ -466,13 +438,11 @@ public class FrmPlacasDatosAuto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JPanel btnCerrar;
-    private javax.swing.JPanel btnCerrarSesion;
     private javax.swing.JButton btnContinuar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;

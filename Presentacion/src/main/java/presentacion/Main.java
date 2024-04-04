@@ -20,8 +20,9 @@ public class Main {
         } catch (UnsupportedLookAndFeelException e) {
             
         }
-        FrmHome frmLogin = new FrmHome();
-        frmLogin.setVisible(true);
+        
+        FrmHome frmHome = new FrmHome();
+        frmHome.setVisible(true);
     }
 
 }

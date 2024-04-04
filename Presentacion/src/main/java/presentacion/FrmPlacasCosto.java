@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import utilerias.RoundedPanel;
 
 /**
  *
@@ -92,8 +91,6 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         pnlTitulo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        btnCerrarSesion = new RoundedPanel(40);
-        jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -207,25 +204,6 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         pnlTitulo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 25, -1, -1));
 
-        btnCerrarSesion.setBackground(new java.awt.Color(11, 35, 30));
-        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCerrarSesion.setOpaque(false);
-        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCerrarSesionMouseClicked(evt);
-            }
-        });
-        btnCerrarSesion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/usuario.png"))); // NOI18N
-        jLabel6.setText("Cerrar sesión");
-        btnCerrarSesion.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 40));
-
-        pnlTitulo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 160, 40));
-
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 48)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(188, 149, 92));
         jLabel5.setText("Sistema de tránsito");
@@ -301,9 +279,6 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tblTarifas.setBackground(new java.awt.Color(11, 35, 30));
-        tblTarifas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        tblTarifas.setForeground(new java.awt.Color(242, 242, 242));
         tblTarifas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -316,7 +291,10 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
             }
         ));
         tblTarifas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tblTarifas.setBackground(new java.awt.Color(11, 35, 30));
         tblTarifas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tblTarifas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        tblTarifas.setForeground(new java.awt.Color(242, 242, 242));
         tblTarifas.setName(""); // NOI18N
         tblTarifas.setSelectionBackground(new java.awt.Color(106, 27, 49));
         tblTarifas.setSelectionForeground(new java.awt.Color(242, 242, 242));
@@ -328,11 +306,11 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Costos de licencias");
 
+        btnContinuar.setText("Continuar");
         btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
+        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnContinuar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnContinuar.setForeground(new java.awt.Color(242, 242, 242));
-        btnContinuar.setText("Continuar");
-        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnContinuar.setPreferredSize(new java.awt.Dimension(120, 40));
         btnContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -340,12 +318,12 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
             }
         });
 
-        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
-        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
         btnVolver.setText("Volver");
+        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
         btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver.setPreferredSize(new java.awt.Dimension(120, 40));
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -432,12 +410,6 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
-    private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
-        FrmLogin frmLogin = new FrmLogin();
-        frmLogin.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnCerrarSesionMouseClicked
-
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmPlacasDatosCliente frmLicenciaDatosCliente = new FrmPlacasDatosCliente(usado);
         frmLicenciaDatosCliente.setVisible(true);
@@ -453,7 +425,6 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnCerrar;
-    private javax.swing.JPanel btnCerrarSesion;
     private javax.swing.JButton btnContinuar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnVolver;
@@ -463,7 +434,6 @@ public class FrmPlacasCosto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

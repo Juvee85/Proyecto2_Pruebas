@@ -1,14 +1,12 @@
 package presentacion;
 
 import dtos.ReporteDTO;
-import dtos.TramiteDTO;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import utilerias.RoundedPanel;
 
 /**
  *
@@ -34,10 +32,10 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         if(!fechaInicio.isBlank() || !fechaFin.isBlank()) {
             lblPeriodo.setText("Periodo: ");
             if(!fechaInicio.isBlank()) {
-                lblPeriodo.setText(lblPeriodo.getText() + fechaInicio + " - ");
+                lblPeriodo.setText(lblPeriodo.getText() + fechaInicio + " -");
             }
             if(!fechaFin.isBlank()) {
-                lblPeriodo.setText(lblPeriodo.getText() + fechaFin);
+                lblPeriodo.setText(lblPeriodo.getText() + "- " + fechaFin);
             }
         }
         
@@ -104,8 +102,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         pnlTitulo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        btnCerrarSesion = new RoundedPanel(40);
-        jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -124,7 +120,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(700, 630));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -222,25 +217,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         pnlTitulo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 25, -1, -1));
 
-        btnCerrarSesion.setBackground(new java.awt.Color(11, 35, 30));
-        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCerrarSesion.setOpaque(false);
-        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCerrarSesionMouseClicked(evt);
-            }
-        });
-        btnCerrarSesion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/usuario.png"))); // NOI18N
-        jLabel6.setText("Cerrar sesión");
-        btnCerrarSesion.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 40));
-
-        pnlTitulo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 160, 40));
-
         jLabel5.setText("Sistema de tránsito");
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 48)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(188, 149, 92));
@@ -317,9 +293,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tblTramites.setBackground(new java.awt.Color(11, 35, 30));
-        tblTramites.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        tblTramites.setForeground(new java.awt.Color(242, 242, 242));
         tblTramites.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -332,7 +305,10 @@ public class FrmReportesResultados extends javax.swing.JFrame {
             }
         ));
         tblTramites.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tblTramites.setBackground(new java.awt.Color(11, 35, 30));
         tblTramites.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tblTramites.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        tblTramites.setForeground(new java.awt.Color(242, 242, 242));
         tblTramites.setName(""); // NOI18N
         tblTramites.setSelectionBackground(new java.awt.Color(106, 27, 49));
         tblTramites.setSelectionForeground(new java.awt.Color(242, 242, 242));
@@ -340,12 +316,12 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         tblTramites.setSurrendersFocusOnKeystroke(true);
         jScrollPane1.setViewportView(tblTramites);
 
-        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
-        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
         btnVolver.setText("Volver");
+        btnVolver.setBackground(new java.awt.Color(11, 35, 30));
         btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver.setPreferredSize(new java.awt.Dimension(120, 40));
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,12 +329,12 @@ public class FrmReportesResultados extends javax.swing.JFrame {
             }
         });
 
-        btnAnterior.setBackground(new java.awt.Color(188, 149, 92));
-        btnAnterior.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnAnterior.setForeground(new java.awt.Color(242, 242, 242));
         btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/siguiente.png"))); // NOI18N
         btnAnterior.setText("Siguiente");
+        btnAnterior.setBackground(new java.awt.Color(188, 149, 92));
         btnAnterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAnterior.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnAnterior.setForeground(new java.awt.Color(242, 242, 242));
         btnAnterior.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         btnAnterior.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         btnAnterior.setPreferredSize(new java.awt.Dimension(120, 40));
@@ -368,12 +344,12 @@ public class FrmReportesResultados extends javax.swing.JFrame {
             }
         });
 
-        btnSiguiente.setBackground(new java.awt.Color(188, 149, 92));
-        btnSiguiente.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnSiguiente.setForeground(new java.awt.Color(242, 242, 242));
         btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/anterior.png"))); // NOI18N
         btnSiguiente.setText("Anterior");
+        btnSiguiente.setBackground(new java.awt.Color(188, 149, 92));
         btnSiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSiguiente.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnSiguiente.setForeground(new java.awt.Color(242, 242, 242));
         btnSiguiente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSiguiente.setPreferredSize(new java.awt.Dimension(120, 40));
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
@@ -387,12 +363,12 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        btnVolver1.setBackground(new java.awt.Color(106, 27, 49));
-        btnVolver1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnVolver1.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pdf.png"))); // NOI18N
         btnVolver1.setText("Exportar");
+        btnVolver1.setBackground(new java.awt.Color(106, 27, 49));
         btnVolver1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVolver1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnVolver1.setForeground(new java.awt.Color(242, 242, 242));
         btnVolver1.setPreferredSize(new java.awt.Dimension(120, 40));
         btnVolver1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -487,12 +463,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
-    private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
-        FrmLogin frmLogin = new FrmLogin();
-        frmLogin.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnCerrarSesionMouseClicked
-
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmReportesFiltros frmReportesFiltros = new FrmReportesFiltros();
         frmReportesFiltros.setVisible(true);
@@ -514,7 +484,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
     private javax.swing.JPanel btnCerrar;
-    private javax.swing.JPanel btnCerrarSesion;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
@@ -525,7 +494,6 @@ public class FrmReportesResultados extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;

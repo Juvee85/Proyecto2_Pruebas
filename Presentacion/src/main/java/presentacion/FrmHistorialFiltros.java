@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import utilerias.JButtonCellEditor;
 import utilerias.JButtonRenderer;
-import utilerias.RoundedPanel;
 
 /**
  *
@@ -69,34 +68,34 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
     }
     
     public void cargarDatos() {
-        List<PersonaDTO> listaPersonas = new ArrayList<>();
-        listaPersonas.add(new PersonaDTO("VADD041220HNUMTIF9", "Diego Valenzuela Dávila", "20/12/2004"));
-        listaPersonas.add(new PersonaDTO("VAPD040603HSRLRGA6", "Diego Valenzuela Parra", "03/06/2004"));
-        listaPersonas.add(new PersonaDTO("VALD040118HCDAPZB4", "Diego Valenzuela Lira", "18/01/2004"));
-        listaPersonas.add(new PersonaDTO("VAUD040314HTCELRV7", "Diego Valenzuela Urías", "14/03/2004"));
-        
-        llenarTablaPersonas(listaPersonas);
+//        List<PersonaDTO> listaPersonas = new ArrayList<>();
+//        listaPersonas.add(new PersonaDTO("VADD041220HNUMTIF9", "Diego Valenzuela Dávila", "20/12/2004"));
+//        listaPersonas.add(new PersonaDTO("VAPD040603HSRLRGA6", "Diego Valenzuela Parra", "03/06/2004"));
+//        listaPersonas.add(new PersonaDTO("VALD040118HCDAPZB4", "Diego Valenzuela Lira", "18/01/2004"));
+//        listaPersonas.add(new PersonaDTO("VAUD040314HTCELRV7", "Diego Valenzuela Urías", "14/03/2004"));
+//        
+//        llenarTablaPersonas(listaPersonas);
     }
     
     private void llenarTablaPersonas(List<PersonaDTO> listaPersonas) {
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblPersonas.getModel();
-
-        if (modeloTabla.getRowCount() > 0) {
-            for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
-                modeloTabla.removeRow(i);
-            }
-        }
-
-        if (listaPersonas != null) {
-            listaPersonas.forEach(row -> {
-                Object[] fila = new Object[3];
-                fila[0] = row.getCurp();
-                fila[1] = row.getNombre();
-                fila[2] = row.getFechaNac();
-
-                modeloTabla.addRow(fila);
-            });
-        }
+//        DefaultTableModel modeloTabla = (DefaultTableModel) tblPersonas.getModel();
+//
+//        if (modeloTabla.getRowCount() > 0) {
+//            for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
+//                modeloTabla.removeRow(i);
+//            }
+//        }
+//
+//        if (listaPersonas != null) {
+//            listaPersonas.forEach(row -> {
+//                Object[] fila = new Object[3];
+//                fila[0] = row.getCurp();
+//                fila[1] = row.getNombre();
+//                fila[2] = row.getFechaNac();
+//
+//                modeloTabla.addRow(fila);
+//            });
+//        }
     }
 
     /** This method is called from within the constructor to
@@ -117,8 +116,6 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         pnlTitulo = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        btnCerrarSesion = new RoundedPanel(40);
-        jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -236,25 +233,6 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         pnlTitulo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 25, -1, -1));
-
-        btnCerrarSesion.setBackground(new java.awt.Color(11, 35, 30));
-        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCerrarSesion.setOpaque(false);
-        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCerrarSesionMouseClicked(evt);
-            }
-        });
-        btnCerrarSesion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/usuario.png"))); // NOI18N
-        jLabel6.setText("Cerrar sesión");
-        btnCerrarSesion.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 40));
-
-        pnlTitulo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 160, 40));
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 48)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(188, 149, 92));
@@ -525,12 +503,6 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
-    private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
-        FrmLogin frmLogin = new FrmLogin();
-        frmLogin.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnCerrarSesionMouseClicked
-
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmHome frmHome = new FrmHome();
         frmHome.setVisible(true);
@@ -553,7 +525,6 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
     private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JPanel btnCerrar;
-    private javax.swing.JPanel btnCerrarSesion;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
@@ -565,7 +536,6 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;

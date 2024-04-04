@@ -1,21 +1,35 @@
 package presentacion;
 
-import java.awt.Color;
+import dtos.PersonaDTO;
+import excepciones.NegocioException;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
-import utilerias.RoundedPanel;
+import negocio.IInsercionMasivaBO;
+import negocio.InsercionMasivaBO;
+import utilerias.Paleta;
 
 /**
- *
+ * Ventana principal del programa.
+ * 
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
 public class FrmHome extends javax.swing.JFrame {
-    int mouseX, mouseY;
     
-    /** Creates new form NewJFrame */
+    private IInsercionMasivaBO insercionMasivaBO;
+    private int mouseX, mouseY;
+    
+    /**
+     * Constructor del frame.
+     */
     public FrmHome() {
         initComponents();
+        insercionMasivaBO = new InsercionMasivaBO();
+        cargarTarifas();
+    }
+    
+    public void cargarTarifas() {
+        
     }
 
     /** This method is called from within the constructor to
@@ -36,8 +50,6 @@ public class FrmHome extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         pnlTitulo = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
-        btnCerrarSesion = new RoundedPanel(40);
-        jLabel13 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -163,25 +175,6 @@ public class FrmHome extends javax.swing.JFrame {
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo.png"))); // NOI18N
         pnlTitulo.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 25, -1, -1));
-
-        btnCerrarSesion.setBackground(new java.awt.Color(11, 35, 30));
-        btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCerrarSesion.setOpaque(false);
-        btnCerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCerrarSesionMouseClicked(evt);
-            }
-        });
-        btnCerrarSesion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel13.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(242, 242, 242));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/usuario.png"))); // NOI18N
-        jLabel13.setText("Cerrar sesión");
-        btnCerrarSesion.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 150, 40));
-
-        pnlTitulo.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 100, 160, 40));
 
         jLabel10.setFont(new java.awt.Font("SansSerif", 0, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(188, 149, 92));
@@ -528,69 +521,126 @@ public class FrmHome extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para tramitar licencia.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnLicenciasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLicenciasMouseClicked
-        FrmLicenciaDatosCliente frmLicenciaDC = new FrmLicenciaDatosCliente();
+        FrmLicenciaDatos frmLicenciaDC = new FrmLicenciaDatos(null);
         frmLicenciaDC.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnLicenciasMouseClicked
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para tramitar placas.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPlacasMouseClicked
         FrmPlacasSeleccionVehiculo frmPlacasSeleccion = new FrmPlacasSeleccionVehiculo();
         frmPlacasSeleccion.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPlacasMouseClicked
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para realizar consultas.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnHistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHistorialMouseClicked
         FrmHistorialFiltros frmHistorialFiltros = new FrmHistorialFiltros();
         frmHistorialFiltros.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnHistorialMouseClicked
 
-    private void btnCerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarSesionMouseClicked
-        FrmLogin frmLogin = new FrmLogin();
-        frmLogin.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnCerrarSesionMouseClicked
-
+    /**
+     * Método que cambia el color del botón para cerrar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
-        btnCerrar.setBackground(Color.red);
+        btnCerrar.setBackground(Paleta.ROJO);
     }//GEN-LAST:event_btnCerrarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
-        btnMinimizar.setBackground(Color.red);
+        btnMinimizar.setBackground(Paleta.VERDE);
     }//GEN-LAST:event_btnMinimizarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana a su color original.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
-        btnCerrar.setBackground(new Color(88, 88, 88));
+        btnCerrar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnCerrarMouseExited
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana a su color original.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
-        btnMinimizar.setBackground(new Color(88, 88, 88));
+        btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnMinimizarMouseExited
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para cerrar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         System.exit(0);
     }//GEN-LAST:event_btnCerrarMouseClicked
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para minimizar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
+    /**
+     * Método que registra las coordenadas del mouse cuando presiona el header.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
+        // Se actualizan las coordenadas.
         mouseX = evt.getX();
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
+    /**
+     * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
+        // Obtenemos las coordenadas del mouse en la pantalla.
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
+        
+        // Se calcula la distancia del recorrido del mouse y eso es lo que se
+        // mueve la ventana.
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón de inserción masiva.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnInsercionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsercionMouseClicked
-        JOptionPane.showMessageDialog(this, "Se insertaron 20 personas.", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            // Se manda a llamar el método para insertar personas.
+            insercionMasivaBO.insertarPersonas();
+            JOptionPane.showMessageDialog(this, "Se insertaron 20 personas.", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NegocioException ne) {
+            JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnInsercionMouseClicked
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para realizar reportes.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportesMouseClicked
         FrmReportesFiltros frmReportesFiltros = new FrmReportesFiltros();
         frmReportesFiltros.setVisible(true);
@@ -599,7 +649,6 @@ public class FrmHome extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnCerrar;
-    private javax.swing.JPanel btnCerrarSesion;
     private javax.swing.JPanel btnHistorial;
     private javax.swing.JPanel btnInsercion;
     private javax.swing.JPanel btnLicencias;
@@ -609,7 +658,6 @@ public class FrmHome extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
