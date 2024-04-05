@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import utilerias.JButtonCellEditor;
-import utilerias.JButtonRenderer;
+import utilidades.JButtonCellEditor;
+import utilidades.JButtonRenderer;
 
 /**
  *

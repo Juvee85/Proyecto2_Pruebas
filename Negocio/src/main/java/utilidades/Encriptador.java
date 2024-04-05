@@ -1,3 +1,6 @@
+/*
+ * Encriptador.java
+ */
 package utilidades;
 
 import java.util.Base64;
@@ -5,7 +8,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- *
+ * Clase para encriptar y desencriptar valores que requieran seguridad.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

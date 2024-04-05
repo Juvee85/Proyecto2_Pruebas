@@ -14,7 +14,6 @@ negocio\RegistroPlacasBO.class
 negocio\InsercionMasivaBO.class
 dtos\PersonaDTO.class
 negocio\IReporteTramitesBO.class
-utilidades\FormatoDinero.class
 dtos\LicenciaDTO.class
 utilidades\Encriptador.class
 negocio\RegistroLicenciaBO.class

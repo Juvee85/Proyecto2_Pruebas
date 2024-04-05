@@ -1,14 +1,15 @@
+/*
+ * FrmLicenciaRecibo.java
+ */
 package presentacion;
 
 import dtos.LicenciaDTO;
-import dtos.TarifaLicenciaDTO;
 import dtos.PersonaDTO;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import utilidades.FormatoDinero;
 
 /**
- *
+ * Ventana donde se muestran los datos de la licencia generada.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -16,27 +17,37 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
 
     private PersonaDTO persona;
     private LicenciaDTO licencia;
-    private int mouseX, mouseY;
         
     /**
-     * Creates new form FrmLicenciaVigencia
+     * Constructor de la ventana.
+     * @param persona Persona que solicita la licencia.
+     * @param licencia Licencia generada.
      */
     public FrmLicenciaRecibo(PersonaDTO persona, LicenciaDTO licencia) {
         initComponents();
         this.persona = persona;
         this.licencia = licencia;
-        cargarDatos();
+        mostrarDatos();
     }
     
-    private void cargarDatos() {
+    /**
+     * Método para mostrar los datos de la licencia.
+     */
+    private void mostrarDatos() {
+        // Creamos una instancia para darle formato al dinero.
         FormatoDinero fd = new FormatoDinero();
+        
         lblSolicitante.setText(
                   persona.getNombre() + " "
                 + persona.getApellidoPaterno() + " "
                 + persona.getApellidoMaterno());
+        
         lblCosto.setText(fd.formatear(licencia.getCosto()));
+        
+        // Creamos una instancia para darle formato a la fecha de emisión.
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         lblFechaEmision.setText(sdf.format(licencia.getFechaEmision().getTime()));
+        
         lblVigencia.setText(licencia.getTarifa().getVigencia());
     }
 
@@ -102,7 +113,6 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
 
         lblSolicitante.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         lblSolicitante.setForeground(new java.awt.Color(188, 149, 92));
-        lblSolicitante.setText("jLabel9");
 
         jLabel10.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(188, 149, 92));
@@ -110,7 +120,6 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
 
         lblCosto.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         lblCosto.setForeground(new java.awt.Color(188, 149, 92));
-        lblCosto.setText("jLabel11");
 
         jLabel12.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(188, 149, 92));
@@ -122,11 +131,9 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
 
         lblVigencia.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         lblVigencia.setForeground(new java.awt.Color(188, 149, 92));
-        lblVigencia.setText("jLabel14");
 
         lblFechaEmision.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         lblFechaEmision.setForeground(new java.awt.Color(188, 149, 92));
-        lblFechaEmision.setText("jLabel15");
 
         jSeparator1.setBackground(new java.awt.Color(188, 149, 92));
         jSeparator1.setForeground(new java.awt.Color(188, 149, 92));
@@ -209,6 +216,10 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para continuar.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         FrmHome frmHome = new FrmHome();
         frmHome.setVisible(true);

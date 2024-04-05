@@ -1,16 +1,18 @@
+/*
+ * FrmHome.java
+ */
 package presentacion;
 
-import dtos.PersonaDTO;
 import excepciones.NegocioException;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 import negocio.IInsercionMasivaBO;
 import negocio.InsercionMasivaBO;
-import utilerias.Paleta;
+import utilidades.Paleta;
 
 /**
- * Ventana principal del programa.
- * 
+ * Ventana principal del programa donde se encuentran todas las acciones principales
+ * que el usuario puede realizar.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -24,12 +26,8 @@ public class FrmHome extends javax.swing.JFrame {
      */
     public FrmHome() {
         initComponents();
+        // Inicializamos el objeto negocio para la inserción masiva.
         insercionMasivaBO = new InsercionMasivaBO();
-        cargarTarifas();
-    }
-    
-    public void cargarTarifas() {
-        
     }
 
     /** This method is called from within the constructor to
@@ -526,7 +524,7 @@ public class FrmHome extends javax.swing.JFrame {
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnLicenciasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLicenciasMouseClicked
-        FrmLicenciaDatos frmLicenciaDC = new FrmLicenciaDatos(null);
+        FrmLicenciaDatos frmLicenciaDC = new FrmLicenciaDatos();
         frmLicenciaDC.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnLicenciasMouseClicked
@@ -631,8 +629,10 @@ public class FrmHome extends javax.swing.JFrame {
         try {
             // Se manda a llamar el método para insertar personas.
             insercionMasivaBO.insertarPersonas();
+            // Se manda un mensaje de éxito.
             JOptionPane.showMessageDialog(this, "Se insertaron 20 personas.", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
         } catch (NegocioException ne) {
+            // Se manda un mensaje de que se interrumpió el proceso.
             JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnInsercionMouseClicked

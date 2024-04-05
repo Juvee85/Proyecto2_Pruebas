@@ -1,9 +1,11 @@
+/*
+ * PresentacionException.java
+ */
 package excepciones;
 
 /**
  * Excepción lanzada por los métodos implementados en la capa de presentación
  * cuando ocurre un error en la parte con la que interactúa el usuario.
- * 
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

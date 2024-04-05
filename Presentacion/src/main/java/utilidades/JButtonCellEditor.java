@@ -1,4 +1,7 @@
-package utilerias;
+/*
+ * JButtonCellEditor.java
+ */
+package utilidades;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -12,7 +15,8 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.table.TableCellEditor;
 
 /**
- *
+ * Clase que nos brinda la posibilidad de editar botones que hayan sido agregados
+ * a una tabla.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

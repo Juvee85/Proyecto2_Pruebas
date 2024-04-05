@@ -1,3 +1,6 @@
+/*
+ * Conexion.java
+ */
 package conexion;
 
 import javax.persistence.EntityManager;
@@ -7,7 +10,6 @@ import javax.persistence.Persistence;
 /**
  * Clase con la implementación de la interfaz IConexion para crear una conexión
  * con el la base de datos mediante JPA.
- * 
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

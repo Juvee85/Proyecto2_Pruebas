@@ -1,4 +1,7 @@
-package utilerias;
+/*
+ * JButtonRenderer.java
+ */
+package utilidades;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -8,7 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 /**
- *
+ * Clase que nos brinda la posibilidad de agregar botones en las tablas.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

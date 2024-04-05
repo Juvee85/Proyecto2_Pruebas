@@ -3,7 +3,6 @@ package excepciones;
 /**
  * Excepción lanzada por los métodos implementados en la capa de persistencia
  * cuando ocurre un error en la parte de la manipulación de datos.
- * 
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

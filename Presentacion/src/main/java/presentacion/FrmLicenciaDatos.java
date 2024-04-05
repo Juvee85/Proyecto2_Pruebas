@@ -1,9 +1,13 @@
+/*
+ * FrmLicenciaDatos.java
+ */
 package presentacion;
 
 import dtos.LicenciaDTO;
 import dtos.TarifaLicenciaDTO;
 import dtos.PersonaDTO;
 import excepciones.NegocioException;
+import excepciones.PresentacionException;
 import java.awt.Frame;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,11 +16,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import negocio.IRegistroLicenciaBO;
 import negocio.RegistroLicenciaBO;
-import utilerias.Paleta;
+import utilidades.Paleta;
 import utilidades.FormatoDinero;
+import utilidades.Validadores;
 
 /**
- *
+ * Ventana donde se plasman los datos del solicitante y de la licencia.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -26,41 +31,124 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     private PersonaDTO persona;
     private int mouseX, mouseY;
     
-    /** Creates new form FrmLicenciaDatosCliente */
-    public FrmLicenciaDatos(PersonaDTO persona) {
+    /**
+     * Constructor del frame.
+     */
+    public FrmLicenciaDatos() {
         initComponents();
         this.registroLicencia = new RegistroLicenciaBO();
-        this.persona = persona;
-        mostrarDatos(persona);
+        this.persona = null;
     }
     
     /**
-     * Método para cargar las tarifas de licencia que hay.
+     * Método para mostrar los datos de la persona encontrada.
+     * @param persona Persona encontrada.
      */
-    public void cargarDatosLicencia() {
+    private void mostrarDatosPersona(PersonaDTO persona) {
+        // Si la persona es null significa que sí está en la base de datos.
+        if (persona != null) {
+            txtCurp.setText(persona.getCurp());
+            
+            lblNombre.setText(persona.getNombre() + " "
+                    + persona.getApellidoPaterno() + " "
+                    + persona.getApellidoMaterno());
+            
+            // Se crea un objeto para darle formato a la fecha.
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            lblFechaNacimiento.setText(sdf.format(persona.getFechaNacimiento().getTime()));
+            
+            if (persona.getTelefono()!= null) {
+                lblTelefono.setText(persona.getTelefono());
+            } else {
+                // Si la persona no tiene teléfono, se indica.
+                lblTelefono.setText("No tiene");
+            }
+            
+            if (persona.getRfc() != null) {
+                lblRfc.setText(persona.getRfc());
+            } else {
+                // Si la persona no tiene RFC, se indica.
+                lblRfc.setText("No tiene");
+            }
+            
+            // Se indica si la persona está discapacitada o no.
+            if (persona.isDiscapacitado()) {
+                lblDiscapacitado.setText("Sí");
+            } else {
+                lblDiscapacitado.setText("No");
+            }
+        }
+    }
+    
+    /**
+     * Método para generar la licencia que se registrará.
+     * @return 
+     */
+    private LicenciaDTO generarLicencia() {
+        // Se obtiene la fecha de emisión del tramite.
+        Calendar fechaEmision = Calendar.getInstance();
+        // Se obtiene la tarifa seleccionada.
+        TarifaLicenciaDTO tarifa = (TarifaLicenciaDTO) comboTarifa.getSelectedItem();
+        
+        // Se define la variable coso.
+        Float costo;
+        if (persona.isDiscapacitado()) {
+            // Si la persona está discapacitada, se obtiene un costo.
+            costo = tarifa.getCostoDiscapacitado();
+        } else {
+            // Si no, se obtiene el otro costo.
+            costo = tarifa.getCostoNormal();
+        }
+        
+        // Se crea un objeto LicenciaDTO y se le mandan los datos recién generados,
+        // además del argumento true para indicar que la licenca estará activa.
+        LicenciaDTO licencia = new LicenciaDTO(fechaEmision, costo, true, tarifa);
+        
+        // Se retorna la licencia generada.
+        return licencia;
+    }
+    
+    /**
+     * Método para obtener las tarifas disponibles.
+     */
+    public void cargarTarifasLicencia() {
         // Creamos un modelo para combo box.
         DefaultComboBoxModel<TarifaLicenciaDTO> modelo = new DefaultComboBoxModel<>();
                 
-        // Obtenemos una lista con las distintas tarifas que hay disponibles.
-        List<TarifaLicenciaDTO> tarifasLicencia = registroLicencia.buscarTarifasLicencia(persona.isDiscapacitado());
+        // Obtenemos una lista con las distintas tarifas que hay disponibles .
+        List<TarifaLicenciaDTO> tarifasLicencia = registroLicencia.buscarTarifasLicencia();
         
         // Iteramos sobre la lista de tarifas y vamos agregando cada una al modelo.
         for (TarifaLicenciaDTO tarifa : tarifasLicencia) {
             modelo.addElement(tarifa);
         }
         // Asignamos el modelo al combo box de la vigencia.
-        comboVigencia.setModel(modelo);
+        comboTarifa.setModel(modelo);
+        // Calculamos el costo de la licencia.
         calcularCosto();
     }
     
+    /**
+     * Método para calcular el costo de la licencia de acuerdo a la vigencia y si
+     * el solicitante está discapacitado o no.
+     */
     public void calcularCosto() {
+        // Creamos una instancia del formateador de dinero.
         FormatoDinero fd = new FormatoDinero();
-        TarifaLicenciaDTO vigenciaSeleccionada = (TarifaLicenciaDTO) comboVigencia.getSelectedItem();
-        if (persona.isDiscapacitado()) {
-            lblCosto.setText(fd.formatear(vigenciaSeleccionada.getCostoDiscapacitado()));
-        } else {
-            lblCosto.setText(fd.formatear(vigenciaSeleccionada.getCostoNormal()));
+        
+        // Obtenemos la tarifa/vigencia seleccionada.
+        TarifaLicenciaDTO tarifaSeleccionada = (TarifaLicenciaDTO) comboTarifa.getSelectedItem();
+        
+        String costo;
+        if (persona.isDiscapacitado()) { // Si la persona está discapacitada.
+            // Se obtiene el costo normal de la licencia y se le da formato.
+            costo = fd.formatear(tarifaSeleccionada.getCostoDiscapacitado());
+        } else { // Si la persona no está discapacitada.
+            // Se obtiene el costo discapacitado de la licencia y se le da formato.
+            costo = fd.formatear(tarifaSeleccionada.getCostoNormal());
         }
+        // Se muestra el costo.
+        lblCosto.setText(costo);
     }
 
     /** This method is called from within the constructor to
@@ -101,7 +189,7 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel12 = new javax.swing.JLabel();
-        comboVigencia = new javax.swing.JComboBox<>();
+        comboTarifa = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         lblCosto = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
@@ -304,12 +392,12 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
         jLabel12.setForeground(new java.awt.Color(37, 37, 37));
         jLabel12.setText("Vigencia:");
 
-        comboVigencia.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        comboVigencia.setForeground(new java.awt.Color(37, 37, 37));
-        comboVigencia.setEnabled(false);
-        comboVigencia.addActionListener(new java.awt.event.ActionListener() {
+        comboTarifa.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        comboTarifa.setForeground(new java.awt.Color(37, 37, 37));
+        comboTarifa.setEnabled(false);
+        comboTarifa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboVigenciaActionPerformed(evt);
+                comboTarifaActionPerformed(evt);
             }
         });
 
@@ -368,7 +456,7 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
                             .addGroup(pnlCamposLayout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboVigencia, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboTarifa, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(pnlCamposLayout.createSequentialGroup()
                                 .addComponent(jLabel10)
@@ -410,7 +498,7 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboVigencia)
+                    .addComponent(comboTarifa)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -483,41 +571,83 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para minimizar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
         btnMinimizar.setBackground(Paleta.VERDE);
     }//GEN-LAST:event_btnMinimizarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana a su color original.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
         btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnMinimizarMouseExited
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para cerrar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         System.exit(0);
     }//GEN-LAST:event_btnCerrarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
         btnCerrar.setBackground(Paleta.ROJO);
     }//GEN-LAST:event_btnCerrarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana a su color original.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
         btnCerrar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnCerrarMouseExited
 
+    /**
+     * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
+        // Obtenemos las coordenadas del mouse en la pantalla.
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
+        
+        // Se calcula la distancia del recorrido del mouse y eso es lo que se
+        // mueve la ventana.
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
+    /**
+     * Método que registra las coordenadas del mouse cuando presiona el header.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
+        // Se actualizan las coordenadas.
         mouseX = evt.getX();
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para confirmar la
+     * licencia y proceder.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         try {
             // Se valida que el solicitante cumpla con los requisitos.
@@ -527,31 +657,27 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
             LicenciaDTO licencia = generarLicencia();
             
             // Se manda a agregar la licencia.
+            // Mandamos la curp para luego obtener la entidad para asociarla a la
+            // licencia.
             registroLicencia.agregarLicencia(persona.getCurp(), licencia);
             
+            // Se redirecciona al recibo donde están los datos de la licencia y
+            // el solicitante.
             FrmLicenciaRecibo frmLicenciaRecibo = new FrmLicenciaRecibo(persona, licencia);
             frmLicenciaRecibo.setVisible(true);
             this.dispose();
         } catch (NegocioException ne) {
+            // Se manda un mensaje de que se interrumpió el proceso por incumplimiento
+            // de requisitos.
             JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
-
-    private LicenciaDTO generarLicencia() {
-        Calendar fechaEmision = Calendar.getInstance();
-        TarifaLicenciaDTO tarifa = (TarifaLicenciaDTO) comboVigencia.getSelectedItem();
-        Float costo = 0F;
-        if (persona.isDiscapacitado()) {
-            costo = tarifa.getCostoDiscapacitado();
-        } else {
-            costo = tarifa.getCostoNormal();
-        }
-        
-        LicenciaDTO licencia = new LicenciaDTO(fechaEmision, costo, true, tarifa);
-        
-        return licencia;
-    }
     
+    /**
+     * Método que reacciona al evento de dar clic en el botón para regresar a la
+     * pantalla inicial.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmHome frmHome = new FrmHome();
         frmHome.setVisible(true);
@@ -564,62 +690,50 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String curp = txtCurp.getText();
+        // Se obtiene la CURP ingresada.
+        String curp = txtCurp.getText().trim().toUpperCase();
         try {
-            // Se busca si hay alguna persona registrada con la curp ingresada.
-            persona = registroLicencia.buscarCurp(curp);
+            // Creamos una instancia de validadores.
+            Validadores v = new Validadores();
+            
+            // Validamos la CURP.
+            v.validarCurp(curp);
+            
+            // Se busca si hay alguna persona registrada con la CURP ingresada.
+            persona = registroLicencia.buscarPersonaCurp(curp);
+            
             // Se habilitan el botón de continuar y el combobox de vigencia.
             btnConfirmar.setEnabled(true);
-            comboVigencia.setEnabled(true);
+            comboTarifa.setEnabled(true);
+            
             // Se muestran los datos de la persona encontrada.
-            mostrarDatos(persona);
-            cargarDatosLicencia();
-        } catch (NegocioException ne) {
-            JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
+            mostrarDatosPersona(persona);
+            
+            // Se cargan las tarifas disponibles.
+            cargarTarifasLicencia();
+        } catch (PresentacionException | NegocioException ex) {
+            // Se muestra un mensaje si la CURP fue mal ingresada o si no se
+            // encontró una persona con dicha CURP.
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void comboVigenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVigenciaActionPerformed
-        calcularCosto();
-    }//GEN-LAST:event_comboVigenciaActionPerformed
-
     /**
-     * Método para mostrar los datos de la persona encontrada.
-     * @param persona Persona encontrada.
+     * Método que reacciona al evento de seleccionar una tarifa.
+     * @param evt Evento del mouse al que se escucha.
      */
-    private void mostrarDatos(PersonaDTO persona) {
-        if (persona != null) {
-            txtCurp.setText(persona.getCurp());
-            lblNombre.setText(persona.getNombre() + " "
-                    + persona.getApellidoPaterno() + " "
-                    + persona.getApellidoMaterno());
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            lblFechaNacimiento.setText(sdf.format(persona.getFechaNacimiento().getTime()));
-            if (persona.getTelefono()!= null) {
-                lblTelefono.setText(persona.getTelefono());
-            } else {
-                lblTelefono.setText("No tiene");
-            }
-            if (persona.getRfc() != null) {
-                lblRfc.setText(persona.getRfc());
-            } else {
-                lblRfc.setText("No tiene");
-            }
-            if (persona.isDiscapacitado()) {
-                lblDiscapacitado.setText("Sí");
-            } else {
-                lblDiscapacitado.setText("No");
-            }
-        }
-    }
-    
+    private void comboTarifaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTarifaActionPerformed
+        // Calculamos el costo de la licencia.
+        calcularCosto();
+    }//GEN-LAST:event_comboTarifaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JPanel btnCerrar;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<TarifaLicenciaDTO> comboVigencia;
+    private javax.swing.JComboBox<dtos.TarifaLicenciaDTO> comboTarifa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
