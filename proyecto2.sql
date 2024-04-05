@@ -1,13 +1,16 @@
 create database proyecto2_247700_248547;
 
-use proyecto2_247700_248547;
+-- Creación de las tarifas de licencia.
+insert into tarifas_licencia
+(costo_discapacitado, costo_normal, vigencia)
+values
+(200, 600, "1 año"),
+(500, 900, "2 años"),
+(700, 1100, "3 años");
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    correo VARCHAR(50) NOT NULL,
-    contrasenia VARCHAR(64) NOT NULL
-);
-
--- Utilizamos la función de encriptación SHA-256 para la contraseña
-INSERT INTO usuarios (correo, contrasenia) 
-VALUES ('root@root.com', SHA2('root', 256));
+-- Creación de las tarifas de placas.
+insert into tarifas_placa
+(tipo, costo)
+values
+("Auto nuevo", 1500),
+("Auto usado", 1000);
