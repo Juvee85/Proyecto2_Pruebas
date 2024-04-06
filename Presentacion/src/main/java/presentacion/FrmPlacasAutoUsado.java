@@ -4,12 +4,10 @@ import dtos.AutomovilDTO;
 import dtos.LicenciaDTO;
 import dtos.PersonaDTO;
 import dtos.PlacasDTO;
-import dtos.TarifaLicenciaDTO;
 import dtos.TarifaPlacasDTO;
 import excepciones.NegocioException;
 import excepciones.PresentacionException;
 import java.awt.Frame;
-import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import negocio.IRegistroPlacasBO;
 import negocio.RegistroPlacasBO;
@@ -60,6 +58,8 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
         lblMarca.setText(auto.getMarca()); // Mostramos la marca.
         
         lblLinea.setText(auto.getLinea()); // Mostramos la línea.
+        
+        lblColor.setText(auto.getColor()); // Mostramos la línea.
         
         lblModelo.setText(auto.getModelo()); // Mostramos el modelo.
     }
@@ -372,9 +372,9 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
             pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCamposLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNumPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -523,7 +523,8 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
             v.validarPlacas(numPlacas);
 
             // Se busca si hay alguna persona registrada con la CURP ingresada.
-            auto = registroPlacas.buscarPlacas(numPlacas);
+            auto = registroPlacas.buscarAutoPlacas(numPlacas);
+            auto.setNumPlaca(numPlacas);
 
             // Se habilita el botón de confirmar.
             btnConfirmar.setEnabled(true);
@@ -541,7 +542,9 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
         try {
             PlacasDTO placaDTO = registroPlacas.generarPlaca("Automóvil usado");
             
-            registroPlacas.agregarPlacaUsado(auto, persona.getCurp(), placaDTO);
+            registroPlacas.desactivarPlacas(txtNumPlaca.getText());
+            
+            registroPlacas.agregarPlacaUsado(auto.getNumSerie(), persona.getCurp(), placaDTO);
             
             FrmPlacasRecibo frmPlacasRecibo = new FrmPlacasRecibo(persona, placaDTO);
             frmPlacasRecibo.setVisible(true);

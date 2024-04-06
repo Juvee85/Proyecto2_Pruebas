@@ -35,7 +35,7 @@ public class PlacasEntidad extends TramiteEntidad implements Serializable {
     @JoinColumn(name = "id_tarifa", nullable = false)
     private TarifaPlacasEntidad tarifa;
     
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_vehiculo", nullable = false)
     private VehiculoEntidad vehiculo;
 

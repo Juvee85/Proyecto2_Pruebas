@@ -45,11 +45,17 @@ public interface IRegistroPlacasBO {
     
     public String generarNumeroPlaca();
     
+    public AutomovilDTO buscarAutomovil(String numSerie);
+    
     public void agregarPlacaNuevo(AutomovilDTO auto, String curp, PlacasDTO placa) throws NegocioException;
 
     public TarifaPlacasDTO buscarTarifa(String tipo);
 
-    public AutomovilDTO buscarPlacas(String numPlacas);
+    public AutomovilDTO buscarAutoPlacas(String numPlacas) throws NegocioException;
 
-    public void agregarPlacaUsado(AutomovilDTO auto, String curp, PlacasDTO placaDTO);
+    public void desactivarPlacas(String text);
+    
+    public PlacasDTO obtenerUltimasPlacas(String numSerie);
+    
+    public void agregarPlacaUsado(String numSerie, String curp, PlacasDTO placasDTO) throws NegocioException;
 }

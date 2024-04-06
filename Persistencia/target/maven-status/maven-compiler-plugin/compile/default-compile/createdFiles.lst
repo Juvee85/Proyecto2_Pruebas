@@ -9,11 +9,13 @@ entidades\RelacionVehiculoPersona.class
 daos\ITramiteDAO.class
 entidades\PlacasEntidad.class
 entidades\TarifaLicenciaEntidad.class
+daos\RelacionVehiculoPersonaDAO.class
 entidades\TramiteEntidad.class
 conexion\Conexion.class
 entidades\PersonaEntidad_.class
 daos\ITarifaLicenciaDAO.class
 entidades\VehiculoEntidad.class
+daos\IRelacionVehiculoPersonaDAO.class
 entidades\AutomovilEntidad.class
 daos\AutomovilDAO.class
 daos\LicenciaDAO.class

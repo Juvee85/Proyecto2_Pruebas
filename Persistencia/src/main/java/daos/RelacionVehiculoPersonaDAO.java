@@ -2,7 +2,8 @@ package daos;
 
 import conexion.Conexion;
 import conexion.IConexion;
-import entidades.AutomovilEntidad;
+import entidades.PlacasEntidad;
+import entidades.RelacionVehiculoPersona;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -16,46 +17,44 @@ import javax.persistence.criteria.Root;
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
-public class AutomovilDAO implements IAutomovilDAO {
-    
+public class RelacionVehiculoPersonaDAO implements IRelacionVehiculoPersonaDAO {
+
     private final IConexion conexion = new Conexion();
-    private static final Logger logger = Logger.getLogger(AutomovilDAO.class.getName());
+    private static final Logger logger = Logger.getLogger(RelacionVehiculoPersonaDAO.class.getName());
 
     @Override
-    public boolean estaRegistrado(String numSerie) {
-        return (obtenerAutomovil(numSerie) != null);
-    }
-    
-    @Override
-    public AutomovilEntidad obtenerAutomovil(String numSerie) {
+    public boolean existeDetalle(RelacionVehiculoPersona rvp) {
         // Creamos un entity manager.
         EntityManager em = conexion.crearConexion();
-        
+
         try {
             // Construimos una instancia de CriteriaBuilder.
             CriteriaBuilder cb = em.getCriteriaBuilder();
             // Creamos un objeto CriteriaQuery para indicar el resultado de la consulta.
-            CriteriaQuery<AutomovilEntidad> cq = cb.createQuery(AutomovilEntidad.class);
-            // Creamos una instancia instancia del tipo Root para indicar de qué entidad
+            CriteriaQuery<RelacionVehiculoPersona> cq = cb.createQuery(RelacionVehiculoPersona.class);
+            // Creamos una instancia instanciadel tipo Root para indicar de qué entidad
             // se hará la consulta.
-            Root<AutomovilEntidad> root = cq.from(AutomovilEntidad.class);
+            Root<RelacionVehiculoPersona> root = cq.from(RelacionVehiculoPersona.class);
 
             // Con esta línea especificamos que la consulta seleccionará todos los
-            // campos de PersonaEntidad donde la CURP coincida con la buscada.
-            cq.select(root).where(cb.equal(root.get("numeroSerie"), numSerie));
+            // campos de LicenciaEntidad donde el atributo 'activa' sea true y el
+            // atributo 'persona' sea el mismo que el recibido en el parámetro.
+            cq.select(root).where(cb.equal(root.get("persona"), rvp.getPersona()),
+                    cb.equal(root.get("vehiculo"), rvp.getVehiculo()));
 
-            // Se manda a ejecutar la consulta y guardamos el resultado.
-            AutomovilEntidad automovil = em.createQuery(cq).getSingleResult();
+            // Obtenemos la última licencia.
+            RelacionVehiculoPersona rvpResultado = em.createQuery(cq).getSingleResult();
 
             // Imprimimos un mensaje de que se ejecutó una consulta.
-            logger.log(Level.INFO, "Se ha consultado la tabla 'automoviles' y se obtuvo 1 resultado.");
+            logger.log(Level.INFO, "Se ha consultado la tabla 'vehículos_persona' y se obtuvo 1 resultado.");
 
-            // Retornamos la persona encontrada.
-            return automovil;
+            // Retornamos la licencia obtenida.
+            return true;
         } catch (NoResultException nre) {
-            // Si no se obtuvo nada, imprimimos un mensaje de que se ejecutó una consulta.
-            logger.log(Level.INFO, "Se ha consultado la tabla 'automoviles' y no se obtuvieron resultados.");
-            return null;
+            // Imprimimos un mensaje de que se ejecutó una consulta.
+            logger.log(Level.INFO, "Se ha consultado la tabla 'vehículos_persona' y no se obtuvieron resultados.");
+            // Lanzamos una excepción de que no se encontró ninguna licencia.
+            return false;
         } finally {
             // Cerramos el entity manager.
             em.close();
@@ -63,7 +62,7 @@ public class AutomovilDAO implements IAutomovilDAO {
     }
 
     @Override
-    public void insertarAutomovil(AutomovilEntidad autoEntidad) {
+    public void insertarDetalle(RelacionVehiculoPersona rvp) {
         // Creamos un entity manager.
         EntityManager em = conexion.crearConexion();
 
@@ -71,7 +70,7 @@ public class AutomovilDAO implements IAutomovilDAO {
         em.getTransaction().begin();
 
         // Mandamos a persistir la licencia.
-        em.persist(autoEntidad);
+        em.persist(rvp);
 
         // Hacemos el commit y cerramos el entity manager.
         em.getTransaction().commit();
@@ -79,6 +78,7 @@ public class AutomovilDAO implements IAutomovilDAO {
 
         // Imprimimos un mensaje de que se registró una licencia.
         logger.log(Level.INFO, "Se ha insertado 1 placa correctamente.");
+
     }
 
 }

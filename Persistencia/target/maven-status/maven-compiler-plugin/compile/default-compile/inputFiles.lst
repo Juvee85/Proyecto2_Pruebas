@@ -20,7 +20,9 @@ C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\ja
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\RelacionVehiculoPersona.java
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IPlacasDAO.java
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\TramiteDAO.java
+C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IRelacionVehiculoPersonaDAO.java
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IAutomovilDAO.java
+C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\RelacionVehiculoPersonaDAO.java
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\AutomovilEntidad.java
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\conexion\Conexion.java
 C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\LicenciaEntidad.java

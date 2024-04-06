@@ -4,6 +4,7 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,13 +36,13 @@ public abstract class VehiculoEntidad implements Serializable {
     @Column(name = "usado", nullable = false)
     private Boolean usado;
     
-    @Column(name = "numero_serie", nullable = false)
+    @Column(name = "numero_serie", nullable = false, unique = true)
     private String numeroSerie;
     
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.PERSIST)
     private List<RelacionVehiculoPersona> detalle;
     
-    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "vehiculo")
     private List<PlacasEntidad> placas;
 
     public VehiculoEntidad() {
@@ -50,6 +51,7 @@ public abstract class VehiculoEntidad implements Serializable {
     public VehiculoEntidad(Boolean usado, String numeroSerie) {
         this.usado = usado;
         this.numeroSerie = numeroSerie;
+        this.detalle = new ArrayList<>();
     }
     
     public Long getId() {
@@ -80,16 +82,16 @@ public abstract class VehiculoEntidad implements Serializable {
         return detalle;
     }
 
-    public void setDetalle(List<RelacionVehiculoPersona> detalle) {
-        this.detalle = detalle;
+    public void setDetalle(RelacionVehiculoPersona detalle) {
+        this.detalle.add(detalle);
     }
 
     public List<PlacasEntidad> getPlacas() {
         return placas;
     }
 
-    public void setPlacas(List<PlacasEntidad> placas) {
-        this.placas = placas;
+    public void setPlacas(PlacasEntidad placas) {
+        this.placas.add(placas);
     }
 
 }

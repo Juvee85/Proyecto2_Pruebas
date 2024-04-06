@@ -3,6 +3,7 @@
  */
 package dtos;
 
+import entidades.PlacasEntidad;
 import java.util.Calendar;
 
 /**
@@ -34,6 +35,15 @@ public class PlacasDTO {
         this.costo = costo;
         this.activa = activa;
         this.tarifa = tarifa;
+    }
+
+    public PlacasDTO(PlacasEntidad placasEnt) {
+        this.numero = placasEnt.getNumero();
+        this.fechaRecepcion = placasEnt.getFechaRecepcion();
+        this.fechaEmision = placasEnt.getFechaEmision();
+        this.costo = placasEnt.getCosto();
+        this.activa = placasEnt.isActiva();
+        this.tarifa = new TarifaPlacasDTO(placasEnt.getTarifa());
     }
     
     /**

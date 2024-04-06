@@ -71,15 +71,15 @@ public class RegistroLicenciaBO implements IRegistroLicenciaBO {
         // Creamos una cadena para almacenar los errores.
         String errores = "";
         if (persona.getRfc() == null) { // Se valida que el solicitante tenga RFC.
-            errores += "• El solicitante no cuenta con RFC.\n";
+            errores += "El solicitante no cuenta con RFC.\n";
         }
         
         if (persona.getTelefono() == null) { // Se valida que el solicitante tenga teléfono.
-            errores += "• El solicitante no cuenta con un número de teléfono.\n";
+            errores += "El solicitante no cuenta con un número de teléfono.\n";
         }
         
         if (menorDeEdad(persona)) { // Se valida que el solicitante sea mayor de edad.
-            errores += "• El solicitante es menor de edad.\n";
+            errores += "El solicitante es menor de edad.\n";
         }
         
         if (!errores.equals("")) { // Si hubo errores.

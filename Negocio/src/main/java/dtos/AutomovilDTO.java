@@ -1,5 +1,7 @@
 package dtos;
 
+import entidades.AutomovilEntidad;
+
 /**
  *
  * @author Diego Valenzuela Parra - 00000247700
@@ -19,6 +21,14 @@ public class AutomovilDTO {
         this.linea = linea;
         this.color = color;
         this.modelo = modelo;
+    }
+
+    public AutomovilDTO(AutomovilEntidad autoEntidad) {
+        this.numSerie = autoEntidad.getNumeroSerie();
+        this.marca = autoEntidad.getMarca();
+        this.linea = autoEntidad.getLinea();
+        this.color = autoEntidad.getColor();
+        this.modelo = autoEntidad.getModelo();
     }
 
     public String getNumSerie() {

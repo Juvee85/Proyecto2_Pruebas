@@ -10,6 +10,8 @@ import excepciones.NegocioException;
 import excepciones.PresentacionException;
 import java.awt.Color;
 import java.awt.Frame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import negocio.IRegistroPlacasBO;
 import negocio.RegistroPlacasBO;
@@ -479,14 +481,14 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        AutomovilDTO automovil = null;
+        AutomovilDTO automovil;
+        // Obtenemos los datos que ingresó el usuario.
+        String numSerie = txtNumSerie.getText().trim().toUpperCase();
+        String marca = txtMarca.getText().trim().toUpperCase();
+        String linea = txtLinea.getText().trim().toUpperCase();
+        String color = txtColor.getText().trim().toUpperCase();
+        String modelo = txtModelo.getText().replaceAll("\\s+", "");
         try {
-            // Obtenemos los datos que ingresó el usuario.
-            String numSerie = txtNumSerie.getText().trim().toUpperCase();
-            String marca = txtMarca.getText().trim().toUpperCase();
-            String linea = txtLinea.getText().trim().toUpperCase();
-            String color = txtColor.getText().trim().toUpperCase();
-            String modelo = txtModelo.getText().strip();
             
             // Creamos una instancia para validar que se hayan ingresado correctamente
             // los datos del vehículo.
@@ -497,24 +499,18 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
             v.validarLinea(linea);
             v.validarColor(color);
             v.validarModelo(modelo);
-            
-            automovil = new AutomovilDTO(numSerie, marca, linea, color, modelo);
-            
-            PlacasDTO placaDTO = registroPlacas.generarPlaca("Automóvil nuevo");
-            
-            automovil.setNumPlaca(placaDTO.getNumero());
-            
-            registroPlacas.agregarPlacaNuevo(automovil, persona.getCurp(), placaDTO);
-            
-            FrmPlacasRecibo frmPlacasRecibo = new FrmPlacasRecibo(persona, placaDTO);
-            frmPlacasRecibo.setVisible(true);
-            this.dispose();
         } catch (PresentacionException pe) {
             // Se manda un mensaje de que se introdujeron datos erróneos.
             JOptionPane.showMessageDialog(this, pe.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
-        } catch (NegocioException ne) {
+            return;
+        }
+        
+        automovil = registroPlacas.buscarAutomovil(numSerie);
+        if (automovil != null) {
+            PlacasDTO ultimasPlacas = registroPlacas.obtenerUltimasPlacas(numSerie);
+            automovil.setNumPlaca(ultimasPlacas.getNumero());
             // Se manda un mensaje de ya está registrado el vehículo.
-            int opcion = JOptionPane.showConfirmDialog(this, ne.getMessage() + "\n¿Desea continuar con el trámite?", "¡Error!", JOptionPane.YES_NO_OPTION);
+            int opcion = JOptionPane.showConfirmDialog(this, "El automóvil ya está registrado.\n¿Desea continuar con el trámite?", "¡Error!", JOptionPane.YES_NO_OPTION);
             if (opcion == 0) {
                 FrmPlacasAutoUsado frmPlacasAutoUsado = new FrmPlacasAutoUsado(persona, automovil, null);
                 frmPlacasAutoUsado.setVisible(true);
@@ -522,6 +518,22 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
                 FrmHome frmHome = new FrmHome();
                 frmHome.setVisible(true);
             }
+            this.dispose();
+        } else {
+            automovil = new AutomovilDTO(numSerie, marca, linea, color, modelo);
+
+            PlacasDTO placaDTO = registroPlacas.generarPlaca("Automóvil nuevo");
+
+            automovil.setNumPlaca(placaDTO.getNumero());
+
+            try {
+                registroPlacas.agregarPlacaNuevo(automovil, persona.getCurp(), placaDTO);
+            } catch (NegocioException ex) {
+
+            }
+
+            FrmPlacasRecibo frmPlacasRecibo = new FrmPlacasRecibo(persona, placaDTO);
+            frmPlacasRecibo.setVisible(true);
             this.dispose();
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed

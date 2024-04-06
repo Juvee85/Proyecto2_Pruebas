@@ -1,6 +1,7 @@
 
 package daos;
 
+import entidades.AutomovilEntidad;
 import entidades.PlacasEntidad;
 import excepciones.PersistenciaException;
 
@@ -15,7 +16,11 @@ public interface IPlacasDAO {
     
     public void insertarPlacas(PlacasEntidad placas);
     
-    public PlacasEntidad buscarUltimasPlacas(String numSerie) throws PersistenciaException;
+    public AutomovilEntidad buscarAutoPlacas(String numPlacas) throws PersistenciaException;
 
+    public PlacasEntidad obtenerUltimasPlacas(String numSerie);
+    
+    public PlacasEntidad obtenerPlacas(String numPlacas);
+    
     public void desactivarPlacas(PlacasEntidad ultimasPlacas);
 }

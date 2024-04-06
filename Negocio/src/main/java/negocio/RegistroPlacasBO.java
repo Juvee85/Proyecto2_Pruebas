@@ -8,11 +8,13 @@ import daos.IAutomovilDAO;
 import daos.ILicenciaDAO;
 import daos.IPersonaDAO;
 import daos.IPlacasDAO;
+import daos.IRelacionVehiculoPersonaDAO;
 import daos.ITarifaLicenciaDAO;
 import daos.ITarifaPlacasDAO;
 import daos.LicenciaDAO;
 import daos.PersonaDAO;
 import daos.PlacasDAO;
+import daos.RelacionVehiculoPersonaDAO;
 import daos.TarifaLicenciaDAO;
 import daos.TarifaPlacasDAO;
 import dtos.AutomovilDTO;
@@ -48,6 +50,7 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
     private ITarifaPlacasDAO tarifaPlacasDAO = new TarifaPlacasDAO();
     private IPlacasDAO placasDAO = new PlacasDAO();
     private IAutomovilDAO automovilDAO = new AutomovilDAO();
+    private IRelacionVehiculoPersonaDAO relacionVehPerDAO = new RelacionVehiculoPersonaDAO();
     private static final Logger logger = Logger.getLogger(RegistroPlacasBO.class.getName());
 
     /**
@@ -194,13 +197,19 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
         // Retornamos el número de la placa.
         return numPlaca;
     }
+    
+    @Override
+    public AutomovilDTO buscarAutomovil(String numSerie) {
+        AutomovilEntidad autoEnt = automovilDAO.obtenerAutomovil(numSerie);
+        AutomovilDTO autoDTO = null;
+        if (autoEnt != null) {
+            autoDTO = new AutomovilDTO(autoEnt);
+        }
+        return autoDTO;
+    }
 
     @Override
     public void agregarPlacaNuevo(AutomovilDTO autoDTO, String curp, PlacasDTO placasDTO) throws NegocioException {
-        if (automovilDAO.estaRegistrado(autoDTO.getNumSerie())) {
-            throw new NegocioException("El automovil ya está registrado.");
-        }
-
         // Creamos un objeto para guardar a la persona.
         // Como para este punto ya sabemos que en realidad sí existe una persona
         // con la CURP dada, no importa si dejamos esto null.
@@ -218,15 +227,15 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
         }
         
         AutomovilEntidad autoEntidad = convertirAutomovilDTO_Entidad(autoDTO);
-        RelacionVehiculoPersona rvp = new RelacionVehiculoPersona();
-        rvp.setPersona(persona);
-        rvp.setVehiculo(autoEntidad);
+        RelacionVehiculoPersona rvp = new RelacionVehiculoPersona(persona, autoEntidad);
+        autoEntidad.setDetalle(rvp);
         
         PlacasEntidad placasEntidad = convertirPlacasDTO_Entidad(placasDTO);
         placasEntidad.setVehiculo(autoEntidad);
         placasEntidad.setPersona(persona);
         placasEntidad.setTarifa(tarifaPlacasDAO.buscarTarifa("Automóvil nuevo"));
         
+        automovilDAO.insertarAutomovil(autoEntidad);
         placasDAO.insertarPlacas(placasEntidad);
     }
     
@@ -264,13 +273,70 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
     }
 
     @Override
-    public AutomovilDTO buscarPlacas(String numPlacas) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public AutomovilDTO buscarAutoPlacas(String numPlacas) throws NegocioException {
+        try {
+            AutomovilEntidad autoEntidad = placasDAO.buscarAutoPlacas(numPlacas);
+            
+            AutomovilDTO autoDTO = new AutomovilDTO(autoEntidad);
+            
+            return autoDTO;
+        } catch (PersistenciaException pe) {
+            // Se manda un mensaje a consola de que se interrumpió el registro de
+            // placas.
+            logger.log(Level.WARNING, "Registro de placas interrumpido.");
+            // Lanzamos una exceción indicando que no se encontró ningún automóvil
+            // con la placa proporcionada.
+            throw new NegocioException(pe.getMessage());
+        }
     }
 
     @Override
-    public void agregarPlacaUsado(AutomovilDTO auto, String curp, PlacasDTO placaDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void desactivarPlacas(String numPlacas) {
+        PlacasEntidad placas = placasDAO.obtenerPlacas(numPlacas);
+        placas.setActiva(false);
+        placasDAO.desactivarPlacas(placas);
     }
+    
+    @Override
+    public PlacasDTO obtenerUltimasPlacas(String numSerie) {
+        PlacasEntidad placasEnt = placasDAO.obtenerUltimasPlacas(numSerie);
+        PlacasDTO placasDTO = new PlacasDTO(placasEnt);
+        return placasDTO;
+    }
+    
+    @Override
+    public void agregarPlacaUsado(String numSerie, String curp, PlacasDTO placasDTO) throws NegocioException {
+        // Creamos un objeto para guardar a la persona.
+        // Como para este punto ya sabemos que en realidad sí existe una persona
+        // con la CURP dada, no importa si dejamos esto null.
+        PersonaEntidad persona = null;
+        try {
+            // Obtenemos la persona que tiene la CURP proporcionada.
+            persona = personaDAO.buscarPorCurp(curp);
+        } catch (PersistenciaException pe) {
+            // Se manda un mensaje a consola de que se interrumpió el registro de
+            // licencia.
+            logger.log(Level.WARNING, "Registro de placas interrumpido.");
+            // En teoría nunca debería lanzarse esta excepción, porque llegados a
+            // este punto ya sabemos que sí existe una persona con la CURP dada.
+            throw new NegocioException(pe.getMessage());
+        }
+        
+        // Obtenemos la entidad del automóvil con el número de serie del parámetro
+        // recibido.
+        AutomovilEntidad autoEntidad = automovilDAO.obtenerAutomovil(numSerie);
+        RelacionVehiculoPersona rvp = new RelacionVehiculoPersona(persona, autoEntidad);
+        
+        PlacasEntidad placasEntidad = convertirPlacasDTO_Entidad(placasDTO);
+        placasEntidad.setVehiculo(autoEntidad);
+        placasEntidad.setPersona(persona);
+        placasEntidad.setTarifa(tarifaPlacasDAO.buscarTarifa("Automóvil usado"));
+        
+        if (!relacionVehPerDAO.existeDetalle(rvp)) {
+            relacionVehPerDAO.insertarDetalle(rvp);
+        }
+        placasDAO.insertarPlacas(placasEntidad);
+    }
+
 
 }

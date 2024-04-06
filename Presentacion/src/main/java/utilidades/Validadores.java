@@ -36,11 +36,13 @@ public class Validadores {
             validarVacio(curp);
         } catch (PresentacionException pe) {
             // Si la CURP está vacía, lanzamos una excepción.
-            throw new PresentacionException("La CURP no puede estar vacía. Ejemplo: \"FEPI910601MTSLZB01\".");
+            throw new PresentacionException("La CURP no puede estar vacía. "
+                    + "Ejemplo: \"FEPI910601MTSLZB01\".");
         }
         if (curp.length() != 18) {
             // Si la CURP no tiene 18 caracteres, lanzamos una excepción.
-            throw new PresentacionException("La CURP debe tener 18 caracteres. Ejemplo: \"FEPI910601MTSLZB01\".");
+            throw new PresentacionException("La CURP debe tener 18 caracteres. "
+                    + "Ejemplo: \"FEPI910601MTSLZB01\".");
         }
     }
     
@@ -52,7 +54,8 @@ public class Validadores {
     public void validarSeleccion(ButtonModel seleccion) throws PresentacionException {
         if (seleccion == null) {
             // Si no se seleccionó ninguna opción.
-            throw new PresentacionException("Favor de especificar si el vehículo es nuevo o usado.");
+            throw new PresentacionException("Favor de especificar si el vehículo "
+                    + "es nuevo o usado.");
         }
     }
     
@@ -68,11 +71,13 @@ public class Validadores {
             validarVacio(numSerie);
         } catch (PresentacionException pe) {
             // Si el número de serie está vacío, lanzamos una excepción.
-            throw new PresentacionException("El número de serie no puede estar vacío. Ejemplo: \"1HGBA87NXBV165879\".");
+            throw new PresentacionException("El número de serie no puede estar "
+                    + "vacío. Ejemplo: \"1HGBA87NXBV165879\".");
         }
         if (numSerie.length() != 17) {
             // Si el número de serie no tiene 17 caracteres, lanzamos una excepción.
-            throw new PresentacionException("El número de serie debe tener 17 caracteres. Ejemplo: \"1HGBA87NXBV165879\".");
+            throw new PresentacionException("El número de serie debe tener 17 "
+                    + "caracteres. Ejemplo: \"1HGBA87NXBV165879\".");
         }
     }
     
@@ -87,11 +92,13 @@ public class Validadores {
             validarVacio(marca);
         } catch (PresentacionException pe) {
             // Si la marca está vacía, lanzamos una excepción.
-            throw new PresentacionException("La marca no puede estar vacía. Ejemplo: \"Nissan\".");
+            throw new PresentacionException("La marca no puede estar vacía. "
+                    + "Ejemplo: \"Nissan\".");
         }
         if (marca.matches(".*\\d.*")) {
             // Si la marca contiene números, lanzamos una excepción.
-            throw new PresentacionException("La marca no puede estar vacía. Ejemplo: \"Nissan\".");
+            throw new PresentacionException("La marca no puede estar vacía. "
+                    + "Ejemplo: \"Nissan\".");
         }
     }
     
@@ -106,7 +113,8 @@ public class Validadores {
             validarVacio(linea);
         } catch (PresentacionException pe) {
             // Si la línea está vacía, lanzamos una excepción.
-            throw new PresentacionException("La línea no puede estar vacía. Ejemplo: \"Sentra\".");
+            throw new PresentacionException("La línea no puede estar vacía. "
+                    + "Ejemplo: \"Sentra\".");
         }
     }
     
@@ -121,11 +129,13 @@ public class Validadores {
             validarVacio(color);
         } catch (PresentacionException pe) {
             // Si el color está vacío, lanzamos una excepción.
-            throw new PresentacionException("El color no puede estar vacío. Ejemplo: \"Blanco\".");
+            throw new PresentacionException("El color no puede estar vacío. "
+                    + "Ejemplo: \"Blanco\".");
         }
         if (color.matches(".*\\d.*")) {
             // Si el color contiene números, lanzamos una excepción.
-            throw new PresentacionException("El color no puede tener números. Ejemplo: \"Blanco\".");
+            throw new PresentacionException("El color no puede tener números. "
+                    + "Ejemplo: \"Blanco\".");
         }
     }
     
@@ -140,15 +150,33 @@ public class Validadores {
             validarVacio(modelo);
         } catch (PresentacionException pe) {
             // Si el modelo está vacío, lanzamos una excepción.
-            throw new PresentacionException("El modelo no puede estar vacío. Ejemplo: \"2016\".");
+            throw new PresentacionException("El modelo no puede estar vacío. "
+                    + "Ejemplo: \"2016\".");
         }
         if (!modelo.matches("\\d+") || modelo.length() != 4) {
             // Si el modelo contiene algo que no sean 4 números, lanzamos una excepción.
-            throw new PresentacionException("El modelo sólo debe tener 4 números. Ejemplo: \"2016\".");
+            throw new PresentacionException("El modelo sólo debe tener 4 números. "
+                    + "Ejemplo: \"2016\".");
         }
     }
 
-    public void validarPlacas(String numPlacas) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    /**
+     * Método para validar que el número de placas cumple con el formato correcto.
+     * @param numPlacas Número de placas a validar.
+     * @throws PresentacionException si el modelo está vacío o contiene letras.
+     */
+    public void validarPlacas(String numPlacas) throws PresentacionException {
+        try {
+            validarVacio(numPlacas);
+        } catch (PresentacionException pe) {
+            // Si el número de placas está vacío, lanzamos una excepción.
+            throw new PresentacionException("El número de placas no puede estar "
+                    + "vacío. Ejemplo: \"AAA-123\".");
+        }
+        if (!numPlacas.matches("^[A-Z]{3}-\\d{3}$")) {
+            // Si el número de placas no sigue el formato "AAA-123", lanzamos una excepción.
+            throw new PresentacionException("El número de placas sólo acepta tres"
+                    + "letras seguidas de un guión y tres números.Ejemplo: \"AAA-123\".");
+        }
     }
 }
