@@ -147,4 +147,8 @@ public class Validadores {
             throw new PresentacionException("El modelo sólo debe tener 4 números. Ejemplo: \"2016\".");
         }
     }
+
+    public void validarPlacas(String numPlacas) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

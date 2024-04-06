@@ -339,7 +339,7 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
         btnConfirmar.setBackground(new java.awt.Color(106, 27, 49));
         btnConfirmar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnConfirmar.setForeground(new java.awt.Color(242, 242, 242));
-        btnConfirmar.setText("Continuar");
+        btnConfirmar.setText("Confirmar");
         btnConfirmar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirmar.setPreferredSize(new java.awt.Dimension(120, 40));
         btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
@@ -479,6 +479,7 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
+        AutomovilDTO automovil = null;
         try {
             // Obtenemos los datos que ingresó el usuario.
             String numSerie = txtNumSerie.getText().trim().toUpperCase();
@@ -497,9 +498,11 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
             v.validarColor(color);
             v.validarModelo(modelo);
             
-            AutomovilDTO automovil = new AutomovilDTO(numSerie, marca, linea, color, modelo);
+            automovil = new AutomovilDTO(numSerie, marca, linea, color, modelo);
             
             PlacasDTO placaDTO = registroPlacas.generarPlaca("Automóvil nuevo");
+            
+            automovil.setNumPlaca(placaDTO.getNumero());
             
             registroPlacas.agregarPlacaNuevo(automovil, persona.getCurp(), placaDTO);
             
@@ -513,7 +516,7 @@ public class FrmPlacasAutoNuevo extends javax.swing.JFrame {
             // Se manda un mensaje de ya está registrado el vehículo.
             int opcion = JOptionPane.showConfirmDialog(this, ne.getMessage() + "\n¿Desea continuar con el trámite?", "¡Error!", JOptionPane.YES_NO_OPTION);
             if (opcion == 0) {
-                FrmPlacasAutoUsado frmPlacasAutoUsado = new FrmPlacasAutoUsado(/*automovil, persona, placaDTO*/);
+                FrmPlacasAutoUsado frmPlacasAutoUsado = new FrmPlacasAutoUsado(persona, automovil, null);
                 frmPlacasAutoUsado.setVisible(true);
             } else {
                 FrmHome frmHome = new FrmHome();

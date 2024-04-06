@@ -266,7 +266,7 @@
                       <Group type="102" attributes="0">
                           <Component id="btnVolver" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="btnConfirmar" min="-2" pref="160" max="-2" attributes="0"/>
+                          <Component id="btnConfirmar" min="-2" pref="140" max="-2" attributes="0"/>
                       </Group>
                       <Component id="pnlCampos" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>

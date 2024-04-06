@@ -11,6 +11,7 @@ public class AutomovilDTO {
     private String linea;
     private String color;
     private String modelo;
+    private String numPlaca;
 
     public AutomovilDTO(String numSerie, String marca, String linea, String color, String modelo) {
         this.numSerie = numSerie;
@@ -59,6 +60,12 @@ public class AutomovilDTO {
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
-    
-    
+
+    public String getNumPlaca() {
+        return numPlaca;
+    }
+
+    public void setNumPlaca(String numPlaca) {
+        this.numPlaca = numPlaca;
+    }
 }

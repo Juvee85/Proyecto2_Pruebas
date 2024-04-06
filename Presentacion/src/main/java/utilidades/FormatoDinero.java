@@ -24,7 +24,7 @@ public class FormatoDinero {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
 
         // Formateamos la cantidad como dinero.
-        String cantFormateada = currencyFormatter.format(cantidad);
+        String cantFormateada = currencyFormatter.format(cantidad) + " MXN";
         
         // Retornamos la cantidad con el formato aplicado.
         return cantFormateada;

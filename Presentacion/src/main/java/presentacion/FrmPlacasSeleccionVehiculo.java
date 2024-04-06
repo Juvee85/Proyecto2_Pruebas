@@ -444,7 +444,7 @@ public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
             frmPlacasAutoNuevo.setVisible(true);
             this.dispose();
         } else if (rdbUsado.isSelected()) {
-            FrmPlacasAutoUsado frmPlacasAutoUsado = new FrmPlacasAutoUsado();
+            FrmPlacasAutoUsado frmPlacasAutoUsado = new FrmPlacasAutoUsado(persona, null, licencia);
             frmPlacasAutoUsado.setVisible(true);
             this.dispose();
         }

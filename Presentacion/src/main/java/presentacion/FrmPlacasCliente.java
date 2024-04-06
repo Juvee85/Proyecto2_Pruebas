@@ -570,7 +570,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         try {
             // Se valida que el solicitante cumpla con los requisitos.
-            registroPlacas.validarRequisitos(licencia);
+            registroPlacas.validarRequisitosLicencia(licencia);
 
             // Se redirecciona a la ventana de selección de vehículo.
             FrmPlacasSeleccionVehiculo frmPlacasSeleccionVehiculo = new FrmPlacasSeleccionVehiculo(persona, licencia);

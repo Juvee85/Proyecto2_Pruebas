@@ -32,7 +32,7 @@ public interface IRegistroPlacasBO {
      * @param licencia Licencia a validar.
      * @throws NegocioException si la licencia no está vigente.
      */
-    public void validarRequisitos(LicenciaDTO licencia) throws NegocioException;
+    public void validarRequisitosLicencia(LicenciaDTO licencia) throws NegocioException;
     
     /**
      * Método para convertir una licencia de DTO a entidad.
@@ -48,4 +48,8 @@ public interface IRegistroPlacasBO {
     public void agregarPlacaNuevo(AutomovilDTO auto, String curp, PlacasDTO placa) throws NegocioException;
 
     public TarifaPlacasDTO buscarTarifa(String tipo);
+
+    public AutomovilDTO buscarPlacas(String numPlacas);
+
+    public void agregarPlacaUsado(AutomovilDTO auto, String curp, PlacasDTO placaDTO);
 }

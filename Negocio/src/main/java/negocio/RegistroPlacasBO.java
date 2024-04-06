@@ -104,7 +104,7 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
      * @throws NegocioException si la licencia no está vigente.
      */
     @Override
-    public void validarRequisitos(LicenciaDTO licencia) throws NegocioException {
+    public void validarRequisitosLicencia(LicenciaDTO licencia) throws NegocioException {
         if (licencia == null) { // Se valida que la licencia esté vigente.
             // Se manda un mensaje a consola de que se interrumpió el registro de
             // placas.
@@ -261,6 +261,16 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
         
         // La retornamos.
         return tarifaDTO;
+    }
+
+    @Override
+    public AutomovilDTO buscarPlacas(String numPlacas) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void agregarPlacaUsado(AutomovilDTO auto, String curp, PlacasDTO placaDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
