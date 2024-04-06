@@ -20,7 +20,6 @@ import javax.persistence.TemporalType;
 
 /**
  * Clase de entidad con los atributos y relaciones de un tramite
- * 
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -81,7 +80,7 @@ public abstract class TramiteEntidad implements Serializable {
         this.fechaEmision = fechaEmision;
     }
 
-    public Boolean getActiva() {
+    public Boolean isActiva() {
         return activa;
     }
 

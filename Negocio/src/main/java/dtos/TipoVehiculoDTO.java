@@ -5,10 +5,10 @@ package dtos;
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
-public class VehiculoDTO {
+public class TipoVehiculoDTO {
     private String tipo;
 
-    public VehiculoDTO(String tipo) {
+    public TipoVehiculoDTO(String tipo) {
         this.tipo = tipo;
     }
 
@@ -24,5 +24,4 @@ public class VehiculoDTO {
     public String toString() {
         return tipo;
     }
-    
 }

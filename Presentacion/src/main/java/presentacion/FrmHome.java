@@ -524,7 +524,7 @@ public class FrmHome extends javax.swing.JFrame {
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnLicenciasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLicenciasMouseClicked
-        FrmLicenciaDatos frmLicenciaDC = new FrmLicenciaDatos();
+        FrmLicenciaDatos frmLicenciaDC = new FrmLicenciaDatos(null);
         frmLicenciaDC.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnLicenciasMouseClicked
@@ -534,8 +534,8 @@ public class FrmHome extends javax.swing.JFrame {
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPlacasMouseClicked
-        FrmPlacasSeleccionVehiculo frmPlacasSeleccion = new FrmPlacasSeleccionVehiculo();
-        frmPlacasSeleccion.setVisible(true);
+        FrmPlacasCliente frmPlacasCliente = new FrmPlacasCliente(null, null);
+        frmPlacasCliente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPlacasMouseClicked
 

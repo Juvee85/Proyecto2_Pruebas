@@ -1,5 +1,5 @@
 /*
- * TarifaPlacaEntidad.java
+ * TarifaPlacasEntidad.java
  */
 package entidades;
 
@@ -20,8 +20,8 @@ import javax.persistence.Table;
  * @author Juventino López García - 00000248547
  */
 @Entity
-@Table(name = "tarifas_placa")
-public class TarifaPlacaEntidad implements Serializable {
+@Table(name = "tarifas_placas")
+public class TarifaPlacasEntidad implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -35,12 +35,12 @@ public class TarifaPlacaEntidad implements Serializable {
     private Float costo;
     
     @OneToMany(mappedBy = "tarifa")
-    private List<PlacaEntidad> placas;
+    private List<PlacasEntidad> placas;
 
-    public TarifaPlacaEntidad() {
+    public TarifaPlacasEntidad() {
     }
 
-    public TarifaPlacaEntidad(String tipo, Float costo) {
+    public TarifaPlacasEntidad(String tipo, Float costo) {
         this.tipo = tipo;
         this.costo = costo;
     }
@@ -69,11 +69,11 @@ public class TarifaPlacaEntidad implements Serializable {
         this.costo = costo;
     }
 
-    public List<PlacaEntidad> getPlacas() {
+    public List<PlacasEntidad> getPlacas() {
         return placas;
     }
 
-    public void setPlacas(List<PlacaEntidad> placas) {
+    public void setPlacas(List<PlacasEntidad> placas) {
         this.placas = placas;
     }
 

@@ -30,9 +30,6 @@ public class RelacionVehiculoPersona implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "duenho_actual", nullable = false)
-    private Boolean actual;
-    
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_persona", nullable = false)
     private PersonaEntidad persona;
@@ -44,8 +41,7 @@ public class RelacionVehiculoPersona implements Serializable {
     public RelacionVehiculoPersona() {
     }
 
-    public RelacionVehiculoPersona(Boolean actual, PersonaEntidad persona, VehiculoEntidad vehiculo) {
-        this.actual = actual;
+    public RelacionVehiculoPersona(PersonaEntidad persona, VehiculoEntidad vehiculo) {
         this.persona = persona;
         this.vehiculo = vehiculo;
     }
@@ -56,14 +52,6 @@ public class RelacionVehiculoPersona implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean isActual() {
-        return actual;
-    }
-
-    public void setActual(Boolean actual) {
-        this.actual = actual;
     }
 
     public PersonaEntidad getPersona() {

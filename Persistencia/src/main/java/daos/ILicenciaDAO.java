@@ -5,6 +5,7 @@ package daos;
 
 import entidades.LicenciaEntidad;
 import entidades.PersonaEntidad;
+import entidades.PlacasEntidad;
 import excepciones.PersistenciaException;
 
 /**
@@ -19,6 +20,7 @@ public interface ILicenciaDAO {
      * Método para buscar la última licencia asociada a una persona.
      * @param persona Persona que está solicitando una nueva licencia.
      * @return La licencia que se haya encontrado.
+     * @throws PersistenciaException si no se encontró ninguna licencia.
      */
     public LicenciaEntidad buscarUltimaLicencia(PersonaEntidad persona) throws PersistenciaException;
     

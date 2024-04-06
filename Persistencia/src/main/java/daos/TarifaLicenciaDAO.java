@@ -61,7 +61,7 @@ public class TarifaLicenciaDAO implements ITarifaLicenciaDAO {
     }
 
     /**
-     * Método que devuelve la tarifa cuya vigencia es la misma que la recibiad
+     * Método que devuelve la tarifa cuya vigencia es la misma que la recibida
      * en el parámeto.
      * @param vigencia Vigencia de la tarifa que se busca.
      * @return La tarifa con la vigencia dada.

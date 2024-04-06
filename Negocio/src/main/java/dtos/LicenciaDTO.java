@@ -1,5 +1,6 @@
 package dtos;
 
+import entidades.LicenciaEntidad;
 import java.util.Calendar;
 
 /**
@@ -18,6 +19,13 @@ public class LicenciaDTO {
         this.costo = costo;
         this.activa = activa;
         this.tarifa = tarifa;
+    }
+    
+    public LicenciaDTO(LicenciaEntidad licencia) {
+        this.fechaEmision = licencia.getFechaEmision();
+        this.costo = licencia.getCosto();
+        this.activa = licencia.isActiva();
+        this.tarifa = new TarifaLicenciaDTO(licencia.getTarifa());
     }
 
     public Calendar getFechaEmision() {

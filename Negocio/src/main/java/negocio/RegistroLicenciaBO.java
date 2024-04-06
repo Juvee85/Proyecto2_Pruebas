@@ -24,7 +24,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
+ * Clase con la implementación de la interfaz IRegistroLicenciaBO para realizar
+ * el registro de licencias.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -33,7 +34,7 @@ public class RegistroLicenciaBO implements IRegistroLicenciaBO {
     private IPersonaDAO personaDAO = new PersonaDAO();
     private ITarifaLicenciaDAO tarifaLicenciaDAO = new TarifaLicenciaDAO();
     private ILicenciaDAO licenciaDAO = new LicenciaDAO();
-    private static final Logger logger = Logger.getLogger(InsercionMasivaBO.class.getName());
+    private static final Logger logger = Logger.getLogger(RegistroLicenciaBO.class.getName());
 
     /**
      * Método para buscar a una persona dada una CURP.
@@ -114,6 +115,35 @@ public class RegistroLicenciaBO implements IRegistroLicenciaBO {
 
         // Si es menor de edad retornamos true. Retornamos false en caso contrario.
         return edad < 18;
+    }
+    
+    /**
+     * Método para generar los datos de una licencia.
+     * @param persona Solicitante de la licencia.
+     * @param tarifa Tipo de tarifa de la licencia.
+     * @return Licencia con sus datos generados.
+     */
+    @Override
+    public LicenciaDTO generarLicencia(PersonaDTO persona, TarifaLicenciaDTO tarifa) {
+        // Se obtiene la fecha de emisión del tramite.
+        Calendar fechaEmision = Calendar.getInstance();
+        
+        // Se define la variable coso.
+        Float costo;
+        if (persona.isDiscapacitado()) {
+            // Si la persona está discapacitada, se obtiene un costo.
+            costo = tarifa.getCostoDiscapacitado();
+        } else {
+            // Si no, se obtiene el otro costo.
+            costo = tarifa.getCostoNormal();
+        }
+
+        // Se crea un objeto LicenciaDTO y se le mandan los datos recién generados,
+        // además del argumento true para indicar que la licenca estará activa.
+        LicenciaDTO licencia = new LicenciaDTO(fechaEmision, costo, true, tarifa);
+
+        // Se retorna la licencia generada.
+        return licencia;
     }
 
     /**

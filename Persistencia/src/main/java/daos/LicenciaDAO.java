@@ -20,7 +20,6 @@ import javax.persistence.criteria.Root;
  * Clase que implementa la interfaz ILicenciaDAO y proporciona los métodos para
  * realizar operaciones relacionadas con la entidad Licencia en la base de
  * datos.
- *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -31,9 +30,9 @@ public class LicenciaDAO implements ILicenciaDAO {
 
     /**
      * Método para buscar la última licencia asociada a una persona.
-     *
      * @param persona Persona que está solicitando una nueva licencia.
      * @return La licencia que se haya encontrado.
+     * @throws PersistenciaException si no se encontró ninguna licencia.
      */
     @Override
     public LicenciaEntidad buscarUltimaLicencia(PersonaEntidad persona) throws PersistenciaException {
@@ -53,11 +52,11 @@ public class LicenciaDAO implements ILicenciaDAO {
             // campos de LicenciaEntidad donde el atributo 'activa' sea true y el
             // atributo 'persona' sea el mismo que el recibido en el parámetro.
             cq.select(root).where(
-                    cb.isTrue(root.get("activa")),
-                    cb.and(cb.equal(root.get("persona"), persona)));
+                    cb.equal(root.get("persona"), persona))
+                    .orderBy(cb.desc(root.get("fechaEmision")));
 
             // Obtenemos la última licencia.
-            LicenciaEntidad ultimaLicencia = em.createQuery(cq).getSingleResult();
+            LicenciaEntidad ultimaLicencia = em.createQuery(cq).setMaxResults(1).getSingleResult();
 
             // Imprimimos un mensaje de que se ejecutó una consulta.
             logger.log(Level.INFO, "Se ha consultado la tabla 'licencias' y se obtuvo 1 resultado.");

@@ -42,7 +42,7 @@ public abstract class VehiculoEntidad implements Serializable {
     private List<RelacionVehiculoPersona> detalle;
     
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.PERSIST)
-    private List<PlacaEntidad> placas;
+    private List<PlacasEntidad> placas;
 
     public VehiculoEntidad() {
     }
@@ -84,11 +84,11 @@ public abstract class VehiculoEntidad implements Serializable {
         this.detalle = detalle;
     }
 
-    public List<PlacaEntidad> getPlacas() {
+    public List<PlacasEntidad> getPlacas() {
         return placas;
     }
 
-    public void setPlacas(List<PlacaEntidad> placas) {
+    public void setPlacas(List<PlacasEntidad> placas) {
         this.placas = placas;
     }
 

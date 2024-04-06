@@ -5,12 +5,13 @@
     <class>entidades.AutomovilEntidad</class>
     <class>entidades.LicenciaEntidad</class>
     <class>entidades.PersonaEntidad</class>
-    <class>entidades.PlacaEntidad</class>
     <class>entidades.RelacionVehiculoPersona</class>
     <class>entidades.TarifaLicenciaEntidad</class>
     <class>entidades.TarifaPlacaEntidad</class>
     <class>entidades.TramiteEntidad</class>
     <class>entidades.VehiculoEntidad</class>
+    <class>entidades.PlacasEntidad</class>
+    <class>entidades.TarifaPlacasEntidad</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/proyecto2_247700_248547?serverTime=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

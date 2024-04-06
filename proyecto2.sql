@@ -1,4 +1,5 @@
 create database proyecto2_247700_248547;
+use proyecto2_247700_248547;
 
 -- Creación de las tarifas de licencia.
 insert into tarifas_licencia
@@ -9,8 +10,8 @@ values
 (700, 1100, "3 años");
 
 -- Creación de las tarifas de placas.
-insert into tarifas_placa
+insert into tarifas_placas
 (tipo, costo)
 values
-("Auto nuevo", 1500),
-("Auto usado", 1000);
+("Automóvil nuevo", 1500),
+("Automóvil usado", 1000);

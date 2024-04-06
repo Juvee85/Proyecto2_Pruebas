@@ -5,7 +5,6 @@ package entidades;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,7 +12,6 @@ import javax.persistence.Table;
 
 /**
  * Clase de entidad con los atributos y relaciones de una licencia
- *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */

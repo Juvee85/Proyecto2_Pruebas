@@ -1,5 +1,5 @@
 /*
- * PlacaEntidad.java
+ * PlacasEntidad.java
  */
 package entidades;
 
@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "placas")
-public class PlacaEntidad extends TramiteEntidad implements Serializable {
+public class PlacasEntidad extends TramiteEntidad implements Serializable {
 
     @Column(name = "fecha_recepcion", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,15 +31,15 @@ public class PlacaEntidad extends TramiteEntidad implements Serializable {
     @Column(name = "numero_placa", unique = true, nullable = false)
     private String numero;
     
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_tarifa", nullable = false)
-    private TarifaPlacaEntidad tarifa;
+    private TarifaPlacasEntidad tarifa;
     
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_vehiculo", nullable = false)
     private VehiculoEntidad vehiculo;
 
-    public PlacaEntidad() {
+    public PlacasEntidad() {
     }
 
     /**
@@ -52,7 +52,7 @@ public class PlacaEntidad extends TramiteEntidad implements Serializable {
      * @param fechaEmision Fecha y hora en que se emitió la placa.
      * @param activa Indica si la placa está activa o no.
      */
-    public PlacaEntidad(Calendar fechaRecepcion, String numero, Boolean activa, Float costo, Calendar fechaEmision) {
+    public PlacasEntidad(Calendar fechaRecepcion, String numero, Boolean activa, Float costo, Calendar fechaEmision) {
         super(costo, fechaEmision, activa);
         this.fechaRecepcion = fechaRecepcion;
         this.numero = numero;
@@ -74,11 +74,11 @@ public class PlacaEntidad extends TramiteEntidad implements Serializable {
         this.numero = numero;
     }
 
-    public TarifaPlacaEntidad getTarifa() {
+    public TarifaPlacasEntidad getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(TarifaPlacaEntidad tarifa) {
+    public void setTarifa(TarifaPlacasEntidad tarifa) {
         this.tarifa = tarifa;
     }
 

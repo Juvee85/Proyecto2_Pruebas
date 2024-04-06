@@ -43,6 +43,14 @@ public interface IRegistroLicenciaBO {
     public boolean menorDeEdad(PersonaDTO persona);
     
     /**
+     * Método para generar los datos de una licencia.
+     * @param persona Solicitante de la licencia.
+     * @param tarifa Tipo de tarifa de la licencia.
+     * @return Licencia con sus datos generados.
+     */
+    public LicenciaDTO generarLicencia(PersonaDTO persona, TarifaLicenciaDTO tarifa);
+    
+    /**
      * Método para obtener las tarifas de licencia que hay disponibles.
      * @return Una lista con las tarifas encontradas.
      */

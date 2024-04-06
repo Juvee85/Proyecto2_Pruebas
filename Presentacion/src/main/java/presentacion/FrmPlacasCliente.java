@@ -1,59 +1,55 @@
 /*
- * FrmLicenciaDatos.java
+ * FrmPlacasCliente.java
  */
 package presentacion;
 
 import dtos.LicenciaDTO;
-import dtos.TarifaLicenciaDTO;
 import dtos.PersonaDTO;
 import excepciones.NegocioException;
 import excepciones.PresentacionException;
 import java.awt.Frame;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import negocio.IRegistroLicenciaBO;
-import negocio.RegistroLicenciaBO;
+import negocio.IRegistroPlacasBO;
+import negocio.RegistroPlacasBO;
 import utilidades.Paleta;
-import utilidades.FormatoDinero;
 import utilidades.Validadores;
 
 /**
- * Ventana donde se plasman los datos del solicitante y de la licencia.
- *
+ * Ventana para buscar a un solicitante y saber si tiene una licencia vigente o
+ * no.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
-public class FrmLicenciaDatos extends javax.swing.JFrame {
+public class FrmPlacasCliente extends javax.swing.JFrame {
 
-    private IRegistroLicenciaBO registroLicencia;
+    private IRegistroPlacasBO registroPlacas;
+    // El valor personaLicencia[0] es PersonaDTO.
     private PersonaDTO persona;
+    private LicenciaDTO licencia;
     private int mouseX, mouseY;
 
     /**
      * Constructor del frame.
+     * @param persona 
+     * @param licencia
      */
-    public FrmLicenciaDatos(PersonaDTO persona) {
+    public FrmPlacasCliente(PersonaDTO persona, LicenciaDTO licencia) {
         initComponents();
-        this.registroLicencia = new RegistroLicenciaBO();
+        this.registroPlacas = new RegistroPlacasBO();
         this.persona = persona;
+        this.licencia = licencia;
+        
         if (persona != null) {
-            // Se habilitan el botón de continuar y el combobox de vigencia.
-            btnConfirmar.setEnabled(true);
-            comboTarifa.setEnabled(true);
-            btnBuscar.setEnabled(false);
             mostrarDatosPersona();
-            cargarTarifasLicencia();
         }
     }
 
     /**
      * Método para mostrar los datos de la persona encontrada.
-     *
-     * @param persona Persona encontrada.
+     * @param persona Mapa con los datos de la persona y su licencia.
      */
-    private void mostrarDatosPersona() {
+    private void mostrarDatosPersona() {        
         txtCurp.setText(persona.getCurp()); // Mostramos la CURP.
 
         lblNombre.setText(persona.getNombre() + " " // Mostramos el nombre
@@ -78,56 +74,13 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
             // Si la persona no tiene RFC, se indica.
             lblRfc.setText("No tiene");
         }
-
-        // Se indica si la persona está discapacitada o no.
-        if (persona.isDiscapacitado()) {
-            lblDiscapacitado.setText("Sí");
+        
+        // Se indica si la licencia está vigente o no.
+        if (licencia != null && licencia.isActiva()) {
+            lblLicencia.setText("Sí");
         } else {
-            lblDiscapacitado.setText("No");
+            lblLicencia.setText("No");
         }
-    }
-
-    /**
-     * Método para obtener las tarifas disponibles.
-     */
-    private void cargarTarifasLicencia() {
-        // Creamos un modelo para combo box.
-        DefaultComboBoxModel<TarifaLicenciaDTO> modelo = new DefaultComboBoxModel<>();
-
-        // Obtenemos una lista con las distintas tarifas que hay disponibles .
-        List<TarifaLicenciaDTO> tarifasLicencia = registroLicencia.buscarTarifasLicencia();
-
-        // Iteramos sobre la lista de tarifas y vamos agregando cada una al modelo.
-        for (TarifaLicenciaDTO tarifa : tarifasLicencia) {
-            modelo.addElement(tarifa);
-        }
-        // Asignamos el modelo al combo box de la vigencia.
-        comboTarifa.setModel(modelo);
-        // Calculamos el costo de la licencia.
-        calcularCosto();
-    }
-
-    /**
-     * Método para calcular el costo de la licencia de acuerdo a la vigencia y
-     * si el solicitante está discapacitado o no.
-     */
-    public void calcularCosto() {
-        // Creamos una instancia del formateador de dinero.
-        FormatoDinero fd = new FormatoDinero();
-
-        // Obtenemos la tarifa/vigencia seleccionada.
-        TarifaLicenciaDTO tarifaSeleccionada = (TarifaLicenciaDTO) comboTarifa.getSelectedItem();
-
-        String costo;
-        if (persona.isDiscapacitado()) { // Si la persona está discapacitada.
-            // Se obtiene el costo normal de la licencia y se le da formato.
-            costo = fd.formatear(tarifaSeleccionada.getCostoDiscapacitado());
-        } else { // Si la persona no está discapacitada.
-            // Se obtiene el costo discapacitado de la licencia y se le da formato.
-            costo = fd.formatear(tarifaSeleccionada.getCostoNormal());
-        }
-        // Se muestra el costo.
-        lblCosto.setText(costo);
     }
 
     /**
@@ -157,21 +110,17 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         txtCurp = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         lblNombre = new javax.swing.JLabel();
         lblFechaNacimiento = new javax.swing.JLabel();
         lblTelefono = new javax.swing.JLabel();
         lblRfc = new javax.swing.JLabel();
-        lblDiscapacitado = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel12 = new javax.swing.JLabel();
-        comboTarifa = new javax.swing.JComboBox<>();
-        jLabel10 = new javax.swing.JLabel();
-        lblCosto = new javax.swing.JLabel();
-        btnConfirmar = new javax.swing.JButton();
+        lblLicencia = new javax.swing.JLabel();
+        btnContinuar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -303,7 +252,7 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 0, 40)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Trámite de licencias");
+        jLabel7.setText("Trámite de placas");
 
         pnlCampos.setBackground(new java.awt.Color(242, 242, 242));
 
@@ -326,10 +275,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(37, 37, 37));
         jLabel14.setText("Fecha de nacimiento:");
 
-        jLabel15.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel15.setText("Discapacitado/a:");
-
         jSeparator1.setForeground(new java.awt.Color(106, 27, 49));
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
@@ -347,9 +292,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
         lblRfc.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         lblRfc.setForeground(new java.awt.Color(37, 37, 37));
-
-        lblDiscapacitado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        lblDiscapacitado.setForeground(new java.awt.Color(37, 37, 37));
 
         btnBuscar.setBackground(new java.awt.Color(106, 27, 49));
         btnBuscar.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
@@ -369,23 +311,10 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel12.setText("Vigencia:");
+        jLabel12.setText("Licencia vigente:");
 
-        comboTarifa.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        comboTarifa.setForeground(new java.awt.Color(37, 37, 37));
-        comboTarifa.setEnabled(false);
-        comboTarifa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboTarifaActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel10.setText("Costo:");
-
-        lblCosto.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        lblCosto.setForeground(new java.awt.Color(37, 37, 37));
+        lblLicencia.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblLicencia.setForeground(new java.awt.Color(37, 37, 37));
 
         javax.swing.GroupLayout pnlCamposLayout = new javax.swing.GroupLayout(pnlCampos);
         pnlCampos.setLayout(pnlCamposLayout);
@@ -395,53 +324,34 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCamposLayout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblLicencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlCamposLayout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblFechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDiscapacitado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(lblFechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlCamposLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblRfc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(lblRfc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlCamposLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(lblTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlCamposLayout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator2)
+                    .addComponent(jSeparator1)
                     .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator2)
-                            .addComponent(jSeparator1)
-                            .addGroup(pnlCamposLayout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCurp, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlCamposLayout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboTarifa, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(pnlCamposLayout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblCosto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(6, 6, 6))))
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCurp, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         pnlCamposLayout.setVerticalGroup(
             pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -469,33 +379,25 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(lblRfc))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(lblDiscapacitado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboTarifa)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(lblCosto))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblLicencia))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnConfirmar.setBackground(new java.awt.Color(106, 27, 49));
-        btnConfirmar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnConfirmar.setForeground(new java.awt.Color(242, 242, 242));
-        btnConfirmar.setText("Confirmar");
-        btnConfirmar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirmar.setEnabled(false);
-        btnConfirmar.setPreferredSize(new java.awt.Dimension(120, 40));
-        btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
+        btnContinuar.setBackground(new java.awt.Color(106, 27, 49));
+        btnContinuar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnContinuar.setForeground(new java.awt.Color(242, 242, 242));
+        btnContinuar.setText("Continuar");
+        btnContinuar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnContinuar.setEnabled(false);
+        btnContinuar.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnContinuar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConfirmarActionPerformed(evt);
+                btnContinuarActionPerformed(evt);
             }
         });
 
@@ -526,8 +428,8 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
                         .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pnlCampos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         pnlContenidoLayout.setVerticalGroup(
@@ -535,12 +437,12 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
             .addGroup(pnlContenidoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(28, 28, 28)
+                .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -553,7 +455,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     /**
      * Método que reacciona al evento de dar clic en el botón para minimizar la
      * ventana.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
@@ -562,7 +463,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
     /**
      * Método que cambia el color del botón para minimizar la ventana.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
@@ -572,7 +472,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     /**
      * Método que cambia el color del botón para minimizar la ventana a su color
      * original.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
@@ -582,7 +481,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     /**
      * Método que reacciona al evento de dar clic en el botón para cerrar la
      * ventana.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
@@ -591,7 +489,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
     /**
      * Método que cambia el color del botón para cerrar la ventana.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
@@ -601,7 +498,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     /**
      * Método que cambia el color del botón para cerrar la ventana a su color
      * original.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
@@ -610,7 +506,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
     /**
      * Método que mueve la ventana cuando se arrastra el mouse por el header.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
@@ -625,7 +520,6 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
 
     /**
      * Método que registra las coordenadas del mouse cuando presiona el header.
-     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
@@ -635,52 +529,8 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlHeaderMousePressed
 
     /**
-     * Método que reacciona al evento de dar clic en el botón para confirmar la
-     * licencia y proceder.
-     *
-     * @param evt Evento del mouse al que se escucha.
-     */
-    private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        try {
-            // Se valida que el solicitante cumpla con los requisitos.
-            registroLicencia.validarRequisitos(persona);
-
-            // Generamos una licencia.
-            LicenciaDTO licencia = registroLicencia.generarLicencia(persona, (TarifaLicenciaDTO) comboTarifa.getSelectedItem());
-
-            // Se manda a agregar la licencia.
-            // Mandamos la curp para luego obtener la entidad para asociarla a la
-            // licencia.
-            registroLicencia.agregarLicencia(persona.getCurp(), licencia);
-
-            // Se redirecciona al recibo donde están los datos de la licencia y
-            // el solicitante.
-            FrmLicenciaRecibo frmLicenciaRecibo = new FrmLicenciaRecibo(persona, licencia);
-            frmLicenciaRecibo.setVisible(true);
-            this.dispose();
-        } catch (NegocioException ne) {
-            // Se manda un mensaje de que se interrumpió el proceso por incumplimiento
-            // de requisitos.
-            JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnConfirmarActionPerformed
-
-    /**
-     * Método que reacciona al evento de dar clic en el botón para regresar a la
-     * pantalla inicial.
-     *
-     * @param evt Evento del mouse al que se escucha.
-     */
-    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        FrmHome frmHome = new FrmHome();
-        frmHome.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnVolverActionPerformed
-
-    /**
      * Método que reacciona al evento de dar clic en el botón para buscar una
-     * persona por su CURP.
-     *
+     * persona y saber si tiene una licencia vigente o no.
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -693,18 +543,18 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
             // Validamos la CURP.
             v.validarCurp(curp);
 
-            // Se busca si hay alguna persona registrada con la CURP ingresada.
-            persona = registroLicencia.buscarPersonaCurp(curp);
+            // Se busca al solicitante y si ya cuenta con una licencia.
+            Object[] personaLicencia = registroPlacas.buscarPersonaCurp(curp);
+            
+            // Extraemos los datos del solicitante y la licencia.
+            persona = (PersonaDTO) personaLicencia[0];
+            licencia = (LicenciaDTO) personaLicencia[1];
 
             // Se habilitan el botón de continuar y el combobox de vigencia.
-            btnConfirmar.setEnabled(true);
-            comboTarifa.setEnabled(true);
+            btnContinuar.setEnabled(true);
 
-            // Se muestran los datos de la persona encontrada.
+            // Se muestran los datos del solicitante.
             mostrarDatosPersona();
-
-            // Se cargan las tarifas disponibles.
-            cargarTarifasLicencia();
         } catch (PresentacionException | NegocioException ex) {
             // Se muestra un mensaje si la CURP fue mal ingresada o si no se
             // encontró una persona con dicha CURP.
@@ -713,28 +563,55 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
-     * Método que reacciona al evento de seleccionar una tarifa.
-     *
+     * Método que reacciona al evento de dar clic en el botón para continuar la
+     * selección del solicitante y continuar.
      * @param evt Evento del mouse al que se escucha.
      */
-    private void comboTarifaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTarifaActionPerformed
-        // Calculamos el costo de la licencia.
-        calcularCosto();
-    }//GEN-LAST:event_comboTarifaActionPerformed
+    private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
+        try {
+            // Se valida que el solicitante cumpla con los requisitos.
+            registroPlacas.validarRequisitos(licencia);
+
+            // Se redirecciona a la ventana de selección de vehículo.
+            FrmPlacasSeleccionVehiculo frmPlacasSeleccionVehiculo = new FrmPlacasSeleccionVehiculo(persona, licencia);
+            frmPlacasSeleccionVehiculo.setVisible(true);
+            this.dispose();
+        } catch (NegocioException ne) {
+            // Se manda un mensaje de que se interrumpió el proceso por incumplimiento
+            // de requisitos.
+            int opcion = JOptionPane.showConfirmDialog(this, ne.getMessage() + "\n¿Desea tramitar/renovar su licencia momento?", "¡Error!", JOptionPane.YES_NO_OPTION);
+            if (opcion == 0) {
+                FrmLicenciaDatos drmLicenciaDatos = new FrmLicenciaDatos(persona);
+                drmLicenciaDatos.setVisible(true);
+            } else {
+                FrmHome frmHome = new FrmHome();
+                frmHome.setVisible(true);
+            }
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnContinuarActionPerformed
+
+    /**
+     * Método que reacciona al evento de dar clic en el botón para regresar a la
+     * pantalla inicial.
+     * @param evt Evento del mouse al que se escucha.
+     */
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        FrmHome frmHome = new FrmHome();
+        frmHome.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JPanel btnCerrar;
-    private javax.swing.JButton btnConfirmar;
+    private javax.swing.JButton btnContinuar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<dtos.TarifaLicenciaDTO> comboTarifa;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -745,9 +622,8 @@ public class FrmLicenciaDatos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel lblCosto;
-    private javax.swing.JLabel lblDiscapacitado;
     private javax.swing.JLabel lblFechaNacimiento;
+    private javax.swing.JLabel lblLicencia;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblRfc;
     private javax.swing.JLabel lblTelefono;

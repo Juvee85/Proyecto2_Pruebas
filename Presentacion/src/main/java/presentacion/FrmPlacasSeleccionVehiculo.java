@@ -1,38 +1,61 @@
+/*
+ * FrmPlacasSeleccionVehiculo.java
+ */
 package presentacion;
 
-import dtos.VehiculoDTO;
+import dtos.LicenciaDTO;
+import dtos.PersonaDTO;
+import dtos.TipoVehiculoDTO;
+import excepciones.PresentacionException;
 import java.awt.Color;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import utilidades.Paleta;
+import utilidades.Validadores;
 
 /**
- *
+ * Ventana para seleccionar si las placas serán para un vehículo nuevo o usado.
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
 public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
     
-    int mouseX, mouseY;
-    private boolean usado;
-    
-    /** Creates new form FrmPlacasPago */
-    public FrmPlacasSeleccionVehiculo() {
+    private PersonaDTO persona;
+    private LicenciaDTO licencia;
+    private int mouseX, mouseY;
+        
+    /**
+     * Constructor del frame.
+     * @param persona Persona que solicita el trámite.
+     * @param licencia Licencia del solicitante.
+     */
+    public FrmPlacasSeleccionVehiculo(PersonaDTO persona, LicenciaDTO licencia) {
         initComponents();
+        this.persona = persona;
+        this.licencia = licencia;
         cargarDatos();
     }
     
-    public void cargarDatos() {
-        List<VehiculoDTO> tiposVehiculo = new ArrayList<>();
-        tiposVehiculo.add(new VehiculoDTO("Automóvil"));
+    /**
+     * Método para cargar los datos del tipo de vehículo que hay disponibles.
+     */
+    private void cargarDatos() {
+        // Creamos una lista de tipos de vehículos.
+        List<TipoVehiculoDTO> tiposVehiculo = new ArrayList<>();
+        // Guardamos el tipo "Automóvil".
+        tiposVehiculo.add(new TipoVehiculoDTO("Automóvil"));
         
-        DefaultComboBoxModel<VehiculoDTO> modelo = new DefaultComboBoxModel<>();
-        for (VehiculoDTO tipo : tiposVehiculo) {
+        // Creamos un modelo para combo box.
+        DefaultComboBoxModel<TipoVehiculoDTO> modelo = new DefaultComboBoxModel<>();
+        for (TipoVehiculoDTO tipo : tiposVehiculo) {
+            // Agregamos cada tipo de vehículo al modelo.
             modelo.addElement(tipo);
         }
         
+        // Asignamos el modelo al combo box de tipos de vehículo.
         comboTipo.setModel(modelo);
     }
 
@@ -45,7 +68,7 @@ public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btgVehiculo = new javax.swing.ButtonGroup();
+        btgEstado = new javax.swing.ButtonGroup();
         pnlBarra = new javax.swing.JPanel();
         pnlHeader = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -204,12 +227,12 @@ public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
         jLabel15.setForeground(new java.awt.Color(37, 37, 37));
         jLabel15.setText("¿El vehículo es nuevo o usado?");
 
-        btgVehiculo.add(rdbNuevo);
+        btgEstado.add(rdbNuevo);
         rdbNuevo.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         rdbNuevo.setForeground(new java.awt.Color(37, 37, 37));
         rdbNuevo.setText("Nuevo");
 
-        btgVehiculo.add(rdbUsado);
+        btgEstado.add(rdbUsado);
         rdbUsado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         rdbUsado.setForeground(new java.awt.Color(37, 37, 37));
         rdbUsado.setText("Usado");
@@ -226,14 +249,14 @@ public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
             pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCamposLayout.createSequentialGroup()
                 .addGap(140, 140, 140)
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                    .addComponent(comboTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8)
                     .addGroup(pnlCamposLayout.createSequentialGroup()
                         .addComponent(rdbNuevo)
                         .addGap(18, 18, 18)
-                        .addComponent(rdbUsado))
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                    .addComponent(comboTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(rdbUsado)))
                 .addContainerGap(140, Short.MAX_VALUE))
         );
         pnlCamposLayout.setVerticalGroup(
@@ -302,10 +325,11 @@ public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         getContentPane().add(pnlContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 450));
@@ -314,69 +338,125 @@ public class FrmPlacasSeleccionVehiculo extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para minimizar la
+     * ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
-        btnMinimizar.setBackground(Color.red);
+        btnMinimizar.setBackground(Paleta.VERDE);
     }//GEN-LAST:event_btnMinimizarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana a su color
+     * original.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
-        btnMinimizar.setBackground(new Color(88, 88, 88));
+        btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnMinimizarMouseExited
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para cerrar la
+     * ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         System.exit(0);
     }//GEN-LAST:event_btnCerrarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
-        btnCerrar.setBackground(Color.red);
+        btnMinimizar.setBackground(Paleta.ROJO);
     }//GEN-LAST:event_btnCerrarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana a su color
+     * original.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
-        btnCerrar.setBackground(new Color(88, 88, 88));
+        btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnCerrarMouseExited
 
+    /**
+     * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
+        // Obtenemos las coordenadas del mouse en la pantalla.
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
+
+        // Se calcula la distancia del recorrido del mouse y eso es lo que se
+        // mueve la ventana.
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
+    /**
+     * Método que registra las coordenadas del mouse cuando presiona el header.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
+         // Se actualizan las coordenadas.
         mouseX = evt.getX();
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para regresar a la
+     * pantalla inicial.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        FrmHome frmHome = new FrmHome();
-        frmHome.setVisible(true);
+        FrmPlacasCliente frmPlacasCliente = new FrmPlacasCliente(persona, licencia);
+        frmPlacasCliente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para continuar la
+     * selección del solicitante y continuar.
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        if (btgVehiculo.getSelection() == null) {
-            JOptionPane.showMessageDialog(this, "Favor de especificar si el vehículo es nuevo o usado.", "¡Error!", JOptionPane.ERROR_MESSAGE);
-            return;
+        try {
+            Validadores v = new Validadores();
+            v.validarSeleccion(btgEstado.getSelection());
+        } catch (PresentacionException pe) {
+            // Se manda un mensaje de que no se seleccionó una opción.
+            JOptionPane.showMessageDialog(this, pe.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
         }
+        
         if (rdbNuevo.isSelected()) {
-            usado = false;
+            FrmPlacasAutoNuevo frmPlacasAutoNuevo = new FrmPlacasAutoNuevo(persona, licencia);
+            frmPlacasAutoNuevo.setVisible(true);
+            this.dispose();
         } else if (rdbUsado.isSelected()) {
-            usado = true;
+            FrmPlacasAutoUsado frmPlacasAutoUsado = new FrmPlacasAutoUsado();
+            frmPlacasAutoUsado.setVisible(true);
+            this.dispose();
         }
-        FrmPlacasDatosAuto frmPlacasDatosAuto = new FrmPlacasDatosAuto(usado);
-        frmPlacasDatosAuto.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_btnContinuarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup btgVehiculo;
+    private javax.swing.ButtonGroup btgEstado;
     private javax.swing.JPanel btnCerrar;
     private javax.swing.JButton btnContinuar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<VehiculoDTO> comboTipo;
+    private javax.swing.JComboBox<TipoVehiculoDTO> comboTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
