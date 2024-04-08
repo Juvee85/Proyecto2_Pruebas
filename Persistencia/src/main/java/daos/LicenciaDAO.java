@@ -20,6 +20,7 @@ import javax.persistence.criteria.Root;
  * Clase que implementa la interfaz ILicenciaDAO y proporciona los métodos para
  * realizar operaciones relacionadas con la entidad Licencia en la base de
  * datos.
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -30,6 +31,7 @@ public class LicenciaDAO implements ILicenciaDAO {
 
     /**
      * Método para buscar la última licencia asociada a una persona.
+     *
      * @param persona Persona que está solicitando una nueva licencia.
      * @return La licencia que se haya encontrado.
      * @throws PersistenciaException si no se encontró ninguna licencia.
@@ -49,8 +51,9 @@ public class LicenciaDAO implements ILicenciaDAO {
             Root<LicenciaEntidad> root = cq.from(LicenciaEntidad.class);
 
             // Con esta línea especificamos que la consulta seleccionará todos los
-            // campos de LicenciaEntidad donde el atributo 'activa' sea true y el
-            // atributo 'persona' sea el mismo que el recibido en el parámetro.
+            // campos de LicenciaEntidad donde la persona asociada sea la misma
+            // que la proporcionada y ordenamos todo de manera descendente según
+            // la fecha de emisión para obtener la última licencia registrada.
             cq.select(root).where(
                     cb.equal(root.get("persona"), persona))
                     .orderBy(cb.desc(root.get("fechaEmision")));
@@ -58,13 +61,13 @@ public class LicenciaDAO implements ILicenciaDAO {
             // Obtenemos la última licencia.
             LicenciaEntidad ultimaLicencia = em.createQuery(cq).setMaxResults(1).getSingleResult();
 
-            // Imprimimos un mensaje de que se ejecutó una consulta.
+            // Imprimimos un mensaje de que se obtuvo 1 resultado.
             logger.log(Level.INFO, "Se ha consultado la tabla 'licencias' y se obtuvo 1 resultado.");
 
             // Retornamos la licencia obtenida.
             return ultimaLicencia;
         } catch (NoResultException nre) {
-            // Imprimimos un mensaje de que se ejecutó una consulta.
+            // Imprimimos un mensaje de que no se obtuvo nada.
             logger.log(Level.INFO, "Se ha consultado la tabla 'licencias' y no se obtuvieron resultados.");
             // Lanzamos una excepción de que no se encontró ninguna licencia.
             throw new PersistenciaException("No se encontró ninguna licencia activa.");
@@ -76,6 +79,7 @@ public class LicenciaDAO implements ILicenciaDAO {
 
     /**
      * Método para desactivar una licencia.
+     *
      * @param licencia Licencia a desactivar.
      */
     @Override
@@ -99,7 +103,8 @@ public class LicenciaDAO implements ILicenciaDAO {
 
     /**
      * Método para insertar una licencia en la base de datos.
-     * @param licencia Licencia que se quiere insertar.
+     *
+     * @param licencia Licencia a insertar.
      */
     @Override
     public void insertarLicencia(LicenciaEntidad licencia) {

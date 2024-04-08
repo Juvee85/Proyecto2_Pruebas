@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 /**
  * Clase de entidad con los atributos y relaciones de una licencia
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -42,7 +43,7 @@ public class LicenciaEntidad extends TramiteEntidad implements Serializable {
         super(costo, fechaEmision, activa);
         this.tarifa = tarifa;
     }
-    
+
     /**
      * Regresa la tarifa de la licencia
      *

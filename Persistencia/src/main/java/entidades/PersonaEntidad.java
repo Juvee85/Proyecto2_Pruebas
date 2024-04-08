@@ -41,10 +41,10 @@ public class PersonaEntidad implements Serializable {
     @Column(name = "apellido_materno", nullable = false)
     private String apellidoMaterno;
 
-    @Column(name = "CURP", unique = true, nullable = false, length = 18)
+    @Column(name = "curp", unique = true, nullable = false, length = 18)
     private String curp;
 
-    @Column(name = "RFC", unique = true, nullable = true, length = 13)
+    @Column(name = "rfc", unique = true, nullable = true, length = 13)
     private String rfc;
 
     @Column(name = "telefono", nullable = true, length = 10)
@@ -258,7 +258,7 @@ public class PersonaEntidad implements Serializable {
     }
 
     /**
-     * Regreda la lista de tramites realizados por la persona
+     * Regresa la lista de tramites realizados por la persona
      *
      * @return Lista con los tramites realizados por la persona
      */

@@ -7,15 +7,17 @@ import excepciones.PresentacionException;
 import javax.swing.ButtonModel;
 
 /**
- * Clase con todos los métodos necesarios para validar que los datos introducidos
- * por el usuario sean en los formatos correctos.
+ * Clase con todos los métodos necesarios para validar que los datos
+ * introducidos por el usuario tengan el formato correcto.
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
 public class Validadores {
-    
+
     /**
      * Método para validar cadenas vacías o con puros espacios.
+     *
      * @param cadena Cadena a validar.
      * @throws PresentacionException si la cadena del parámetro está vacía.
      */
@@ -24,9 +26,10 @@ public class Validadores {
             throw new PresentacionException("");
         }
     }
-    
+
     /**
      * Método para validar que una curp cumple con el formato correcto.
+     *
      * @param curp CURP a validar.
      * @throws PresentacionException si la curp está vacía o no tiene 18
      * caracteres.
@@ -45,23 +48,26 @@ public class Validadores {
                     + "Ejemplo: \"FEPI910601MTSLZB01\".");
         }
     }
-    
+
     /**
-     * Método para validar se haya seleccionado algo en un grupo de RadioButtons.
+     * Método para validar se haya seleccionado algo en un grupo de
+     * RadioButtons.
+     *
      * @param seleccion Seleccion del grupo de botones.
      * @throws PresentacionException si no se seleccionó nada.
      */
     public void validarSeleccion(ButtonModel seleccion) throws PresentacionException {
         if (seleccion == null) {
-            // Si no se seleccionó ninguna opción.
+            // Si no se seleccionó ninguna opción, lanzamos una excepción.
             throw new PresentacionException("Favor de especificar si el vehículo "
                     + "es nuevo o usado.");
         }
     }
-    
+
     /**
      * Método para validar que el número de serie de un automóvil cumple con el
      * formato correcto.
+     *
      * @param numSerie Número de serie a validar.
      * @throws PresentacionException si el número de serie está vacío o no tiene
      * 17 caracteres.
@@ -80,10 +86,11 @@ public class Validadores {
                     + "caracteres. Ejemplo: \"1HGBA87NXBV165879\".");
         }
     }
-    
+
     /**
      * Método para validar que la marca de un automóvil cumple con el formato
      * correcto.
+     *
      * @param marca Marca a validar.
      * @throws PresentacionException si la marca está vacía o contiene números.
      */
@@ -97,14 +104,15 @@ public class Validadores {
         }
         if (marca.matches(".*\\d.*")) {
             // Si la marca contiene números, lanzamos una excepción.
-            throw new PresentacionException("La marca no puede estar vacía. "
+            throw new PresentacionException("La marca no puede tener números. "
                     + "Ejemplo: \"Nissan\".");
         }
     }
-    
+
     /**
      * Método para validar que la línea de un automóvil cumple con el formato
      * correcto.
+     *
      * @param linea Línea a validar.
      * @throws PresentacionException si la línea está vacía.
      */
@@ -117,10 +125,11 @@ public class Validadores {
                     + "Ejemplo: \"Sentra\".");
         }
     }
-    
+
     /**
      * Método para validar que el color de un automóvil cumple con el formato
      * correcto.
+     *
      * @param color Color a validar.
      * @throws PresentacionException si el color está vacío o contiene números.
      */
@@ -138,10 +147,11 @@ public class Validadores {
                     + "Ejemplo: \"Blanco\".");
         }
     }
-    
+
     /**
      * Método para validar que el modelo de un automóvil cumple con el formato
      * correcto.
+     *
      * @param modelo Modelo a validar.
      * @throws PresentacionException si el modelo está vacío o contiene letras.
      */
@@ -158,12 +168,21 @@ public class Validadores {
             throw new PresentacionException("El modelo sólo debe tener 4 números. "
                     + "Ejemplo: \"2016\".");
         }
+
+        if (Integer.parseInt(modelo) < 1886 || Integer.parseInt(modelo) > 2025) {
+            // Si el modelo es anterior al 1886 o posterior al 2025.
+            throw new PresentacionException("El modelo no puede ser anterior al "
+                    + "1886 o posterior al 2025. Ejemplo: \"2016\".");
+        }
     }
 
     /**
-     * Método para validar que el número de placas cumple con el formato correcto.
+     * Método para validar que el número de placas cumple con el formato
+     * correcto.
+     *
      * @param numPlacas Número de placas a validar.
-     * @throws PresentacionException si el modelo está vacío o contiene letras.
+     * @throws PresentacionException si el número de placas está vacío o no
+     * cumple con el formato correcto.
      */
     public void validarPlacas(String numPlacas) throws PresentacionException {
         try {
@@ -175,8 +194,8 @@ public class Validadores {
         }
         if (!numPlacas.matches("^[A-Z]{3}-\\d{3}$")) {
             // Si el número de placas no sigue el formato "AAA-123", lanzamos una excepción.
-            throw new PresentacionException("El número de placas sólo acepta tres"
-                    + "letras seguidas de un guión y tres números.Ejemplo: \"AAA-123\".");
+            throw new PresentacionException("El número de placas sólo acepta tres "
+                    + "letras seguidas de un guión y tres números. Ejemplo: \"AAA-123\".");
         }
     }
 }

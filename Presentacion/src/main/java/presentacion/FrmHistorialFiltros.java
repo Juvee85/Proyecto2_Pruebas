@@ -1,43 +1,82 @@
+/*
+ * FrmHistorialFiltros.java
+ */
 package presentacion;
 
 import dtos.PersonaDTO;
+import dtos.TramiteDTO;
+import excepciones.NegocioException;
+import excepciones.PresentacionException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import negocio.ConsultaHistorialBO;
+import negocio.IConsultaHistorialBO;
 import utilidades.JButtonCellEditor;
 import utilidades.JButtonRenderer;
+import utilidades.Paleta;
+import utilidades.TipoConsulta;
+import static utilidades.TipoConsulta.ANIO_NACIMIENTO;
+import static utilidades.TipoConsulta.CURP;
+import static utilidades.TipoConsulta.INICIO;
+import static utilidades.TipoConsulta.NOMBRE;
+import utilidades.Validadores;
 
 /**
+ * Ventana donde se filtran a las personas de las cuales se quiere conocer el
+ * historial de trámites.
  *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
 public class FrmHistorialFiltros extends javax.swing.JFrame {
-    
+
     private int mouseX, mouseY;
-    
-    /** Creates new form FrmConsultaFiltros */
+    private TipoConsulta tipo = TipoConsulta.INICIO;
+    private IConsultaHistorialBO consultas;
+    private int pagina = 1;
+    private int numeroFilas = 4;
+
+    /**
+     * Constructor del frame que inicializa los atributos.
+     */
     public FrmHistorialFiltros() {
         initComponents();
+
+        this.consultas = new ConsultaHistorialBO(numeroFilas);
+
+        // Cargamos los datos de las personas que haya registradas.
         cargarDatos();
+        // Le damos formato a la tabla.
         formatearTabla();
     }
-    
-    public void formatearTabla() {
+
+    /**
+     * Método para darle formato a la tabla.
+     */
+    private void formatearTabla() {
+        // Cambiamos el color del fondo.
         tblPersonas.getTableHeader().setBackground(new Color(106, 27, 49));
-        tblPersonas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 20));
+        // Cambiamos la fuente y el tamaño.
+        tblPersonas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        // Cambiamos el color de la letra.
         tblPersonas.getTableHeader().setForeground(new Color(188, 149, 92));
-        
+
+        // Creamos el evento de cuando le pican al botón para ver el historial
+        // de una persona.
         ActionListener onEditarClickListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Metodo para seleccionar una persona
+                //Metodo para seleccionar una persona.
                 seleccionar();
             }
         };
@@ -46,62 +85,134 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
         modeloColumnas.getColumn(indiceColumnaSeleccionar).setCellRenderer(new JButtonRenderer("Seleccionar"));
         modeloColumnas.getColumn(indiceColumnaSeleccionar).setCellEditor(new JButtonCellEditor("Seleccionar", onEditarClickListener));
     }
-    
+
+    /**
+     * Método para seleccionar a una persona de la tabla.
+     */
     private void seleccionar() {
-        //Metodo para regresar el empleado seleccionado de la tabla empleados
+        // Obtenemos la CURP de la persona seleccionada.
         String curp = this.getCurpSeleccionada();
-        FrmHistorialResultados frmHistorialResultados = new FrmHistorialResultados();
+        PersonaDTO persona = null;
+        try {
+            // Obtenemos a la persona.
+            persona = consultas.obtenerPersonaPorCURP(curp);
+            // Obtenemos los trámites que haya realizado la persona.
+            List<TramiteDTO> lista = consultas.obtenerTramitesPorPersona(curp, pagina);
+            if (lista.isEmpty()) {
+                // Si no ha realizado ninguno, mandamos un mensaje indicando esto.
+                JOptionPane.showMessageDialog(this, "Esta persona no ha realizado trámites.", "¡Oops!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } catch (NegocioException ne) {
+            // Mandamos un mensaje de que sucedió un error inesperado.
+            JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
+        }
+        // Redireccionamos a la ventana de los resultados.
+        FrmHistorialResultados frmHistorialResultados = new FrmHistorialResultados(persona);
         frmHistorialResultados.setVisible(true);
         this.dispose();
     }
-    
+
+    /**
+     * Método para obtener la CURP de la persona seleccionada.
+     *
+     * @return La CURP de la persona seleccionada, null si el indice de fila es
+     * negativo.
+     */
     private String getCurpSeleccionada() {
+        // Obtenemos el índice de la fila seleccionada.
         int indiceFilaSeleccionada = this.tblPersonas.getSelectedRow();
-        if (indiceFilaSeleccionada != -1) {
+        if (indiceFilaSeleccionada != -1) { // Si es positivo.
             DefaultTableModel modelo = (DefaultTableModel) this.tblPersonas.getModel();
             int indiceColumnaCurp = 0;
+            // Obtenemos la CURP.
             String curpPersonaSeleccionado = (String) modelo.getValueAt(indiceFilaSeleccionada, indiceColumnaCurp);
             return curpPersonaSeleccionado;
         } else {
             return null;
         }
     }
-    
-    public void cargarDatos() {
-//        List<PersonaDTO> listaPersonas = new ArrayList<>();
-//        listaPersonas.add(new PersonaDTO("VADD041220HNUMTIF9", "Diego Valenzuela Dávila", "20/12/2004"));
-//        listaPersonas.add(new PersonaDTO("VAPD040603HSRLRGA6", "Diego Valenzuela Parra", "03/06/2004"));
-//        listaPersonas.add(new PersonaDTO("VALD040118HCDAPZB4", "Diego Valenzuela Lira", "18/01/2004"));
-//        listaPersonas.add(new PersonaDTO("VAUD040314HTCELRV7", "Diego Valenzuela Urías", "14/03/2004"));
-//        
-//        llenarTablaPersonas(listaPersonas);
-    }
-    
-    private void llenarTablaPersonas(List<PersonaDTO> listaPersonas) {
-//        DefaultTableModel modeloTabla = (DefaultTableModel) tblPersonas.getModel();
-//
-//        if (modeloTabla.getRowCount() > 0) {
-//            for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
-//                modeloTabla.removeRow(i);
-//            }
-//        }
-//
-//        if (listaPersonas != null) {
-//            listaPersonas.forEach(row -> {
-//                Object[] fila = new Object[3];
-//                fila[0] = row.getCurp();
-//                fila[1] = row.getNombre();
-//                fila[2] = row.getFechaNac();
-//
-//                modeloTabla.addRow(fila);
-//            });
-//        }
+
+    /**
+     * Método para cargar los datos de los trámites.
+     */
+    private void cargarDatos() {
+        List<PersonaDTO> personas = new ArrayList<>();
+        Validadores v = new Validadores(); // Instancia para validar la CURP.
+        try {
+            switch (tipo) { // Evalúamos la posibilidad de que se filtre por cada tipo.
+                case CURP -> {
+                    // Validamos la CURP.
+                    v.validarCurp(txtCurp.getText());
+                    // Buscamos una persona y la añadimos la lista.
+                    personas.add(consultas.obtenerPersonaPorCURP(txtCurp.getText()));
+                }
+                case ANIO_NACIMIENTO -> {
+                    // Buscamos personas que coincidan y las añadimos a la lista.
+                    personas = consultas.obtenerPersonasPorAnioNacimiento(Integer.parseInt(txtAnioNacimiento.getText()), pagina);
+                }
+                case NOMBRE -> {
+                    // Buscamos personas que coincidan y las añadimos a la lista.
+                    personas = consultas.obtenerPersonasPorNombre(txtNombre.getText(), pagina);
+                }
+                default ->
+                    // Buscamos a todas las personas y las añadimos a la lista.
+                    personas = consultas.obtenerPersonas(pagina);
+            }
+        } catch (NegocioException | PresentacionException ex) {
+            // Mandamos un error de validación de CURP o de un error inesperado.
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            // Mandamos un mensaje si se ingresan letras en el año.
+            JOptionPane.showMessageDialog(this, "El año ingresado debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // Si la lista de personas es null o está vacía.
+        if (personas == null || personas.isEmpty()) {
+            if (pagina > 1) { // Si estamos en una página mayor a la primera.
+                pagina--; // Decrementamos el número de página.
+            }
+            // Cambiamos el texto de la página.
+            lblPagina.setText("Página " + pagina);
+            // Mandamos un mensaje de que no se encontraron personas.
+            JOptionPane.showMessageDialog(this, "No se encontraron personas.", "Error", JOptionPane.WARNING_MESSAGE);
+        } else {
+            // Si sí se encontraron personas, mandamos a llenar la tabla.
+            llenarTablaPersonas(personas);
+        }
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * Método para llenar la tabla de personas.
+     *
+     * @param listaPersonas Lista con las personas que se encontraron.
+     */
+    private void llenarTablaPersonas(List<PersonaDTO> listaPersonas) {
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblPersonas.getModel();
+
+        if (modeloTabla.getRowCount() > 0) {
+            for (int i = modeloTabla.getRowCount() - 1; i > -1; i--) {
+                modeloTabla.removeRow(i);
+            }
+        }
+
+        if (listaPersonas != null) {
+            listaPersonas.forEach(row -> {
+                Object[] fila = new Object[3];
+                fila[0] = row.getCurp();
+                fila[1] = row.getNombre();
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                String fecha = formatter.format(row.getFechaNacimiento().getTime());
+                fila[2] = fecha;
+
+                modeloTabla.addRow(fila);
+            });
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -120,20 +231,20 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         pnlCampos = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         txtCurp = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
         txtAnioNacimiento = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        nombreRadioBtn = new javax.swing.JRadioButton();
+        anioNacimientoRadioBtn = new javax.swing.JRadioButton();
+        curpRadioBtn = new javax.swing.JRadioButton();
+        jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPersonas = new javax.swing.JTable();
-        jLabel10 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
+        btnAnterior = new javax.swing.JButton();
+        lblPagina = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -268,24 +379,25 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
 
         pnlCampos.setBackground(new java.awt.Color(242, 242, 242));
 
-        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel8.setText("CURP");
-
-        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel9.setText("Nombre");
-
         txtNombre.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        txtNombre.setEnabled(false);
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
 
         txtCurp.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         txtCurp.setForeground(new java.awt.Color(37, 37, 37));
-
-        jLabel11.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel11.setText("Año de nacimiento");
+        txtCurp.setEnabled(false);
 
         txtAnioNacimiento.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        txtAnioNacimiento.setEnabled(false);
+        txtAnioNacimiento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAnioNacimientoKeyTyped(evt);
+            }
+        });
 
         btnBuscar.setBackground(new java.awt.Color(106, 27, 49));
         btnBuscar.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
@@ -301,6 +413,34 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
             }
         });
 
+        nombreRadioBtn.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        nombreRadioBtn.setText("Nombre");
+        nombreRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreRadioBtnActionPerformed(evt);
+            }
+        });
+
+        anioNacimientoRadioBtn.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        anioNacimientoRadioBtn.setText("Año de nacimiento");
+        anioNacimientoRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                anioNacimientoRadioBtnActionPerformed(evt);
+            }
+        });
+
+        curpRadioBtn.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        curpRadioBtn.setText("CURP");
+        curpRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                curpRadioBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel10.setText("Coincidencias");
+
         javax.swing.GroupLayout pnlCamposLayout = new javax.swing.GroupLayout(pnlCampos);
         pnlCampos.setLayout(pnlCamposLayout);
         pnlCamposLayout.setHorizontalGroup(
@@ -309,38 +449,45 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtAnioNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCurp))
+                        .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtAnioNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                                .addComponent(txtCurp))
+                            .addComponent(curpRadioBtn))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCamposLayout.createSequentialGroup()
+                                .addComponent(nombreRadioBtn)
+                                .addGap(180, 180, 180))
+                            .addGroup(pnlCamposLayout.createSequentialGroup()
+                                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap())))
+                    .addGroup(pnlCamposLayout.createSequentialGroup()
+                        .addComponent(anioNacimientoRadioBtn)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         pnlCamposLayout.setVerticalGroup(
             pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCamposLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
+                    .addComponent(nombreRadioBtn)
+                    .addComponent(curpRadioBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCurp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtAnioNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCurp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addComponent(anioNacimientoRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAnioNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -367,10 +514,6 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
         tblPersonas.setSurrendersFocusOnKeystroke(true);
         jScrollPane1.setViewportView(tblPersonas);
 
-        jLabel10.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel10.setText("Coincidencias");
-
         btnVolver.setBackground(new java.awt.Color(11, 35, 30));
         btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnVolver.setForeground(new java.awt.Color(242, 242, 242));
@@ -384,28 +527,14 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
             }
         });
 
-        btnAnterior.setBackground(new java.awt.Color(188, 149, 92));
-        btnAnterior.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnAnterior.setForeground(new java.awt.Color(242, 242, 242));
-        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/siguiente.png"))); // NOI18N
-        btnAnterior.setText("Siguiente");
-        btnAnterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAnterior.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        btnAnterior.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        btnAnterior.setPreferredSize(new java.awt.Dimension(120, 40));
-        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnteriorActionPerformed(evt);
-            }
-        });
-
         btnSiguiente.setBackground(new java.awt.Color(188, 149, 92));
         btnSiguiente.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(242, 242, 242));
-        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/anterior.png"))); // NOI18N
-        btnSiguiente.setText("Anterior");
+        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/siguiente.png"))); // NOI18N
+        btnSiguiente.setText("Siguiente");
         btnSiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSiguiente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSiguiente.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnSiguiente.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         btnSiguiente.setPreferredSize(new java.awt.Dimension(120, 40));
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -413,10 +542,24 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("Página 1");
-        jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAnterior.setBackground(new java.awt.Color(188, 149, 92));
+        btnAnterior.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnAnterior.setForeground(new java.awt.Color(242, 242, 242));
+        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/anterior.png"))); // NOI18N
+        btnAnterior.setText("Anterior");
+        btnAnterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAnterior.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAnterior.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+
+        lblPagina.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblPagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPagina.setText("Página 1");
+        lblPagina.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout pnlContenidoLayout = new javax.swing.GroupLayout(pnlContenido);
         pnlContenido.setLayout(pnlContenidoLayout);
@@ -431,35 +574,32 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
                         .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         pnlContenidoLayout.setVerticalGroup(
             pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenidoLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblPagina)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(pnlContenido, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 450));
@@ -468,78 +608,261 @@ public class FrmHistorialFiltros extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para minimizar la
+     * ventana.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana cuando se
+     * pasa el mouse por encima.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
-        btnMinimizar.setBackground(Color.red);
+        btnMinimizar.setBackground(Paleta.VERDE);
     }//GEN-LAST:event_btnMinimizarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana a su color
+     * original.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
-        btnMinimizar.setBackground(new Color(88, 88, 88));
+        btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnMinimizarMouseExited
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para cerrar la
+     * ventana.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         System.exit(0);
     }//GEN-LAST:event_btnCerrarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana cuando se
+     * pasa el mouse por encima.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
-        btnCerrar.setBackground(Color.red);
+        btnCerrar.setBackground(Paleta.ROJO);
     }//GEN-LAST:event_btnCerrarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana a su color
+     * original.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
-        btnCerrar.setBackground(new Color(88, 88, 88));
+        btnCerrar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnCerrarMouseExited
 
+    /**
+     * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
+        // Obtenemos las coordenadas del mouse en la pantalla.
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
+
+        // Se calcula la distancia del recorrido del mouse y eso es lo que se
+        // mueve la ventana.
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
+    /**
+     * Método que registra las coordenadas del mouse cuando presiona el header.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
+        // Se actualizan las coordenadas.
         mouseX = evt.getX();
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para regresar a la
+     * pantalla anterior.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmHome frmHome = new FrmHome();
         frmHome.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para buscar una
+     * persona según el filtro seleccionado.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        // Nos vamos a la página 1 y cargamos los datos.
+        pagina = 1;
+        cargarDatos();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAnteriorActionPerformed
-
+    /**
+     * Método que reacciona al evento de dar clic en el botón para ir a la
+     * página siguiente de la tabla.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        // TODO add your handling code here:
+        pagina++; // Aumentamos la página.
+        cargarDatos(); // Cargamos los datos.
+        lblPagina.setText("Página " + pagina); // Mostramos el nuevo número de página.
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para ir a la
+     * página anterior de la tabla.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        if (pagina > 1) { // Si estamos en otra página que no sea la 1.
+            pagina--; // Disminuímos la página.
+            cargarDatos(); // Cargamos los datos.
+            lblPagina.setText("Página " + pagina); // Mostramos el nuevo número de página.
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    /**
+     * Método que reacciona al evento de dar clic en el radio button para
+     * habilitar o deshabilitar el filtro de nombre.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
+    private void nombreRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreRadioBtnActionPerformed
+        if (nombreRadioBtn.isSelected()) {
+            // Se deshabilitan los otros filtros.
+            anioNacimientoRadioBtn.setSelected(false);
+            txtAnioNacimiento.setEnabled(false);
+            curpRadioBtn.setSelected(false);
+            txtCurp.setEnabled(false);
+            txtNombre.setEnabled(true);
+            txtNombre.requestFocus();
+            tipo = NOMBRE; // Indicamos que el filtro es por nombre.
+        } else {
+            // Deshabilitamos el radio button e indicamos que el filtro es el inicial.
+            txtNombre.setEnabled(false);
+            tipo = INICIO;
+        }
+    }//GEN-LAST:event_nombreRadioBtnActionPerformed
+
+    /**
+     * Método que reacciona al evento de dar clic en el radio button para
+     * habilitar o deshabilitar el filtro de año de nacimiento.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
+    private void anioNacimientoRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anioNacimientoRadioBtnActionPerformed
+        if (anioNacimientoRadioBtn.isSelected()) {
+            // Se deshabilitan los otros filtros.
+            nombreRadioBtn.setSelected(false);
+            txtNombre.setEnabled(false);
+            curpRadioBtn.setSelected(false);
+            txtCurp.setEnabled(false);
+            txtAnioNacimiento.setEnabled(true);
+            txtAnioNacimiento.requestFocus();
+            tipo = ANIO_NACIMIENTO; // Indicamos que el filtro es por año de nacimiento.
+        } else {
+            // Deshabilitamos el radio button e indicamos que el filtro es el inicial.
+            txtAnioNacimiento.setEnabled(true);
+            tipo = INICIO;
+        }
+    }//GEN-LAST:event_anioNacimientoRadioBtnActionPerformed
+
+    /**
+     * Método que reacciona al evento de dar clic en el radio button para
+     * habilitar o deshabilitar el filtro de CURP.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
+    private void curpRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_curpRadioBtnActionPerformed
+        if (curpRadioBtn.isSelected()) {
+            // Se deshabilitan los otros filtros.
+            anioNacimientoRadioBtn.setSelected(false);
+            txtAnioNacimiento.setEnabled(false);
+            nombreRadioBtn.setSelected(false);
+            txtNombre.setEnabled(false);
+            txtCurp.setEnabled(true);
+            txtCurp.requestFocus();
+            tipo = CURP; // Indicamos que el filtro es por CURP.
+        } else {
+            // Deshabilitamos el radio button e indicamos que el filtro es el inicial.
+            txtCurp.setEnabled(false);
+            tipo = INICIO;
+        }
+    }//GEN-LAST:event_curpRadioBtnActionPerformed
+
+    /**
+     * Método para evitar que se ingresen letras en el campo de texto año.
+     *
+     * @param evt
+     */
+    private void txtAnioNacimientoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnioNacimientoKeyTyped
+        // Se obtiene el caracter ingresado.
+        char c = evt.getKeyChar();
+        // Si es diferente a un dígito y al retroceso.
+        if ((c < '0' || c > '9') && c != KeyEvent.VK_BACK_SPACE) {
+            // Se destruye el evento (no se pone el caracter).
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtAnioNacimientoKeyTyped
+
+    /**
+     * Método para evitar que se ingresen números en el campo de texto del
+     * nombre.
+     *
+     * @param evt
+     */
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // Se obtiene el caracter ingresado.
+        char c = evt.getKeyChar();
+        // Si no es una letra o el retroceso.
+        if (!Character.isLetter(c) && c != KeyEvent.VK_BACK_SPACE) {
+            // Se destruye el evento (no se pone el caracter).
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton anioNacimientoRadioBtn;
     private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JPanel btnCerrar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JRadioButton curpRadioBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblPagina;
+    private javax.swing.JRadioButton nombreRadioBtn;
     private javax.swing.JPanel pnlBarra;
     private javax.swing.JPanel pnlCampos;
     private javax.swing.JPanel pnlContenido;

@@ -1,28 +1,28 @@
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\TarifaLicenciaEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\TramiteEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\PersonaEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\PlacasEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\TarifaPlacasEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\TarifaLicenciaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\VehiculoEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\LicenciaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\conexion\IConexion.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\AutomovilDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IPersonaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\PlacasDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\ITramiteDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\excepciones\PersistenciaException.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\ITarifaPlacasDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\TarifaPlacasDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\ILicenciaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\PersonaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\ITarifaLicenciaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\RelacionVehiculoPersona.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IPlacasDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\TramiteDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IRelacionVehiculoPersonaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\IAutomovilDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\daos\RelacionVehiculoPersonaDAO.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\AutomovilEntidad.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\conexion\Conexion.java
-C:\Users\jorge\OneDrive\Documentos\GitHub\BDA_Proyecto2\Persistencia\src\main\java\entidades\LicenciaEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\TarifaPlacasEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\LicenciaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\AutomovilDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\conexion\Conexion.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\LicenciaEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\ILicenciaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\IAutomovilDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\IPlacasDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\AutomovilEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\RelacionVehiculoPersona.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\ITarifaLicenciaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\TarifaLicenciaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\TramiteDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\TarifaLicenciaEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\PersonaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\PlacasDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\ITramiteDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\PersonaEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\IPersonaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\TarifaPlacasDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\PlacasEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\VehiculoEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\entidades\TramiteEntidad.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\conexion\IConexion.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\IRelacionVehiculoPersonaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\RelacionVehiculoPersonaDAO.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\excepciones\PersistenciaException.java
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java\daos\ITarifaPlacasDAO.java

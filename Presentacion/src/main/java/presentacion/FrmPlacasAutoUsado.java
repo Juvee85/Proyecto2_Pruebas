@@ -1,3 +1,6 @@
+/*
+ * FrmPlacasAutoUsado.java
+ */
 package presentacion;
 
 import dtos.AutomovilDTO;
@@ -16,6 +19,8 @@ import utilidades.Paleta;
 import utilidades.Validadores;
 
 /**
+ * Ventana donde se introducen las últimas placas asociadas a un automóvil para
+ * buscarlo.
  *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
@@ -29,26 +34,35 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
     private int mouseX, mouseY;
 
     /**
-     * Creates new form FrmPlacasSeleccionVehiculo
+     * Constructor del frame que inicializa los atributos.
+     *
+     * @param persona Persona que quiere tramitar unas placas.
+     * @param auto Automóvil al cual se le están sacando las placas.
+     * @param licencia Licencia del solicitante.
      */
     public FrmPlacasAutoUsado(PersonaDTO persona, AutomovilDTO auto, LicenciaDTO licencia) {
         initComponents();
+
         this.registroPlacas = new RegistroPlacasBO();
         this.persona = persona;
         this.auto = auto;
         this.licencia = licencia;
+
+        // Si el automóvil llega como diferente de null, significa que se trató
+        // trató de realizar el trámite tratando el auto como nuevo, cuando en
+        // realidad es usado.
         if (auto != null) {
+            // Habilitamos el botón de confirmar.
             btnConfirmar.setEnabled(true);
-            btnBuscar.setEnabled(false);
+            // Mostramos los datos del automóvil.
             mostrarDatosAutomovil();
         }
+        // Cargamos el costo de las placas.
         cargarCosto();
     }
 
     /**
-     * Método para mostrar los datos de la persona encontrada.
-     *
-     * @param persona Persona encontrada.
+     * Método para mostrar los datos del automóvil.
      */
     private void mostrarDatosAutomovil() {
         txtNumPlaca.setText(auto.getNumPlaca()); // Mostramos el número de la placa.
@@ -56,23 +70,27 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
         lblNumSerie.setText(auto.getNumSerie()); // Mostramos el número de serie.
 
         lblMarca.setText(auto.getMarca()); // Mostramos la marca.
-        
+
         lblLinea.setText(auto.getLinea()); // Mostramos la línea.
-        
+
         lblColor.setText(auto.getColor()); // Mostramos la línea.
-        
+
         lblModelo.setText(auto.getModelo()); // Mostramos el modelo.
     }
 
+    /**
+     * Método para cargar y mostrar el costo del trámite para un automóvil
+     * usado.
+     */
     private void cargarCosto() {
         // Creamos una instancia del formateador de dinero.
         FormatoDinero fd = new FormatoDinero();
 
-        // Obtenemos el costo del trámite de placas para un auto nuevo.
+        // Obtenemos el costo del trámite de placas para un auto usado.
         TarifaPlacasDTO tarifa = registroPlacas.buscarTarifa("Automóvil usado");
         String costo = fd.formatear(tarifa.getCosto());
-        
-        // Se muestra el costo.
+
+        // Mostramos el costo.
         lblCosto.setText(costo);
     }
 
@@ -272,7 +290,7 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
 
         jLabel15.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(37, 37, 37));
-        jLabel15.setText("Modelo");
+        jLabel15.setText("Modelo:");
 
         jSeparator1.setForeground(new java.awt.Color(106, 27, 49));
 
@@ -472,30 +490,71 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para minimizar la
+     * ventana.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana cuando se
+     * pasa el mouse por encima.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
         btnMinimizar.setBackground(Paleta.VERDE);
     }//GEN-LAST:event_btnMinimizarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana a su color
+     * original.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
         btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnMinimizarMouseExited
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para cerrar la
+     * ventana.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         System.exit(0);
     }//GEN-LAST:event_btnCerrarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana cuando se
+     * pasa el mouse por encima.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
         btnCerrar.setBackground(Paleta.ROJO);
     }//GEN-LAST:event_btnCerrarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana a su color
+     * original.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
         btnCerrar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnCerrarMouseExited
 
+    /**
+     * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
         // Obtenemos las coordenadas del mouse en la pantalla.
         int x = evt.getXOnScreen();
@@ -506,56 +565,78 @@ public class FrmPlacasAutoUsado extends javax.swing.JFrame {
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
+    /**
+     * Método que registra las coordenadas del mouse cuando presiona el header.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
         // Se actualizan las coordenadas.
         mouseX = evt.getX();
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para buscar un
+     * automóvil con las placas ingresadas.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // Se obtiene la CURP ingresada.
-        String numPlacas = txtNumPlaca.getText().trim().toUpperCase();
         try {
+            // Se obtiene el número de las placas ingresadas.
+            String numPlacas = txtNumPlaca.getText().trim().toUpperCase();
+
             // Creamos una instancia de validadores.
             Validadores v = new Validadores();
-
-            // Validamos la CURP.
+            // Validamos las placas.
             v.validarPlacas(numPlacas);
 
-            // Se busca si hay alguna persona registrada con la CURP ingresada.
+            // Se busca si hay algún automóvil que tenga asociadas las placas.
             auto = registroPlacas.buscarAutoPlacas(numPlacas);
+            // Asignamos las placas al DTO.
             auto.setNumPlaca(numPlacas);
 
             // Se habilita el botón de confirmar.
             btnConfirmar.setEnabled(true);
-            
-            // Se muestran los datos de la persona encontrada.
+
+            // Se muestran los datos del automóvil encontrado.
             mostrarDatosAutomovil();
         } catch (PresentacionException | NegocioException ex) {
-            // Se muestra un mensaje si el número de la placa fue mal ingresado
-            // o si no se encontraron ningunas placas.
+            // Se muestra un mensaje si el número de las placas fue mal ingresado
+            // o si no se encontró ningún vehículo asociado a ellas.
             JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Oops!", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para confirmar las
+     * placas y culminar el trámite.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        try {
-            PlacasDTO placaDTO = registroPlacas.generarPlaca("Automóvil usado");
-            
-            registroPlacas.desactivarPlacas(txtNumPlaca.getText());
-            
-            registroPlacas.agregarPlacaUsado(auto.getNumSerie(), persona.getCurp(), placaDTO);
-            
-            FrmPlacasRecibo frmPlacasRecibo = new FrmPlacasRecibo(persona, placaDTO);
-            frmPlacasRecibo.setVisible(true);
-            this.dispose();
-        } catch (NegocioException ne) {
-            // Se manda un mensaje de que se interrumpió el proceso por incumplimiento
-            // de requisitos.
-            JOptionPane.showMessageDialog(this, ne.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
-        }
+        // Generamos las placas para el automóvil usado.
+        PlacasDTO placaDTO = registroPlacas.generarPlaca("Automóvil usado");
+
+        // Mandamos a desactivar las últimas placas del automóvil.
+        registroPlacas.desactivarPlacas(txtNumPlaca.getText());
+
+        // Registramos las placas nuevas.
+        registroPlacas.agregarPlacaUsado(auto.getNumSerie(), persona.getCurp(), placaDTO);
+
+        // Redireccionamos a la ventana de que se terminó el trámite.
+        FrmPlacasRecibo frmPlacasRecibo = new FrmPlacasRecibo(persona, placaDTO);
+        frmPlacasRecibo.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para regresar a la
+     * pantalla anterior.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmPlacasSeleccionVehiculo frmPlacasSeleccionVehiculo = new FrmPlacasSeleccionVehiculo(persona, licencia);
         frmPlacasSeleccionVehiculo.setVisible(true);

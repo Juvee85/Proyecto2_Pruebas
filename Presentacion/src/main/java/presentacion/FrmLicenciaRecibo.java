@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 import utilidades.FormatoDinero;
 
 /**
- * Ventana donde se muestran los datos de la licencia generada.
+ * Ventana donde se muestra que se completó el trámite y aparecen los datos del
+ * de la licencia y del solicitante.
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -17,37 +19,44 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
 
     private PersonaDTO persona;
     private LicenciaDTO licencia;
-        
+
     /**
-     * Constructor de la ventana.
-     * @param persona Persona que solicita la licencia.
+     * Constructor del frame que inicializa los atributos.
+     *
+     * @param persona Persona que solicitó la licencia.
      * @param licencia Licencia generada.
      */
     public FrmLicenciaRecibo(PersonaDTO persona, LicenciaDTO licencia) {
         initComponents();
+
         this.persona = persona;
         this.licencia = licencia;
+
+        // Mostramos los datos de la licencia y del solicitante.
         mostrarDatos();
     }
-    
+
     /**
      * Método para mostrar los datos de la licencia.
      */
     private void mostrarDatos() {
         // Creamos una instancia para darle formato al dinero.
         FormatoDinero fd = new FormatoDinero();
-        
+
+        // Mostramos el nombre completo.
         lblSolicitante.setText(
-                  persona.getNombre() + " "
+                persona.getNombre() + " "
                 + persona.getApellidoPaterno() + " "
                 + persona.getApellidoMaterno());
-        
-        lblCosto.setText(fd.formatear(licencia.getCosto()));
-        
+
+        lblCosto.setText(fd.formatear(licencia.getCosto())); // Mostramos el costo.
+
         // Creamos una instancia para darle formato a la fecha de emisión.
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        // Mostramos la fecha en que se emitió el trámite.
         lblFechaEmision.setText(sdf.format(licencia.getFechaEmision().getTime()));
-        
+
+        // Mostramos la vigencia de la licencia.
         lblVigencia.setText(licencia.getTarifa().getVigencia());
     }
 
@@ -218,6 +227,7 @@ public class FrmLicenciaRecibo extends javax.swing.JFrame {
 
     /**
      * Método que reacciona al evento de dar clic en el botón para continuar.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed

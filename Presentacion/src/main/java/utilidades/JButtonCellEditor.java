@@ -15,8 +15,9 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.table.TableCellEditor;
 
 /**
- * Clase que nos brinda la posibilidad de editar botones que hayan sido agregados
- * a una tabla.
+ * Clase que nos brinda la posibilidad de editar botones que hayan sido
+ * agregados a una tabla.
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -32,13 +33,13 @@ public class JButtonCellEditor implements TableCellEditor {
         this.button.setBackground(new Color(188, 149, 92));
         this.button.setForeground(new Color(242, 242, 242));
         this.actionListener = actionListener;
-        this.button.addActionListener((ActionEvent evt)->{
+        this.button.addActionListener((ActionEvent evt) -> {
             this.actionListener.actionPerformed(
-                new ActionEvent(this.button, ActionEvent.ACTION_PERFORMED, this.row+"")
+                    new ActionEvent(this.button, ActionEvent.ACTION_PERFORMED, this.row + "")
             );
         });
     }
-    
+
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         this.row = row;
@@ -66,11 +67,14 @@ public class JButtonCellEditor implements TableCellEditor {
     }
 
     @Override
-    public void cancelCellEditing() {}
+    public void cancelCellEditing() {
+    }
 
     @Override
-    public void addCellEditorListener(CellEditorListener l) {}
+    public void addCellEditorListener(CellEditorListener l) {
+    }
 
     @Override
-    public void removeCellEditorListener(CellEditorListener l) {}
+    public void removeCellEditorListener(CellEditorListener l) {
+    }
 }

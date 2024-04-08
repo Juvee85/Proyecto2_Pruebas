@@ -1,5 +1,5 @@
 /*
- * IncercionMasivaBO.java
+ * InsercionMasivaBO.java
  */
 package negocio;
 
@@ -17,6 +17,7 @@ import utilidades.Encriptador;
 /**
  * Clase con la implementación de la interfaz IInsercionMasivaBO para realizar
  * la inserción masiva.
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
@@ -27,12 +28,12 @@ public class InsercionMasivaBO implements IInsercionMasivaBO {
 
     /**
      * Método para llevar a cabo la inserción masiva.
+     *
      * @throws NegocioException si ya se realizó la inserción masiva.
      */
     @Override
     public void insertarPersonas() throws NegocioException {
-        // Si ya hay personas registradas, lanzamos una excepción.
-        if (personaDAO.hayPersonas()) {
+        if (personaDAO.hayPersonas()) { // Si ya hay personas registradas.
             // Mandamos un mensaje a la consola de que se interrumpió la inserción
             // masiva.
             logger.log(Level.WARNING, "Inserción masiva interrumpida.");
@@ -45,7 +46,7 @@ public class InsercionMasivaBO implements IInsercionMasivaBO {
 
         // Iteramos sobre la lista de personas.
         for (PersonaEntidad persona : listaPersonas) {
-            // Mandamos a insertar a la persona.
+            // Mandamos a insertar a cada persona.
             personaDAO.insertarPersona(persona);
         }
         // Mandamos un mensaje a la consola de que se realizó la inserción masiva.
@@ -54,6 +55,7 @@ public class InsercionMasivaBO implements IInsercionMasivaBO {
 
     /**
      * Método que crea las personas de la inserción masiva.
+     *
      * @return Una lista de personas.
      * @throws NegocioException si ocurre un error durante la encriptación.
      */
@@ -87,7 +89,7 @@ public class InsercionMasivaBO implements IInsercionMasivaBO {
             listaPersonas.add(new PersonaEntidad(e.encriptar("José"), e.encriptar("Díaz"), e.encriptar("López"), "DILJ800922MTSJSP05", "DILJ800922OE0", "5756789012", true, new GregorianCalendar(1980, 8, 22)));
             listaPersonas.add(new PersonaEntidad(e.encriptar("Fernanda"), e.encriptar("Ramírez"), e.encriptar("Martínez"), "RAMF790130GDLRND06", "RAMF790130RT1", "5767890123", false, new GregorianCalendar(1979, 0, 30)));
             listaPersonas.add(new PersonaEntidad(e.encriptar("Javier"), e.encriptar("González"), e.encriptar("Sánchez"), "GOSJ861205MTSJKR07", "GOSJ861205JC2", "5778901234", true, new GregorianCalendar(1986, 11, 5)));
-            
+
             // Devolvemos la lista de personas.
             return listaPersonas;
         } catch (Exception ex) {

@@ -18,45 +18,51 @@ import utilidades.Validadores;
 /**
  * Ventana para buscar a un solicitante y saber si tiene una licencia vigente o
  * no.
+ *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
 public class FrmPlacasCliente extends javax.swing.JFrame {
 
     private IRegistroPlacasBO registroPlacas;
-    // El valor personaLicencia[0] es PersonaDTO.
     private PersonaDTO persona;
     private LicenciaDTO licencia;
     private int mouseX, mouseY;
 
     /**
-     * Constructor del frame.
-     * @param persona 
-     * @param licencia
+     * Constructor del frame que inicializa los atributos.
+     *
+     * @param persona Persona que quiere tramitar unas placas.
+     * @param licencia Licencia del solicitante.
      */
     public FrmPlacasCliente(PersonaDTO persona, LicenciaDTO licencia) {
         initComponents();
+
         this.registroPlacas = new RegistroPlacasBO();
         this.persona = persona;
         this.licencia = licencia;
-        
+
+        // Si la persona llega como diferente a null, significa que se presionó
+        // el botón de volver.
         if (persona != null) {
+            // Habilitamos el botón de continuar.
+            btnContinuar.setEnabled(true);
+            // Mostramos los datos de la persona.
             mostrarDatosPersona();
         }
     }
 
     /**
      * Método para mostrar los datos de la persona encontrada.
-     * @param persona Mapa con los datos de la persona y su licencia.
      */
-    private void mostrarDatosPersona() {        
+    private void mostrarDatosPersona() {
         txtCurp.setText(persona.getCurp()); // Mostramos la CURP.
 
-        lblNombre.setText(persona.getNombre() + " " // Mostramos el nombre
+        lblNombre.setText(persona.getNombre() + " " // Mostramos el nombre completo.
                 + persona.getApellidoPaterno() + " "
                 + persona.getApellidoMaterno());
 
-        // Se crea un objeto para darle formato a la fecha.
+        // Creamos un objeto para darle formato a la fecha de nacimiento.
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         // Mostramos la fehca de nacimiento.
         lblFechaNacimiento.setText(sdf.format(persona.getFechaNacimiento().getTime()));
@@ -64,17 +70,15 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
         if (persona.getTelefono() != null) {
             lblTelefono.setText(persona.getTelefono()); // Mostramos el teléfono.
         } else {
-            // Si la persona no tiene teléfono, se indica.
-            lblTelefono.setText("No tiene");
+            lblTelefono.setText("No tiene"); // Por si la persona no tiene teléfono.
         }
 
         if (persona.getRfc() != null) {
             lblRfc.setText(persona.getRfc()); // Mostramos el RFC.
         } else {
-            // Si la persona no tiene RFC, se indica.
-            lblRfc.setText("No tiene");
+            lblRfc.setText("No tiene"); // Por si la persona no tiene teléfono.
         }
-        
+
         // Se indica si la licencia está vigente o no.
         if (licencia != null && licencia.isActiva()) {
             lblLicencia.setText("Sí");
@@ -455,6 +459,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     /**
      * Método que reacciona al evento de dar clic en el botón para minimizar la
      * ventana.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
@@ -462,7 +467,9 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
     /**
-     * Método que cambia el color del botón para minimizar la ventana.
+     * Método que cambia el color del botón para minimizar la ventana cuando se
+     * pasa el mouse por encima.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
@@ -472,6 +479,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     /**
      * Método que cambia el color del botón para minimizar la ventana a su color
      * original.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
@@ -481,6 +489,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     /**
      * Método que reacciona al evento de dar clic en el botón para cerrar la
      * ventana.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
@@ -488,7 +497,9 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarMouseClicked
 
     /**
-     * Método que cambia el color del botón para cerrar la ventana.
+     * Método que cambia el color del botón para cerrar la ventana cuando se
+     * pasa el mouse por encima.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
@@ -498,6 +509,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     /**
      * Método que cambia el color del botón para cerrar la ventana a su color
      * original.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
@@ -506,6 +518,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
 
     /**
      * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
@@ -520,6 +533,7 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
 
     /**
      * Método que registra las coordenadas del mouse cuando presiona el header.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
@@ -530,13 +544,15 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
 
     /**
      * Método que reacciona al evento de dar clic en el botón para buscar una
-     * persona y saber si tiene una licencia vigente o no.
+     * persona.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // Se obtiene la CURP ingresada.
-        String curp = txtCurp.getText().trim().toUpperCase();
         try {
+            // Se obtiene la CURP ingresada.
+            String curp = txtCurp.getText().trim().toUpperCase();
+
             // Creamos una instancia de validadores.
             Validadores v = new Validadores();
 
@@ -544,16 +560,18 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
             v.validarCurp(curp);
 
             // Se busca al solicitante y si ya cuenta con una licencia.
+            // personaLicencia[0] almacena un objeto PersonaDTO.
+            // personaLicencia[1] almacena un objeto LicenciaDTO.
             Object[] personaLicencia = registroPlacas.buscarPersonaCurp(curp);
-            
+
             // Extraemos los datos del solicitante y la licencia.
             persona = (PersonaDTO) personaLicencia[0];
             licencia = (LicenciaDTO) personaLicencia[1];
 
-            // Se habilitan el botón de continuar y el combobox de vigencia.
+            // Se habilita el botón de continuar.
             btnContinuar.setEnabled(true);
 
-            // Se muestran los datos del solicitante.
+            // Se muestran los datos del solicitante y su licencia.
             mostrarDatosPersona();
         } catch (PresentacionException | NegocioException ex) {
             // Se muestra un mensaje si la CURP fue mal ingresada o si no se
@@ -563,8 +581,8 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
-     * Método que reacciona al evento de dar clic en el botón para continuar la
-     * selección del solicitante y continuar.
+     * Método que reacciona al evento de dar clic en el botón para continuar.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
@@ -577,23 +595,30 @@ public class FrmPlacasCliente extends javax.swing.JFrame {
             frmPlacasSeleccionVehiculo.setVisible(true);
             this.dispose();
         } catch (NegocioException ne) {
-            // Se manda un mensaje de que se interrumpió el proceso por incumplimiento
-            // de requisitos.
-            int opcion = JOptionPane.showConfirmDialog(this, ne.getMessage() + "\n¿Desea tramitar/renovar su licencia momento?", "¡Error!", JOptionPane.YES_NO_OPTION);
-            if (opcion == 0) {
+            // Si llegamos aquí es porque el solicitante no tiene una licencia
+            // vigente.
+            // Mandamos un mensaje para informar de esto y preguntamos si quiere
+            // tramitar/renovar su licencia.
+            int opcion = JOptionPane.showConfirmDialog(this, ne.getMessage() + "\n¿Desea tramitar/renovar su licencia en este momento?", "¡Error!", JOptionPane.YES_NO_OPTION);
+            if (opcion == 0) { // Si se seleccionó que sí.
+                // Redireccionamos a la pantalla de trámite de licencia
+                // y precargamos sus datos.
                 FrmLicenciaDatos drmLicenciaDatos = new FrmLicenciaDatos(persona);
                 drmLicenciaDatos.setVisible(true);
-            } else {
+            } else { // Si se seleccionó que no.
+                // Redireccionamos a la pantalla principal.
                 FrmHome frmHome = new FrmHome();
                 frmHome.setVisible(true);
             }
+            // Destruimos este frame.
             this.dispose();
         }
     }//GEN-LAST:event_btnContinuarActionPerformed
 
     /**
      * Método que reacciona al evento de dar clic en el botón para regresar a la
-     * pantalla inicial.
+     * pantalla anterior.
+     *
      * @param evt Evento del mouse al que se escucha.
      */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed

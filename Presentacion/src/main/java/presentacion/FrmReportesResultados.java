@@ -1,67 +1,101 @@
+/*
+ * FrmReportesResultados.java
+ */
 package presentacion;
 
 import dtos.ReporteDTO;
+import excepciones.NegocioException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import negocio.IReporteTramitesBO;
+import negocio.ReporteTramitesBO;
+import utilidades.Paleta;
+import utilidades.TiposTramite;
 
 /**
+ * Ventana donde aparece el reporte generado.
  *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
  */
 public class FrmReportesResultados extends javax.swing.JFrame {
-    
-    int mouseX, mouseY;
-    
-    /** Creates new form FrmReportesResultados */
-    public FrmReportesResultados(String nombre, String tipo, String fechaInicio, String fechaFin) {
+
+    private IReporteTramitesBO reportes;
+    private List<TiposTramite> tiposSeleccionados;
+    private String nombre;
+    private Calendar fechaInicio;
+    private Calendar fechaFin;
+    private int pagina = 1;
+    private int numeroFilas = 6;
+    private int mouseX, mouseY;
+
+    /**
+     * Constructor del frame que inicializa los atributos.
+     *
+     * @param nombre Nombre que se busca.
+     * @param tiposSeleccionados Tipos de trámite seleccionados.
+     * @param fechaInicio Fecha de inicio del periodo.
+     * @param fechaFin Fecha de fin del periodo.
+     */
+    public FrmReportesResultados(String nombre, List<TiposTramite> tiposSeleccionados, Calendar fechaInicio, Calendar fechaFin) {
         initComponents();
-        
-        if(!nombre.isBlank()) {
-            lblNombre.setText("Nombre: " + nombre);
-        }
-        
-        if(!tipo.isBlank()) {
-            lblTipo.setText("Tipo: " + tipo);
-        }
-        
-        if(!fechaInicio.isBlank() || !fechaFin.isBlank()) {
-            lblPeriodo.setText("Periodo: ");
-            if(!fechaInicio.isBlank()) {
-                lblPeriodo.setText(lblPeriodo.getText() + fechaInicio + " -");
-            }
-            if(!fechaFin.isBlank()) {
-                lblPeriodo.setText(lblPeriodo.getText() + "- " + fechaFin);
-            }
-        }
-        
+
+        reportes = new ReporteTramitesBO(numeroFilas);
+        this.nombre = nombre;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.tiposSeleccionados = tiposSeleccionados;
+
+        // Mandamos a formatear la tabla y a cargar los datos.
         formatearTabla();
         cargarDatos();
     }
-    
-    public void formatearTabla() {
+
+    /**
+     * Método para darle formato a la tabla.
+     */
+    private void formatearTabla() {
+        // Cambiamos el color del fondo.
         tblTramites.getTableHeader().setBackground(new Color(106, 27, 49));
-        tblTramites.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 20));
+        // Cambiamos la fuente y el tamaño.
+        tblTramites.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        // Cambiamos el color de la letra.
         tblTramites.getTableHeader().setForeground(new Color(188, 149, 92));
     }
-    
-    public void cargarDatos() {
-        List<ReporteDTO> lista = new ArrayList<>();
-        lista.add(new ReporteDTO("Diego Valenzuela Dávila", "Placas", "$1,000.00", "12/08/2023 09:19:48"));
-        lista.add(new ReporteDTO("Diego Valenzuela Lira", "Licencia", "$200.00", "30/10/2023 10:20:33"));
-        lista.add(new ReporteDTO("Diego Valenzuela Lira", "Placas", "$1,000.00", "30/10/2023 11:35:16"));
-        lista.add(new ReporteDTO("Diego Valenzuela Urías", "Placas", "$1,000.00", "01/11/2023 16:07:14"));
-        lista.add(new ReporteDTO("Diego Valenzuela Urías", "Placas", "$1,500.00", "08/02/2024 15:49:52"));
-        lista.add(new ReporteDTO("Diego Valenzuela Parra", "Licencia", "$1,100.00", "15/03/2024 14:50:21"));
-        lista.add(new ReporteDTO("Diego Valenzuela Parra", "Placas", "$1,500.00", "17/03/2024 13:32:01"));
-        
-        llenarTablaReporte(lista);
+
+    /**
+     * Método para cargar los datos de los trámites.
+     */
+    private void cargarDatos() {
+        List<ReporteDTO> lista = null;
+        try {
+            // Obtenemos la lista de trámites.
+            lista = reportes.obtenerReporteTramites(tiposSeleccionados, nombre, fechaInicio, fechaFin, pagina);
+        } catch (NegocioException ex) {
+            // No hacemos nada porque ya sabemos que si llegamos a este frame es porque
+            // sí hay trámites coincidentes.
+        }
+
+        if (lista == null || lista.isEmpty()) {
+            pagina--; // Decrementamos el número de página.
+            // Cambiamos el texto de la página.
+            lblPagina.setText("Página " + pagina);
+        } else {
+            // Mandamos a llenar la tabla.
+            llenarTablaReporte(lista);
+        }
     }
-    
+
+    /**
+     * Método para llenar la tabla de trámites.
+     *
+     * @param listaTramites Lista de trámites con la que se llenará la tabla.
+     */
     private void llenarTablaReporte(List<ReporteDTO> lista) {
         DefaultTableModel modeloTabla = (DefaultTableModel) tblTramites.getModel();
 
@@ -77,17 +111,20 @@ public class FrmReportesResultados extends javax.swing.JFrame {
                 fila[0] = row.getNombre();
                 fila[1] = row.getTipo();
                 fila[2] = row.getCosto();
-                fila[3] = row.getFechaRealizacion();
+                fila[3] = row.getFechaEmision();
 
                 modeloTabla.addRow(fila);
             });
+
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontraron elementos");
         }
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -105,18 +142,14 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         pnlContenido = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        pnlCampos = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        lblNombre = new javax.swing.JLabel();
-        lblTipo = new javax.swing.JLabel();
-        lblPeriodo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTramites = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
-        btnVolver1 = new javax.swing.JButton();
+        btnAnterior = new javax.swing.JButton();
+        lblPagina = new javax.swing.JLabel();
+        btnExportar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -245,54 +278,13 @@ public class FrmReportesResultados extends javax.swing.JFrame {
 
         pnlContenido.setBackground(new java.awt.Color(242, 242, 242));
 
+        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 40)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Reportes");
-        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 40)); // NOI18N
 
-        pnlCampos.setBackground(new java.awt.Color(242, 242, 242));
-
-        jLabel8.setText("Filtros:");
-        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(37, 37, 37));
-
-        lblNombre.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        lblNombre.setForeground(new java.awt.Color(37, 37, 37));
-
-        lblTipo.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        lblTipo.setForeground(new java.awt.Color(37, 37, 37));
-
-        lblPeriodo.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        lblPeriodo.setForeground(new java.awt.Color(37, 37, 37));
-
-        javax.swing.GroupLayout pnlCamposLayout = new javax.swing.GroupLayout(pnlCampos);
-        pnlCampos.setLayout(pnlCamposLayout);
-        pnlCamposLayout.setHorizontalGroup(
-            pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlCamposLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlCamposLayout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblPeriodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        pnlCamposLayout.setVerticalGroup(
-            pnlCamposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlCamposLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblNombre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblTipo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblPeriodo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
+        tblTramites.setBackground(new java.awt.Color(11, 35, 30));
+        tblTramites.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        tblTramites.setForeground(new java.awt.Color(242, 242, 242));
         tblTramites.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -305,10 +297,7 @@ public class FrmReportesResultados extends javax.swing.JFrame {
             }
         ));
         tblTramites.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tblTramites.setBackground(new java.awt.Color(11, 35, 30));
         tblTramites.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tblTramites.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        tblTramites.setForeground(new java.awt.Color(242, 242, 242));
         tblTramites.setName(""); // NOI18N
         tblTramites.setSelectionBackground(new java.awt.Color(106, 27, 49));
         tblTramites.setSelectionForeground(new java.awt.Color(242, 242, 242));
@@ -316,12 +305,16 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         tblTramites.setSurrendersFocusOnKeystroke(true);
         jScrollPane1.setViewportView(tblTramites);
 
-        btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
-        btnVolver.setText("Volver");
+        jLabel8.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(37, 37, 37));
+        jLabel8.setText("Resultados");
+
         btnVolver.setBackground(new java.awt.Color(11, 35, 30));
-        btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVolver.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnVolver.setForeground(new java.awt.Color(242, 242, 242));
+        btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/atras.png"))); // NOI18N
+        btnVolver.setText("Volver");
+        btnVolver.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVolver.setPreferredSize(new java.awt.Dimension(120, 40));
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -329,28 +322,14 @@ public class FrmReportesResultados extends javax.swing.JFrame {
             }
         });
 
-        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/siguiente.png"))); // NOI18N
-        btnAnterior.setText("Siguiente");
-        btnAnterior.setBackground(new java.awt.Color(188, 149, 92));
-        btnAnterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAnterior.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnAnterior.setForeground(new java.awt.Color(242, 242, 242));
-        btnAnterior.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        btnAnterior.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        btnAnterior.setPreferredSize(new java.awt.Dimension(120, 40));
-        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnteriorActionPerformed(evt);
-            }
-        });
-
-        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/anterior.png"))); // NOI18N
-        btnSiguiente.setText("Anterior");
         btnSiguiente.setBackground(new java.awt.Color(188, 149, 92));
-        btnSiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSiguiente.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         btnSiguiente.setForeground(new java.awt.Color(242, 242, 242));
-        btnSiguiente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/siguiente.png"))); // NOI18N
+        btnSiguiente.setText("Siguiente");
+        btnSiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSiguiente.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnSiguiente.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         btnSiguiente.setPreferredSize(new java.awt.Dimension(120, 40));
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,21 +337,35 @@ public class FrmReportesResultados extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("Página 1");
-        jLabel12.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        btnVolver1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pdf.png"))); // NOI18N
-        btnVolver1.setText("Exportar");
-        btnVolver1.setBackground(new java.awt.Color(106, 27, 49));
-        btnVolver1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnVolver1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnVolver1.setForeground(new java.awt.Color(242, 242, 242));
-        btnVolver1.setPreferredSize(new java.awt.Dimension(120, 40));
-        btnVolver1.addActionListener(new java.awt.event.ActionListener() {
+        btnAnterior.setBackground(new java.awt.Color(188, 149, 92));
+        btnAnterior.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnAnterior.setForeground(new java.awt.Color(242, 242, 242));
+        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/anterior.png"))); // NOI18N
+        btnAnterior.setText("Anterior");
+        btnAnterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAnterior.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAnterior.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVolver1ActionPerformed(evt);
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+
+        lblPagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPagina.setText("Página 1");
+        lblPagina.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblPagina.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        btnExportar.setBackground(new java.awt.Color(106, 27, 49));
+        btnExportar.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnExportar.setForeground(new java.awt.Color(242, 242, 242));
+        btnExportar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pdf.png"))); // NOI18N
+        btnExportar.setText("Exportar");
+        btnExportar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportar.setPreferredSize(new java.awt.Dimension(120, 40));
+        btnExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarActionPerformed(evt);
             }
         });
 
@@ -381,44 +374,47 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         pnlContenidoLayout.setHorizontalGroup(
             pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenidoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(pnlContenidoLayout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlContenidoLayout.createSequentialGroup()
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
-                        .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAnterior, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(btnVolver1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(pnlCampos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addContainerGap(70, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlContenidoLayout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(pnlContenidoLayout.createSequentialGroup()
+                                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                    .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(btnSiguiente, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                        .addComponent(btnExportar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jScrollPane1)))
+                        .addGap(0, 64, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         pnlContenidoLayout.setVerticalGroup(
             pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenidoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVolver1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnExportar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -428,68 +424,142 @@ public class FrmReportesResultados extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para minimizar la
+     * ventana.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseClicked
         this.setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana cuando se
+     * pasa el mouse por encima.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseEntered
-        btnMinimizar.setBackground(Color.red);
+        btnMinimizar.setBackground(Paleta.VERDE);
     }//GEN-LAST:event_btnMinimizarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para minimizar la ventana a su color
+     * original.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnMinimizarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMinimizarMouseExited
-        btnMinimizar.setBackground(new Color(88, 88, 88));
+        btnMinimizar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnMinimizarMouseExited
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para cerrar la
+     * ventana.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseClicked
         System.exit(0);
     }//GEN-LAST:event_btnCerrarMouseClicked
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana cuando se
+     * pasa el mouse por encima.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseEntered
-        btnCerrar.setBackground(Color.red);
+        btnCerrar.setBackground(Paleta.ROJO);
     }//GEN-LAST:event_btnCerrarMouseEntered
 
+    /**
+     * Método que cambia el color del botón para cerrar la ventana a su color
+     * original.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnCerrarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCerrarMouseExited
-        btnCerrar.setBackground(new Color(88, 88, 88));
+        btnCerrar.setBackground(Paleta.GRIS);
     }//GEN-LAST:event_btnCerrarMouseExited
 
+    /**
+     * Método que mueve la ventana cuando se arrastra el mouse por el header.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMouseDragged
+        // Obtenemos las coordenadas del mouse en la pantalla.
         int x = evt.getXOnScreen();
         int y = evt.getYOnScreen();
+
+        // Se calcula la distancia del recorrido del mouse y eso es lo que se
+        // mueve la ventana.
         this.setLocation(x - mouseX, y - mouseY);
     }//GEN-LAST:event_pnlHeaderMouseDragged
 
+    /**
+     * Método que registra las coordenadas del mouse cuando presiona el header.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void pnlHeaderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHeaderMousePressed
+        // Se actualizan las coordenadas.
         mouseX = evt.getX();
         mouseY = evt.getY();
     }//GEN-LAST:event_pnlHeaderMousePressed
 
+    /**
+     * Método que reacciona al evento de dar clic en el botón para regresar a la
+     * pantalla anterior.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         FrmReportesFiltros frmReportesFiltros = new FrmReportesFiltros();
         frmReportesFiltros.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAnteriorActionPerformed
-
+    /**
+     * Método que reacciona al evento de dar clic en el botón para ir a la
+     * página siguiente de la tabla.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        // TODO add your handling code here:
+        pagina++; // Aumentamos la página.
+        cargarDatos(); // Cargamos los datos.
+        lblPagina.setText("Página " + pagina); // Mostramos el nuevo número de página.
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
-    private void btnVolver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolver1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVolver1ActionPerformed
+    /**
+     * Método que reacciona al evento de dar clic en el botón para ir a la
+     * página anterior de la tabla.
+     *
+     * @param evt Evento del mouse al que se escucha.
+     */
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        if (pagina > 1) { // Si estamos en otra página que no sea la 1.
+            pagina--; // Disminuímos la página.
+            cargarDatos(); // Cargamos los datos.
+            lblPagina.setText("Página " + pagina); // Mostramos el nuevo número de página.
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
+        reportes.generarReporte(tiposSeleccionados, nombre, fechaInicio, fechaFin);
+    }//GEN-LAST:event_btnExportarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
     private javax.swing.JPanel btnCerrar;
+    private javax.swing.JButton btnExportar;
     private javax.swing.JPanel btnMinimizar;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton btnVolver1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -497,11 +567,8 @@ public class FrmReportesResultados extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblNombre;
-    private javax.swing.JLabel lblPeriodo;
-    private javax.swing.JLabel lblTipo;
+    private javax.swing.JLabel lblPagina;
     private javax.swing.JPanel pnlBarra;
-    private javax.swing.JPanel pnlCampos;
     private javax.swing.JPanel pnlContenido;
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlTitulo;

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Clase de entidad con los atributos y relaciones de un automovil
+ * Clase de entidad con los atributos y relaciones de un autómovil.
  *
  * @author Diego Valenzuela Parra - 00000247700
  * @author Juventino López García - 00000248547
@@ -44,12 +44,10 @@ public class AutomovilEntidad extends VehiculoEntidad implements Serializable {
      * @param color Color del auto
      * @param linea Linea del auto
      * @param modelo Modelo del auto
-     * @param usado Estado de usado del auto, si es verdadero se espera que el
-     * auto haya sido registrado previamente
      * @param numeroSerie Numero de serie del auto
      */
-    public AutomovilEntidad(String marca, String color, String linea, String modelo, Boolean usado, String numeroSerie) {
-        super(usado, numeroSerie);
+    public AutomovilEntidad(String marca, String color, String linea, String modelo, String numeroSerie) {
+        super(numeroSerie);
         this.marca = marca;
         this.color = color;
         this.linea = linea;

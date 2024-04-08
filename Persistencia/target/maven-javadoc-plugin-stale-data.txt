@@ -1,0 +1,62 @@
+@options
+@packages
+-classpath
+'C:/Users/jorge/.m2/repository/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar;C:/Users/jorge/.m2/repository/com/google/protobuf/protobuf-java/3.25.1/protobuf-java-3.25.1.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.core/2.7.12/org.eclipse.persistence.core-2.7.12.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.asm/9.4.0/org.eclipse.persistence.asm-9.4.0.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.antlr/2.7.12/org.eclipse.persistence.antlr-2.7.12.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.jpa/2.7.12/org.eclipse.persistence.jpa-2.7.12.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.jpa.jpql/2.7.12/org.eclipse.persistence.jpa.jpql-2.7.12.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.moxy/2.7.12/org.eclipse.persistence.moxy-2.7.12.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/jakarta.persistence/2.2.3/jakarta.persistence-2.2.3.jar;C:/Users/jorge/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.jpa.modelgen.processor/2.7.12/org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'21'
+-sourcepath
+'C:/Users/jorge/OneDrive/Escritorio/PROYECTO BDA2/Persistencia/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/jorge/OneDrive/Escritorio/PROYECTO BDA2/Persistencia/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Persistencia 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Persistencia 1.0-SNAPSHOT API'
+conexion
+daos
+entidades
+excepciones
+C:\Users\jorge\.m2\repository\com\mysql\mysql-connector-j\8.3.0\mysql-connector-j-8.3.0.jar = 1705352827000
+C:\Users\jorge\.m2\repository\com\google\protobuf\protobuf-java\3.25.1\protobuf-java-3.25.1.jar = 1700088488000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.core\2.7.12\org.eclipse.persistence.core-2.7.12.jar = 1676485815000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.asm\9.4.0\org.eclipse.persistence.asm-9.4.0.jar = 1664961351000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.antlr\2.7.12\org.eclipse.persistence.antlr-2.7.12.jar = 1676485767000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa\2.7.12\org.eclipse.persistence.jpa-2.7.12.jar = 1676485898000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.jpql\2.7.12\org.eclipse.persistence.jpa.jpql-2.7.12.jar = 1676485746000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.moxy\2.7.12\org.eclipse.persistence.moxy-2.7.12.jar = 1676485959000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\jakarta.persistence\2.2.3\jakarta.persistence-2.2.3.jar = 1564761743000
+C:\Users\jorge\.m2\repository\org\eclipse\persistence\org.eclipse.persistence.jpa.modelgen.processor\2.7.12\org.eclipse.persistence.jpa.modelgen.processor-2.7.12.jar = 1676485936000
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\src\main\java = 1712572665958
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\allclasses-index.html = 1712609992005
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\allpackages-index.html = 1712609992007
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\copy.svg = 1712609992049
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\element-list = 1712609991803
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\help-doc.html = 1712609992043
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\index-all.html = 1712609992035
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\index.html = 1712609991987
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\link.svg = 1712609992050
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\member-search-index.js = 1712609992012
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\module-search-index.js = 1712609992008
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\overview-summary.html = 1712609992038
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\overview-tree.html = 1712609991983
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\package-search-index.js = 1712609992010
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\script.js = 1712609992047
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\search-page.js = 1712609992055
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\search.html = 1712609992037
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\search.js = 1712609992053
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\serialized-form.html = 1712609991855
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\stylesheet.css = 1712609992045
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\tag-search-index.js = 1712609992013
+C:\Users\jorge\OneDrive\Escritorio\PROYECTO BDA2\Persistencia\target\site\apidocs\type-search-index.js = 1712609992011
