@@ -484,6 +484,13 @@ public class FrmReportesFiltros extends javax.swing.JFrame {
             if (tiposSeleccionados.isEmpty()) {
                 throw new PresentacionException("Por favor selecciona al menos un tipo de trámite.");
             }
+            
+            // Prevenir que se ingrese un periodo inválido.
+            if ((fechaInicio != null && fechaFin != null)) {
+                if ( fechaInicio.isAfter(fechaFin) || fechaInicio.isEqual(fechaFin)) {
+                    throw new PresentacionException("Por favor ingresa un periodo válido."); 
+                }
+            }
 
             // Convertimos las fechas ingresadas a Calendar.
             Calendar inicio = null;

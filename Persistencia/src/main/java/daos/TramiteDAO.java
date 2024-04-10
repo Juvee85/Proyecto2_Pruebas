@@ -77,14 +77,17 @@ public class TramiteDAO implements ITramiteDAO {
     public List<TramiteEntidad> obtenerReporte(String nombre, Calendar fechaInicial, Calendar fechaFin, List<Class> tipos,
             int limite, int offset) throws PersistenciaException {
         EntityManager em = conexion.crearConexion();
-        TypedQuery<TramiteEntidad> consulta = em.createQuery(""
-                + "SELECT t"
+        TypedQuery<TramiteEntidad> consulta = em.createQuery(
+                  "SELECT t"
                 + " FROM TramiteEntidad t"
                 + " WHERE (:nombre IS NULL OR t.persona.nombre = :nombre)"
-                + " AND (:fechaInicio IS NULL OR t.fechaEmision BETWEEN :fechaInicio AND :fechaFin) "
-                + " AND (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
-                + " OR (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
-                + " AND :tipoTramite2 IS NULL OR Type(t) = :tipoTramite2)) ", TramiteEntidad.class)
+                + "     AND (:fechaInicio IS NULL AND :fechaFin IS NULL "
+                + "         OR (:fechaInicio IS NOT NULL AND t.fechaEmision >= :fechaInicio AND :fechaFin IS NULL) "
+                + "         OR (:fechaFin IS NOT NULL AND t.fechaEmision <= :fechaFin AND :fechaInicio IS NULL) "
+                + "         OR (t.fechaEmision BETWEEN :fechaInicio AND :fechaFin)) "
+                + "     AND (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
+                + "         OR (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
+                + "         AND :tipoTramite2 IS NULL OR Type(t) = :tipoTramite2)) ", TramiteEntidad.class)
                 .setFirstResult(offset)
                 .setMaxResults(limite);
         consulta.setParameter("nombre", nombre);
@@ -132,13 +135,16 @@ public class TramiteDAO implements ITramiteDAO {
         EntityManager em = conexion.crearConexion();
 
         TypedQuery<TramiteEntidad> consulta = em.createQuery(
-                "SELECT t"
+                  "SELECT t"
                 + " FROM TramiteEntidad t"
                 + " WHERE (:nombre IS NULL OR t.persona.nombre = :nombre)"
-                + " AND (:fechaInicio IS NULL OR t.fechaEmision BETWEEN :fechaInicio AND :fechaFin) "
-                + " AND (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
-                + " OR (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
-                + " AND :tipoTramite2 IS NULL OR Type(t) = :tipoTramite2)) ", TramiteEntidad.class);
+                + "     AND (:fechaInicio IS NULL AND :fechaFin IS NULL "
+                + "         OR (:fechaInicio IS NOT NULL AND t.fechaEmision >= :fechaInicio AND :fechaFin IS NULL) "
+                + "         OR (:fechaFin IS NOT NULL AND t.fechaEmision <= :fechaFin AND :fechaInicio IS NULL) "
+                + "         OR (t.fechaEmision BETWEEN :fechaInicio AND :fechaFin)) "
+                + "     AND (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
+                + "         OR (:tipoTramite1 IS NULL OR Type(t) = :tipoTramite1 "
+                + "         AND :tipoTramite2 IS NULL OR Type(t) = :tipoTramite2)) ", TramiteEntidad.class);
         consulta.setParameter("nombre", nombre);
         consulta.setParameter("fechaInicio", fechaInicial);
         consulta.setParameter("fechaFin", fechaFin);
