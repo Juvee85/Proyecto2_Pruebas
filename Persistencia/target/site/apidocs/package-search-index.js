@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"conexion"},{"l":"daos"},{"l":"entidades"},{"l":"excepciones"}];updateSearchResults();
