@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
 import utilidades.Encriptador;
 import utilidades.Paginacion;
 
@@ -35,6 +36,12 @@ public class ConsultaHistorialBO implements IConsultaHistorialBO {
     private static final Logger logger = Logger.getLogger(ConsultaHistorialBO.class.getName());
     private int numeroElementos;
 
+    public ConsultaHistorialBO(IPersonaDAO personaDAO, ITramiteDAO tramiteDAO, int numElementos) {
+        this.personaDAO = personaDAO;
+        this.tramiteDAO = tramiteDAO;
+        this.numeroElementos = numElementos;
+    }
+    
     /**
      * Constructor que inicializa el número de elementos.
      *
@@ -57,8 +64,7 @@ public class ConsultaHistorialBO implements IConsultaHistorialBO {
     public List<PersonaDTO> obtenerPersonas(int pagina) throws NegocioException {
         try {
             // Obtenemos la lista de personas.
-            List<PersonaEntidad> personaEntidades = personaDAO.obtenerPersonas(numeroElementos,
-                    Paginacion.obtenerOffset(numeroElementos, pagina));
+            List<PersonaEntidad> personaEntidades = personaDAO.obtenerPersonas(numeroElementos, Paginacion.obtenerOffset(numeroElementos, pagina));
             // La convertimos a DTO.
             List<PersonaDTO> personaDTOs = new ArrayList<>();
             for (PersonaEntidad personaEntidad : personaEntidades) {
@@ -118,8 +124,13 @@ public class ConsultaHistorialBO implements IConsultaHistorialBO {
             Encriptador encriptador = new Encriptador();
             // Buscamos personas con el nombre dado.
             List<PersonaEntidad> personaEntidades = personaDAO.buscarPorNombre(
+                    nombre, numeroElementos,
+                    Paginacion.obtenerOffset(numeroElementos, pagina));
+            /*
+            List<PersonaEntidad> personaEntidades = personaDAO.buscarPorNombre(
                     encriptador.encriptar(nombre), numeroElementos,
                     Paginacion.obtenerOffset(numeroElementos, pagina));
+            */
             // Convertimos la lista a DTO.
             List<PersonaDTO> personaDTOs = new ArrayList<>();
             for (PersonaEntidad personaEntidad : personaEntidades) {
@@ -127,12 +138,14 @@ public class ConsultaHistorialBO implements IConsultaHistorialBO {
             }
             // Retornamos el DTO.
             return personaDTOs;
-        } catch (Exception pe) {
+        } catch (NoResultException pe) {
             // Mandamos un mensaje a la consola de que no se encontró ninguna persona.
             logger.log(Level.WARNING, "No se obtuvo ninguna persona con el nombre: " + nombre + ".");
             // Lanzamos una exceción indicando que no se encontró ninguna persona
             // con el nombre proporcionada.
             throw new NegocioException(pe.getMessage());
+        } catch (PersistenciaException ex) {
+            throw new NegocioException(ex.getMessage());
         }
     }
 

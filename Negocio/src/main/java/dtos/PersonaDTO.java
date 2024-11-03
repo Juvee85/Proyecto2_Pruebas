@@ -58,21 +58,37 @@ public class PersonaDTO {
      *
      * @param personaEntidad PersonaEntidad a convertir.
      * @throws NegocioException Si ocurre algún error durante la encriptación.
+     *
+     * public PersonaDTO(PersonaEntidad personaEntidad) throws NegocioException
+     * { try { this.nombre = e.desencriptar(personaEntidad.getNombre());
+     * this.apellidoPaterno =
+     * e.desencriptar(personaEntidad.getApellidoPaterno()); this.apellidoMaterno
+     * = e.desencriptar(personaEntidad.getApellidoMaterno()); this.curp =
+     * personaEntidad.getCurp(); this.rfc = personaEntidad.getRfc();
+     * this.telefono = personaEntidad.getTelefono(); this.discapacitado =
+     * personaEntidad.isDiscapacitado(); this.fechaNacimiento =
+     * personaEntidad.getFechaNacimiento(); } catch (Exception ex) {
+     * Logger.getLogger(PersonaDTO.class.getName()).log(Level.SEVERE, "Error al
+     * desencriptar datos.", ex); throw new NegocioException("Hubo un error.");
+     * }
+    }
+     */
+    
+    /**
+     * Constructor que recibe una PersonaEntidad y la conviere a DTO.
+     *
+     * @param personaEntidad PersonaEntidad a convertir.
+     * @throws NegocioException Si ocurre algún error durante la encriptación.
      */
     public PersonaDTO(PersonaEntidad personaEntidad) throws NegocioException {
-        try {
-            this.nombre = e.desencriptar(personaEntidad.getNombre());
-            this.apellidoPaterno = e.desencriptar(personaEntidad.getApellidoPaterno());
-            this.apellidoMaterno = e.desencriptar(personaEntidad.getApellidoMaterno());
-            this.curp = personaEntidad.getCurp();
-            this.rfc = personaEntidad.getRfc();
-            this.telefono = personaEntidad.getTelefono();
-            this.discapacitado = personaEntidad.isDiscapacitado();
-            this.fechaNacimiento = personaEntidad.getFechaNacimiento();
-        } catch (Exception ex) {
-            Logger.getLogger(PersonaDTO.class.getName()).log(Level.SEVERE, "Error al desencriptar datos.", ex);
-            throw new NegocioException("Hubo un error.");
-        }
+        this.nombre = personaEntidad.getNombre();
+        this.apellidoPaterno = personaEntidad.getApellidoPaterno();
+        this.apellidoMaterno = personaEntidad.getApellidoMaterno();
+        this.curp = personaEntidad.getCurp();
+        this.rfc = personaEntidad.getRfc();
+        this.telefono = personaEntidad.getTelefono();
+        this.discapacitado = personaEntidad.isDiscapacitado();
+        this.fechaNacimiento = personaEntidad.getFechaNacimiento();
     }
 
     /**
@@ -215,6 +231,7 @@ public class PersonaDTO {
 
     /**
      * Método que devuelve la fecha de nacimiento de una persona.
+     *
      * @return Fehca de nacimiento a devolver.
      */
     public Calendar getFechaNacimiento() {
@@ -223,6 +240,7 @@ public class PersonaDTO {
 
     /**
      * Método que asigna la fecha de nacimiento a una persona.
+     *
      * @param fechaNacimiento Fecha de nacimiento a asignar.
      */
     public void setFechaNacimiento(Calendar fechaNacimiento) {
