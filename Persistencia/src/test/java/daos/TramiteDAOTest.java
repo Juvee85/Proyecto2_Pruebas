@@ -7,9 +7,9 @@ package daos;
 import entidades.PersonaEntidad;
 import entidades.TramiteEntidad;
 import excepciones.PersistenciaException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import javax.persistence.NoResultException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,20 +52,42 @@ public class TramiteDAOTest {
      * Prueba para el metodo obtenerTramitesPorPersona de la clase TramiteDAO.
      */
     @Test
-    public void testObtenerTramitesPorPersona() throws Exception {
+    public void obtenerTramitesPorPersona_ObtieneTramitesPorPersona_ListTramiteEntidad() throws Exception {
         System.out.println("obtenerTramitesPorPersona");
         
         // arrange
-        PersonaEntidad persona = null;
+        PersonaEntidad persona = new PersonaEntidad();
+        persona.setId(1l);
+        persona.setCurp("NEES040410100SS12");
         int limite = 0;
         int offset = 0;
-        List<TramiteEntidad> expResult = null;
+        List<TramiteEntidad> expResult = Arrays.asList();
         Mockito.when(this.tramiteDAO.obtenerTramitesPorPersona(persona, limite, offset)).thenReturn(expResult);
         
         // act
         List<TramiteEntidad> result = this.tramiteDAO.obtenerTramitesPorPersona(persona, limite, offset);
         
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Prueba para el metodo obtenerTramitesPorPersona de la clase TramiteDAO.
+     */
+    @Test
+    public void obtenerTramitesPorPersona_NoPudoObtenerTramitesPorPersona_PersistenciaException() throws Exception {
+        System.out.println("obtenerTramitesPorPersona - PersistenciaException");
+        
+        // arrange
+        PersonaEntidad persona = new PersonaEntidad();
+        persona.setId(1l);
+        persona.setCurp("NEES040410100SS12");
+        int limite = 0;
+        int offset = 0;
+        
+        Mockito.when(this.tramiteDAO.obtenerTramitesPorPersona(persona, limite, offset)).thenThrow(PersistenciaException.class);
+        
+        // act y assert
+        Exception exp = assertThrows(PersistenciaException.class, () -> this.tramiteDAO.obtenerTramitesPorPersona(persona, limite, offset));
     }
     
     /**
@@ -92,40 +114,96 @@ public class TramiteDAOTest {
      * Prueba para el metodo obtenerReporte de la clase TramiteDAO.
      */
     @Test
-    public void testObtenerReporte_6args() throws Exception {
+    public void obtenerReporte_6args_ObtieneReporteTramites_ListTramiteEntidad() throws Exception {
         System.out.println("obtenerReporte");
         
         // arrange
-        String nombre = "";
-        Calendar fechaInicial = null;
-        Calendar fechaFin = null;
+        Calendar c = Calendar.getInstance();
+        String nombre = "Reporte de Prueba";
+        c.set(2010, 1, 1);
+        Calendar fechaInicial = (Calendar) c.clone();
+        Calendar fechaFin = (Calendar) c.clone();
         List<Class> tipos = null;
         int limite = 0;
         int offset = 0;
-        TramiteDAO instance = new TramiteDAO();
-        List<TramiteEntidad> expResult = null;
+        List<TramiteEntidad> expResult = Arrays.asList();
+        Mockito.when(this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos, limite, offset)).thenReturn(expResult);
         
         // act
-        List<TramiteEntidad> result = instance.obtenerReporte(nombre, fechaInicial, fechaFin, tipos, limite, offset);
+        List<TramiteEntidad> result = this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos, limite, offset);
         
         // assert
         assertEquals(expResult, result);
     }
-
+    
     /**
-     * Test of obtenerReporte method, of class TramiteDAO.
+     * Prueba para el metodo obtenerReporte de la clase TramiteDAO.
      */
     @Test
-    public void testObtenerReporte_4args() throws Exception {
-        System.out.println("obtenerReporte");
-        String nombre = "";
-        Calendar fechaInicial = null;
-        Calendar fechaFin = null;
+    public void obtenerReporte_6args_NoPudoObtenerReporteTramites_PersistenciaException() throws Exception {
+        System.out.println("obtenerReporte - PersistenciaException");
+        
+        // arrange
+        Calendar c = Calendar.getInstance();
+        String nombre = "Reporte de Prueba";
+        c.set(2010, 1, 1);
+        Calendar fechaInicial = (Calendar) c.clone();
+        c.set(2020, 1, 20);
+        Calendar fechaFin = (Calendar) c.clone();
         List<Class> tipos = null;
-        TramiteDAO instance = new TramiteDAO();
-        List<TramiteEntidad> expResult = null;
-        List<TramiteEntidad> result = instance.obtenerReporte(nombre, fechaInicial, fechaFin, tipos);
+        int limite = 0;
+        int offset = 0;
+        
+        Mockito.when(this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos, limite, offset)).thenThrow(PersistenciaException.class);
+        
+        // act y assert
+        Exception exp = assertThrows(PersistenciaException.class, () -> this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos, limite, offset));
+    }
+
+    /**
+     * Prueba del metodo obtenerReporte de la clase TramiteDAO.
+     */
+    @Test
+    public void obtenerReporte_4args_ObtieneReporteTarifas_ListTarifaEntidad() throws Exception {
+        System.out.println("obtenerReporte");
+
+        // arrange
+        Calendar c = Calendar.getInstance();
+        String nombre = "Reporte de Prueba";
+        c.set(2010, 1, 1);
+        Calendar fechaInicial = (Calendar) c.clone();
+        c.set(2020, 1, 20);
+        Calendar fechaFin = (Calendar) c.clone();
+        List<Class> tipos = null;
+        
+        List<TramiteEntidad> expResult = Arrays.asList();
+        
+        // act
+        List<TramiteEntidad> result = this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos);
+        
+        // assert
         assertEquals(expResult, result);
     }
     
+    /**
+     * Prueba del metodo obtenerReporte de la clase TramiteDAO.
+     */
+    @Test
+    public void obtenerReporte_4args_NoPudoObtenerReporteTarifas_PersistenciaException() throws Exception {
+        System.out.println("obtenerReporte - PersistenciaException");
+
+        // arrange
+        Calendar c = Calendar.getInstance();
+        String nombre = "Reporte de Prueba";
+        c.set(2010, 1, 1);
+        Calendar fechaInicial = (Calendar) c.clone();
+        c.set(2020, 1, 20);
+        Calendar fechaFin = (Calendar) c.clone();
+        List<Class> tipos = null;
+        
+        Mockito.when(this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos)).thenThrow(PersistenciaException.class);
+        
+        // act y assert
+        Exception exp = assertThrows(PersistenciaException.class, () -> this.tramiteDAO.obtenerReporte(nombre, fechaInicial, fechaFin, tipos));
+    }
 }
