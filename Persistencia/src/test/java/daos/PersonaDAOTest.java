@@ -99,8 +99,10 @@ public class PersonaDAOTest {
 
         // act
         this.personaDAO.insertarPersona(persona);
-
+        
         // assert
+        Mockito.verify(this.personaDAO).insertarPersona(persona);
+
     }
 
     /**

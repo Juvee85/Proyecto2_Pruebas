@@ -78,7 +78,7 @@ public class LicenciaDAOTest {
      * Prueba del metodo buscarUltimaLicencia de la clase LicenciaDAO.
      */
     @Test
-    public void testBuscarUltimaLicencia_UltimaLicenciaNoEncontrada_NoEncontrada() throws Exception {
+    public void testBuscarUltimaLicencia_UltimaLicenciaNoEncontrada_PersistenciaException() throws Exception {
         System.out.println("buscarUltimaLicencia");
         
         // arrange
@@ -117,13 +117,14 @@ public class LicenciaDAOTest {
         this.licenciaDAO.desactivarLicencia(expResult);
         
         // assert
+        Mockito.verify(this.licenciaDAO).desactivarLicencia(expResult);
     }
 
     /**
      * Prueba del metodo insertarLicencia de la clase LicenciaDAO.
      */
     @Test
-    public void testInsertarLicencia() {
+    public void insertarLicencia_SeInsertaLaLicencia_ResultadoSatisfactorio() {
         System.out.println("insertarLicencia");
         
         // arrange
@@ -141,6 +142,9 @@ public class LicenciaDAOTest {
         
         // act
         this.licenciaDAO.insertarLicencia(lic);
+        
+        // assert
+        Mockito.verify(this.licenciaDAO).insertarLicencia(lic);
     }
     
 }

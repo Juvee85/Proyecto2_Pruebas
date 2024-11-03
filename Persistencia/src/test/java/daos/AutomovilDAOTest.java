@@ -104,6 +104,7 @@ public class AutomovilDAOTest {
         this.autoDAO.insertarAutomovil(auto);
         
         // assert
+        Mockito.verify(this.autoDAO).insertarAutomovil(auto);
     }
     
 }
