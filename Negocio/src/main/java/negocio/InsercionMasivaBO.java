@@ -27,6 +27,14 @@ public class InsercionMasivaBO implements IInsercionMasivaBO {
     private static final Logger logger = Logger.getLogger(InsercionMasivaBO.class.getName());
 
     /**
+     * Crea una nueva instancia de la clase especificando el PersonaDAO a utilizar
+     * @param personaDAO DAO para manejar personas
+     */
+    public InsercionMasivaBO(IPersonaDAO personaDAO) {
+        this.personaDAO = personaDAO;
+    }
+    
+    /**
      * Método para llevar a cabo la inserción masiva.
      *
      * @throws NegocioException si ya se realizó la inserción masiva.
