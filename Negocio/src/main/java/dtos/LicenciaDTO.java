@@ -18,6 +18,10 @@ public class LicenciaDTO {
     private boolean activa;
     private TarifaLicenciaDTO tarifa;
 
+    public LicenciaDTO() {
+        
+    }
+    
     /**
      * COnstructor que inicializa todos los parámetros de la clase.
      * @param fechaEmision

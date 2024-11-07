@@ -38,6 +38,18 @@ public class RegistroLicenciaBO implements IRegistroLicenciaBO {
     private static final Logger logger = Logger.getLogger(RegistroLicenciaBO.class.getName());
 
     /**
+     * 
+     * @param personaDAO
+     * @param tarifaLicenciaDAO
+     * @param licenciaDAO 
+     */
+    public RegistroLicenciaBO(IPersonaDAO personaDAO, ITarifaLicenciaDAO tarifaLicenciaDAO, ILicenciaDAO licenciaDAO) {
+        this.personaDAO = personaDAO;
+        this.tarifaLicenciaDAO = tarifaLicenciaDAO;
+        this.licenciaDAO = licenciaDAO;
+    }
+    
+    /**
      * Método para buscar a una persona dada una CURP.
      *
      * @param curp CURP de la persona a buscar.
