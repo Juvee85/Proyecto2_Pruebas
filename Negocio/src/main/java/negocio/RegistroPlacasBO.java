@@ -53,6 +53,24 @@ public class RegistroPlacasBO implements IRegistroPlacasBO {
     private IRelacionVehiculoPersonaDAO relacionVehPerDAO = new RelacionVehiculoPersonaDAO();
     private static final Logger logger = Logger.getLogger(RegistroPlacasBO.class.getName());
 
+    public RegistroPlacasBO(
+            IPersonaDAO personaDAO, 
+            ITarifaLicenciaDAO tarifaLicenciaDAO,
+            ILicenciaDAO licenciaDAO,
+            ITarifaPlacasDAO tarifaPlacasDAO,
+            IPlacasDAO placasDAO,
+            IAutomovilDAO automovilDAO,
+            IRelacionVehiculoPersonaDAO reVehPerDAO
+    ) {
+        this.personaDAO = personaDAO;
+        this.tarifaLicenciaDAO = tarifaLicenciaDAO;
+        this.licenciaDAO = licenciaDAO;
+        this.tarifaPlacasDAO = tarifaPlacasDAO;
+        this.placasDAO = placasDAO;
+        this.automovilDAO = automovilDAO;
+        this.relacionVehPerDAO = reVehPerDAO;
+    }
+    
     /**
      * Método para buscar a una persona y su licencia dada una CURP.
      *

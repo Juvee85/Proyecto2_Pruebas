@@ -54,6 +54,10 @@ public class PlacasDTO {
         this.tarifa = new TarifaPlacasDTO(placasEnt.getTarifa());
     }
 
+    public PlacasDTO() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     /**
      * Método para obtener el número de las placas.
      *
