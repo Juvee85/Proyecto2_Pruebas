@@ -34,6 +34,7 @@ public class AutomovilEntidad extends VehiculoEntidad implements Serializable {
      * Constructor vacio por defecto
      */
     public AutomovilEntidad() {
+        super("");
     }
 
     /**

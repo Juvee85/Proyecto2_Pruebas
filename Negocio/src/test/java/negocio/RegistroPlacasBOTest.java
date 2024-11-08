@@ -367,7 +367,7 @@ public class RegistroPlacasBOTest {
         auto.setNumeroSerie(numSerie);
 
         Mockito.when(this.automovilDAO.obtenerAutomovil(numSerie)).thenReturn(auto);
-        
+
         // act
         AutomovilDTO result = this.registroPlacasBO.buscarAutomovil(numSerie);
 
@@ -377,10 +377,10 @@ public class RegistroPlacasBOTest {
         assertEquals(auto.getModelo(), result.getModelo());
         assertEquals(auto.getNumeroSerie(), result.getNumSerie());
     }
-    
+
     /**
-     * Efectua el flujo de cuando se busca y no encuentra un auto por el numero de
-     * serie
+     * Efectua el flujo de cuando se busca y no encuentra un auto por el numero
+     * de serie
      */
     @Test
     public void buscarAutomovil_NoSeEncontroElAutomovil_Null() {
@@ -390,7 +390,7 @@ public class RegistroPlacasBOTest {
         String numSerie = "299243736511893";
 
         Mockito.when(this.automovilDAO.obtenerAutomovil(numSerie)).thenReturn(null);
-        
+
         // act
         AutomovilDTO result = this.registroPlacasBO.buscarAutomovil(numSerie);
 
@@ -398,81 +398,226 @@ public class RegistroPlacasBOTest {
         assertNull(result);
     }
 
-    /*
+    /**
+     * Efectua el flujo de la operacion de agregarPlacaNueva sin problemas...
+     *
+     * @throws PersistenciaException Si ocurre un error en DAO (no ocurrira)
+     */
     @Test
-    public void testAgregarPlacaNuevo() {
+    public void agregarPlacaNuevo_LaPlacaSeAgregaSinErrores_ResultadoSatisfactorio() throws PersistenciaException {
         System.out.println("agregarPlacaNuevo");
-        
+
         // arrange
-        AutomovilDTO autoDTO = new AutomovilDTO("SERIE", "MARCA", "LINEA", "COLOR", "MODELO");
-        String curp = "APET1T4N10HHRSLA1";
-        
+        String curp = "DABA01038SHSFS3LA1";
+
+        PersonaEntidad persona = new PersonaEntidad();
+        persona.setNombre("Diana");
+        persona.setApellidoPaterno("Bastidas");
+        persona.setApellidoMaterno("Baca");
+        persona.setCurp(curp);
+        persona.setRfc("19219248663");
+
+        String numSerie = "1290231001235";
+
+        AutomovilEntidad auto = new AutomovilEntidad();
+        auto.setId(1L);
+        auto.setColor("Verde");
+        auto.setLinea("Corolla");
+        auto.setMarca("Toyota");
+        auto.setModelo("2015");
+        auto.setNumeroSerie(numSerie);
+
+        AutomovilDTO autoDTO = new AutomovilDTO(auto);
+
         Calendar fechaRecepcion = Calendar.getInstance();
         Calendar fechaEmision = Calendar.getInstance();
-        
-        PlacasDTO placasDTO = new PlacasDTO();
-        placasDTO.setActiva(true);
-        placasDTO.setCosto(1000.0f);
-        placasDTO.setFechaEmision(fechaEmision);
-        
+
+        TarifaPlacasEntidad tarifa = new TarifaPlacasEntidad();
+        tarifa.setCosto(1000.0f);
+        tarifa.setId(1l);
+        tarifa.setTipo("Automóvil nuevo");
+
+        PlacasEntidad placas = new PlacasEntidad();
+        placas.setActiva(Boolean.TRUE);
+        placas.setCosto(1000.0f);
+        placas.setFechaEmision(fechaEmision);
+        placas.setFechaRecepcion(fechaRecepcion);
+        placas.setNumero("DAB-124");
+        placas.setPersona(persona);
+        placas.setVehiculo(auto);
+        placas.setTarifa(tarifa);
+
+        PlacasDTO placasDTO = new PlacasDTO(placas);
+
+        // volvemos a registroPlacasBO un mock para poder devolver un valor simulado
+        IRegistroPlacasBO registroPlacasBO_Spy = Mockito.spy(this.registroPlacasBO);
+
+        Mockito.when(this.personaDAO.buscarPorCurp(curp)).thenReturn(persona);
+        Mockito.when(registroPlacasBO_Spy.convertirAutomovilDTO_Entidad(autoDTO)).thenReturn(auto);
+        Mockito.when(registroPlacasBO_Spy.convertirPlacasDTO_Entidad(placasDTO)).thenReturn(placas);
+        Mockito.when(this.tarifaPlacasDAO.buscarTarifa("Automóvil nuevo")).thenReturn(tarifa);
+        Mockito.doNothing().when(this.automovilDAO).insertarAutomovil(auto);
+        Mockito.doNothing().when(this.placasDAO).insertarPlacas(placas);
+
         // act
-        instance.agregarPlacaNuevo(autoDTO, curp, placasDTO);
-        
+        registroPlacasBO_Spy.agregarPlacaNuevo(autoDTO, curp, placasDTO);
+
         // assert
+        Mockito.verify(registroPlacasBO_Spy).agregarPlacaNuevo(autoDTO, curp, placasDTO);
     }
 
-    
+    /**
+     * Convierte un AutomovilDTO a AutomovilEntidad sin problemas
+     */
     @Test
-    public void testConvertirAutomovilDTO_Entidad() {
+    public void convertirAutomovilDTO_Entidad_ConvierteElAutoSinProblemas_AutomovilDTO() {
         System.out.println("convertirAutomovilDTO_Entidad");
-        AutomovilDTO autoDTO = null;
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        AutomovilEntidad expResult = null;
-        AutomovilEntidad result = instance.convertirAutomovilDTO_Entidad(autoDTO);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        // arrange
+        AutomovilEntidad expResult = new AutomovilEntidad();
+        expResult.setNumeroSerie("SERIE");
+        expResult.setMarca("MARCA");
+        expResult.setLinea("LINEA");
+        expResult.setColor("COLOR");
+        expResult.setModelo("MODELO");
+
+        AutomovilDTO autoDTO = new AutomovilDTO(expResult);
+
+        // act
+        AutomovilEntidad result = this.registroPlacasBO.convertirAutomovilDTO_Entidad(autoDTO);
+
+        // assert
+        assertEquals(expResult.getNumeroSerie(), result.getNumeroSerie());
+        assertEquals(expResult.getMarca(), result.getMarca());
+        assertEquals(expResult.getLinea(), result.getLinea());
+        assertEquals(expResult.getColor(), result.getColor());
+        assertEquals(expResult.getModelo(), result.getModelo());
     }
 
-
+    /**
+     * Convierte un PlacasDTO a PlacasEntidad sin problemas
+     */
     @Test
-    public void testConvertirPlacasDTO_Entidad() {
+    public void convertirPlacasDTO_Entidad_ConvierteLasPlacasSinProblemas_PlacasEntidad() {
         System.out.println("convertirPlacasDTO_Entidad");
-        PlacasDTO placasDTO = null;
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        PlacasEntidad expResult = null;
-        PlacasEntidad result = instance.convertirPlacasDTO_Entidad(placasDTO);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        // arrange
+        Calendar fechaEmision = Calendar.getInstance();
+        Calendar fechaRecepcion = Calendar.getInstance();
+
+        TarifaPlacasEntidad tarifa = new TarifaPlacasEntidad();
+        tarifa.setCosto(1000.f);
+        tarifa.setTipo("Automovil Nuevo");
+        tarifa.setId(1l);
+
+        PlacasEntidad expResult = new PlacasEntidad();
+        expResult.setId(1l);
+        expResult.setActiva(Boolean.TRUE);
+        expResult.setCosto(1000.0f);
+        expResult.setFechaEmision(fechaEmision);
+        expResult.setFechaRecepcion(fechaRecepcion);
+        expResult.setNumero("ACK-999");
+        expResult.setTarifa(tarifa);
+
+        PlacasDTO placasDTO = new PlacasDTO(expResult);
+
+        Mockito.when(this.tarifaPlacasDAO.buscarTarifa(Mockito.anyString())).thenReturn(tarifa);
+
+        // act
+        PlacasEntidad result = this.registroPlacasBO.convertirPlacasDTO_Entidad(placasDTO);
+
+        // act
+        assertEquals(expResult.getCosto(), result.getCosto());
+        assertEquals(expResult.getFechaEmision(), result.getFechaEmision());
+        assertEquals(expResult.getFechaRecepcion(), result.getFechaRecepcion());
+        assertEquals(expResult.getNumero(), result.getNumero());
+
     }
 
+    /**
+     * Busca una tarifa por tipo y la encuentra
+     */
     @Test
-    public void testBuscarTarifa() {
+    public void buscarTarifa_BuscaLaTarifaYLaEncuentra_TarifaPlacasDTO() {
         System.out.println("buscarTarifa");
-        String tipo = "";
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        TarifaPlacasDTO expResult = null;
-        TarifaPlacasDTO result = instance.buscarTarifa(tipo);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        // arrange
+        String tipo = "Automovil Nuevo";
+        TarifaPlacasEntidad tarifaEntidad = new TarifaPlacasEntidad();
+        tarifaEntidad.setTipo(tipo);
+        tarifaEntidad.setCosto(500.0f);
+
+        Mockito.when(tarifaPlacasDAO.buscarTarifa(tipo)).thenReturn(tarifaEntidad);
+
+        // act
+        TarifaPlacasDTO tarifaDTO = registroPlacasBO.buscarTarifa(tipo);
+
+        // assert
+        assertEquals(tipo, tarifaDTO.getTipo());
+        assertEquals(tarifaEntidad.getCosto(), tarifaDTO.getCosto());
     }
 
-
+    /**
+     * Busca un auto por sus placas y lo encuentra
+     *
+     * @throws Exception
+     */
     @Test
-    public void testBuscarAutoPlacas() throws Exception {
+    public void buscarAutoPlacas_EncuentraAlAutoPorSusPlacas_AutomovilEntidad() throws Exception {
         System.out.println("buscarAutoPlacas");
-        String numPlacas = "";
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        AutomovilDTO expResult = null;
-        AutomovilDTO result = instance.buscarAutoPlacas(numPlacas);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // Arrange
+        String numPlacas = "ACK-999";
+        String numSerie = "299243736511893";
+        
+        AutomovilEntidad autoEntidad = new AutomovilEntidad();
+        autoEntidad.setNumeroSerie(numSerie);
+        autoEntidad.setColor("Verde");
+        autoEntidad.setMarca("Toyota");
+        autoEntidad.setLinea("Corolla");
+        autoEntidad.setModelo("2015");
+
+        Mockito.when(placasDAO.buscarAutoPlacas(numPlacas)).thenReturn(autoEntidad);
+
+        // act
+        AutomovilDTO autoDTO = registroPlacasBO.buscarAutoPlacas(numPlacas);
+
+        // assert
+        assertEquals(autoEntidad.getNumeroSerie(), autoDTO.getNumSerie());
+        assertEquals(autoEntidad.getColor(), autoDTO.getColor());
+        assertEquals(autoEntidad.getMarca(), autoDTO.getMarca());
+        assertEquals(autoEntidad.getLinea(), autoDTO.getLinea());
+        assertEquals(autoEntidad.getModelo(), autoDTO.getModelo());
+    }
+    
+    /**
+     * Busca un auto por sus placas y no lo encuentra, por lo tanto arroja 
+     * excepcion
+     * @throws Exception
+     */
+    @Test
+    public void buscarAutoPlacas_NoseEncuentraAlAutoPorSusPlacas_NegocioException() throws Exception {
+        System.out.println("buscarAutoPlacas");
+        
+        // Arrange
+        String numPlacas = "ACK-999";
+        String numSerie = "299243736511893";
+        String mensajeEsperado = "No se encontró ningún automóvil con la placa: " + numPlacas + ".";
+        
+        AutomovilEntidad autoEntidad = new AutomovilEntidad();
+        autoEntidad.setNumeroSerie(numSerie);
+        autoEntidad.setColor("Verde");
+        autoEntidad.setMarca("Toyota");
+        autoEntidad.setLinea("Corolla");
+        autoEntidad.setModelo("2015");
+
+        Mockito.when(placasDAO.buscarAutoPlacas(numPlacas)).thenThrow(PersistenciaException.class);
+
+        // act y assert
+        Exception excepcion = assertThrows(NegocioException.class, () -> registroPlacasBO.buscarAutoPlacas(numPlacas));
     }
 
-
+    /*
     @Test
     public void testDesactivarPlacas() {
         System.out.println("desactivarPlacas");
