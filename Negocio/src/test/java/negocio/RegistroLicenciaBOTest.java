@@ -126,10 +126,13 @@ public class RegistroLicenciaBOTest {
         persona.setFechaNacimiento(c);
         persona.setTelefono("12345678910");
         
+        IRegistroLicenciaBO registroBO_Spy = Mockito.spy(this.registroBO);
+        
         // act
-        this.registroBO.validarRequisitos(persona);
+        registroBO_Spy.validarRequisitos(persona);
         
         // assert
+        Mockito.verify(registroBO_Spy).validarRequisitos(persona);
     }
     
     /**
@@ -312,7 +315,6 @@ public class RegistroLicenciaBOTest {
 
     /**
      * Test of buscarTarifasLicencia method, of class RegistroLicenciaBO.
-     * TODO: CASOS ALTERNOS PENDIENTES
      */
     @Test
     public void buscarTarifasLicencia_SeObtienenTodasLasTarifasLicencia_ListTarifaLicenciaDTO() {
@@ -339,7 +341,6 @@ public class RegistroLicenciaBOTest {
     
     /**
      * Test of agregarLicencia method, of class RegistroLicenciaBO.
-     * TODO: CASOS ALTERNOS PENDIENTES
      */
     @Test
     public void agregarLicencia_AgregaCorrectamenteLaLicencia_ResultadoSatisfactorio() throws PersistenciaException {
