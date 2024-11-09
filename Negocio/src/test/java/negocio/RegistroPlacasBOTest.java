@@ -24,6 +24,7 @@ import entidades.AutomovilEntidad;
 import entidades.LicenciaEntidad;
 import entidades.PersonaEntidad;
 import entidades.PlacasEntidad;
+import entidades.RelacionVehiculoPersona;
 import entidades.TarifaLicenciaEntidad;
 import entidades.TarifaPlacasEntidad;
 import excepciones.NegocioException;
@@ -565,11 +566,11 @@ public class RegistroPlacasBOTest {
     @Test
     public void buscarAutoPlacas_EncuentraAlAutoPorSusPlacas_AutomovilEntidad() throws Exception {
         System.out.println("buscarAutoPlacas");
-        
+
         // Arrange
         String numPlacas = "ACK-999";
         String numSerie = "299243736511893";
-        
+
         AutomovilEntidad autoEntidad = new AutomovilEntidad();
         autoEntidad.setNumeroSerie(numSerie);
         autoEntidad.setColor("Verde");
@@ -589,21 +590,21 @@ public class RegistroPlacasBOTest {
         assertEquals(autoEntidad.getLinea(), autoDTO.getLinea());
         assertEquals(autoEntidad.getModelo(), autoDTO.getModelo());
     }
-    
+
     /**
-     * Busca un auto por sus placas y no lo encuentra, por lo tanto arroja 
+     * Busca un auto por sus placas y no lo encuentra, por lo tanto arroja
      * excepcion
+     *
      * @throws Exception
      */
     @Test
     public void buscarAutoPlacas_NoseEncuentraAlAutoPorSusPlacas_NegocioException() throws Exception {
         System.out.println("buscarAutoPlacas");
-        
+
         // Arrange
         String numPlacas = "ACK-999";
         String numSerie = "299243736511893";
-        String mensajeEsperado = "No se encontró ningún automóvil con la placa: " + numPlacas + ".";
-        
+
         AutomovilEntidad autoEntidad = new AutomovilEntidad();
         autoEntidad.setNumeroSerie(numSerie);
         autoEntidad.setColor("Verde");
@@ -617,39 +618,105 @@ public class RegistroPlacasBOTest {
         Exception excepcion = assertThrows(NegocioException.class, () -> registroPlacasBO.buscarAutoPlacas(numPlacas));
     }
 
-    /*
+    /**
+     * Efectua el flujo de cuando se desactiva una placa a partir del numero de
+     * placas.
+     */
     @Test
-    public void testDesactivarPlacas() {
+    public void desactivarPlacas_SeDesactivanLasPlacasCorrectamente_ResultadoSatisfactorio() {
         System.out.println("desactivarPlacas");
-        String numPlacas = "";
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        instance.desactivarPlacas(numPlacas);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        // arrange
+        String numPlacas = "ACK-123";
+
+        PlacasEntidad placas = new PlacasEntidad();
+        placas.setNumero(numPlacas);
+
+        IRegistroPlacasBO registroPlacasBO_Spy = Mockito.spy(this.registroPlacasBO);
+        Mockito.when(this.placasDAO.obtenerPlacas(numPlacas)).thenReturn(placas);
+        Mockito.doNothing().when(this.placasDAO).desactivarPlacas(placas);
+
+        // act
+        registroPlacasBO_Spy.desactivarPlacas(numPlacas);
+
+        // assert
+        Mockito.verify(registroPlacasBO_Spy).desactivarPlacas(numPlacas);
     }
 
-
+    /**
+     * Se efectua el flujo en donde se quiere obtener las ultimas placas del
+     * sistema
+     */
     @Test
-    public void testObtenerUltimasPlacas() {
+    public void obtenerUltimasPlacas_SeObtienenLasUltimasPlacas_PlacasDTO() {
         System.out.println("obtenerUltimasPlacas");
-        String numSerie = "";
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        PlacasDTO expResult = null;
-        PlacasDTO result = instance.obtenerUltimasPlacas(numSerie);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        // arrange
+        String numSerie = "1289837801892";
+
+        Calendar fechaEmision = Calendar.getInstance();
+        Calendar fechaRecepcion = Calendar.getInstance();
+
+        TarifaPlacasEntidad tarifa = new TarifaPlacasEntidad();
+        tarifa.setCosto(1000.f);
+        tarifa.setId(1l);
+        tarifa.setTipo("Automovil Nuevo");
+
+        PlacasEntidad placas = new PlacasEntidad();
+        placas.setActiva(Boolean.TRUE);
+        placas.setCosto(1000.f);
+        placas.setFechaEmision(fechaEmision);
+        placas.setFechaRecepcion(fechaRecepcion);
+        placas.setNumero("ACK-101");
+        placas.setTarifa(tarifa);
+
+        PlacasDTO expResult = new PlacasDTO(placas);
+
+        Mockito.when(this.placasDAO.obtenerUltimasPlacas(numSerie)).thenReturn(placas);
+
+        // act
+        PlacasDTO result = this.registroPlacasBO.obtenerUltimasPlacas(numSerie);
+
+        // assert
+        assertEquals(expResult.getCosto(), result.getCosto());
+        assertEquals(expResult.getFechaEmision(), result.getFechaEmision());
+        assertEquals(expResult.getFechaRecepcion(), result.getFechaRecepcion());
+        assertEquals(expResult.getNumero(), result.getNumero());
     }
-    
+
     @Test
-    public void testAgregarPlacaUsado() {
+    public void agregarPlacaUsado_SeAgregaLaPlacaParaAutomovilUsadoCorrectamente_ResultadoSatisfactorio() throws PersistenciaException {
         System.out.println("agregarPlacaUsado");
-        String numSerie = "";
-        String curp = "";
-        PlacasDTO placasDTO = null;
-        RegistroPlacasBO instance = new RegistroPlacasBO();
-        instance.agregarPlacaUsado(numSerie, curp, placasDTO);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
+
+        // Arrange
+        String numSerie = "81278098190870912";
+        String curp = "RAOT1T4N199378SHSLA1";
+        PlacasDTO placasDTO = new PlacasDTO();
+
+        PersonaEntidad persona = new PersonaEntidad();
+        persona.setCurp(curp);
+
+        AutomovilEntidad autoEntidad = new AutomovilEntidad();
+        autoEntidad.setNumeroSerie(numSerie);
+
+        TarifaPlacasEntidad tarifaPlacasEntidad = new TarifaPlacasEntidad();
+        tarifaPlacasEntidad.setTipo("Automóvil usado");
+        tarifaPlacasEntidad.setCosto(800.0f);
+
+        Mockito.when(personaDAO.buscarPorCurp(curp)).thenReturn(persona);
+        Mockito.when(automovilDAO.obtenerAutomovil(numSerie)).thenReturn(autoEntidad);
+        Mockito.when(relacionVehPerDAO.existeDetalle(Mockito.any(RelacionVehiculoPersona.class))).thenReturn(false);
+        Mockito.when(tarifaPlacasDAO.buscarTarifa("Automóvil usado")).thenReturn(tarifaPlacasEntidad);
+
+        // Act
+        registroPlacasBO.agregarPlacaUsado(numSerie, curp, placasDTO);
+
+        // Assert
+        Mockito.verify(personaDAO).buscarPorCurp(curp);
+        Mockito.verify(automovilDAO).obtenerAutomovil(numSerie);
+        Mockito.verify(relacionVehPerDAO).existeDetalle(Mockito.any(RelacionVehiculoPersona.class));
+        Mockito.verify(relacionVehPerDAO).insertarDetalle(Mockito.any(RelacionVehiculoPersona.class));
+        Mockito.verify(tarifaPlacasDAO).buscarTarifa("Automóvil usado");
+        Mockito.verify(placasDAO).insertarPlacas(Mockito.any(PlacasEntidad.class));
+    }
 }

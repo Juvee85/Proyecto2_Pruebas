@@ -61,6 +61,13 @@ public class ReporteTramitesBO implements IReporteTramitesBO {
     public ReporteTramitesBO(int numeroElementos) {
         this.numeroElementos = numeroElementos;
     }
+    
+    public ReporteTramitesBO(ITramiteDAO tramiteDAO, int numElementos) {
+       this.numeroElementos = numElementos;
+       this.tramiteDAO = tramiteDAO;
+    }
+    
+    
 
     /**
      * Método que devuelve una lista de reportes.
