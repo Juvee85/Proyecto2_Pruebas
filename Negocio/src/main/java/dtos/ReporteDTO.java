@@ -7,6 +7,7 @@ import entidades.LicenciaEntidad;
 import entidades.PersonaEntidad;
 import entidades.PlacasEntidad;
 import entidades.TramiteEntidad;
+import excepciones.PersistenciaException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -51,15 +52,17 @@ public class ReporteDTO {
      *
      * @param tramite
      */
-    public ReporteDTO(TramiteEntidad tramite) {
+    public ReporteDTO(TramiteEntidad tramite) throws PersistenciaException {
         PersonaEntidad p = tramite.getPersona();
         Encriptador e = new Encriptador();
         try {
+            /*
             this.nombre = e.desencriptar(p.getNombre()) + " "
                     + e.desencriptar(p.getApellidoPaterno()) + " "
-                    + e.desencriptar(p.getApellidoMaterno());
+                    + e.desencriptar(p.getApellidoMaterno());*/
+            this.nombre = String.format("%s %s %s", p.getNombre(), p.getApellidoPaterno(), p.getApellidoMaterno());
         } catch (Exception ex) {
-            Logger.getLogger(ReporteDTO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new PersistenciaException("Ocurrio un error al intentar general el reporte, porfavor intente mas tarde...");
         }
         if (tramite.getClass() == LicenciaEntidad.class) {
             this.tipo = "Expedición de licencia";

@@ -684,6 +684,10 @@ public class RegistroPlacasBOTest {
         assertEquals(expResult.getNumero(), result.getNumero());
     }
 
+    /**
+     * Efectua el flujo del registro de una placa para automovil usado sin problemas
+     * @throws PersistenciaException 
+     */
     @Test
     public void agregarPlacaUsado_SeAgregaLaPlacaParaAutomovilUsadoCorrectamente_ResultadoSatisfactorio() throws PersistenciaException {
         System.out.println("agregarPlacaUsado");
